@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1ª Corrida Kids Ilhas 2026</title>
+
+  <!-- Tipografia lúdica + moderna -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg1:#2E7DFF;
+      --bg2:#13C4FF;
+      --bg3:#9B5CFF;
+      --card:#ffffff;
+      --text:#0B1220;
+      --muted:#5B6474;
+
+      --primary:#FF6A3D;
+      --primary2:#FFB703;
+
+      --ok:#22C55E;
+      --shadow: 0 18px 45px rgba(0,0,0,.16);
+      --shadow-soft: 0 10px 30px rgba(0,0,0,.10);
+
+      --radius: 22px;
+      --radius-sm: 14px;
+
+      --ring: 0 0 0 4px rgba(19,196,255,.28);
+      --ring2: 0 0 0 4px rgba(255,106,61,.25);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      color:var(--text);
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+      overflow-x:hidden;
+      background:
+        radial-gradient(1200px 600px at 20% -10%, rgba(255,183,3,.35), transparent 60%),
+        radial-gradient(1100px 650px at 90% 10%, rgba(155,92,255,.35), transparent 60%),
+        linear-gradient(180deg, var(--bg2), var(--bg1));
+    }
+
+    /* blobs decorativos */
+    .blob{
+      position:fixed;
+      inset:auto;
+      width:540px;height:540px;
+      border-radius:999px;
+      filter: blur(40px);
+      opacity:.42;
+      pointer-events:none;
+      z-index:0;
+      animation: floaty 10s ease-in-out infinite;
+    }
+    .blob.b1{ background: rgba(255,106,61,.55); left:-240px; top: 20px; }
+    .blob.b2{ background: rgba(155,92,255,.55); right:-260px; top: 120px; animation-delay: -4s; }
+    .blob.b3{ background: rgba(19,196,255,.55); left: 35%; bottom:-260px; animation-delay: -7s; }
+    @keyframes floaty{
+      0%,100%{ transform: translateY(0) translateX(0) scale(1); }
+      50%{ transform: translateY(-18px) translateX(10px) scale(1.03); }
+    }
+
+    /* layout base */
+    .app{
+      position:relative;
+      z-index:1;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.16);
+      border-bottom: 1px solid rgba(255,255,255,.22);
+    }
+    .topbar-inner{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-family: "Baloo 2", cursive;
+      color:#fff;
+      letter-spacing:.2px;
+      text-shadow: 0 10px 25px rgba(0,0,0,.18);
+    }
+    .brand .logo{
+      width:38px;height:38px;border-radius:14px;
+      display:grid; place-items:center;
+      background: rgba(255,255,255,.22);
+      border: 1px solid rgba(255,255,255,.30);
+      box-shadow: 0 12px 24px rgba(0,0,0,.12);
+    }
+    .brand .title{
+      display:flex; flex-direction:column; line-height:1.05;
+    }
+    .brand .title b{ font-size: 16px; }
+    .brand .title span{ font-size: 12px; opacity:.9; }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.26);
+      color:#fff;
+      font-size: 12px;
+      white-space:nowrap;
+    }
+    .pill strong{ font-weight:700; }
+    .pill .dot{
+      width:8px;height:8px;border-radius:999px;
+      background: rgba(255,183,3,.95);
+      box-shadow: 0 0 0 4px rgba(255,183,3,.22);
+    }
+
+    main{
+      flex:1;
+      padding: 28px 16px 34px;
+    }
+
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      display:grid;
+      gap: 18px;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 18px;
+      align-items:stretch;
+    }
+
+    .card{
+      background: rgba(255,255,255,.92);
+      border: 1px solid rgba(255,255,255,.55);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-left{
+      padding: 22px 22px 18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero-left:before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(600px 240px at 20% 0%, rgba(255,183,3,.30), transparent 55%),
+        radial-gradient(600px 240px at 90% 20%, rgba(255,106,61,.22), transparent 60%);
+      pointer-events:none;
+    }
+    .hero-left > *{ position:relative; z-index:1; }
+
+    h1{
+      margin:0;
+      font-family:"Baloo 2", cursive;
+      font-size: 34px;
+      line-height:1.05;
+      letter-spacing:.2px;
+    }
+    .subtitle{
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height:1.45;
+      max-width: 62ch;
+    }
+
+    .badges{
+      display:flex; flex-wrap:wrap; gap:10px;
+      margin-top: 14px;
+    }
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(11,18,32,.04);
+      border: 1px solid rgba(11,18,32,.06);
+      font-size: 13px;
+      color:#1D2433;
+    }
+    .badge small{ color: var(--muted); font-weight:600; }
+
+    .hero-right{
+      padding: 18px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .cta-grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      height:100%;
+    }
+
+    .cta{
+      border-radius: 18px;
+      padding: 14px 14px;
+      background: linear-gradient(135deg, rgba(255,106,61,.18), rgba(255,183,3,.18));
+      border: 1px solid rgba(255,106,61,.20);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      cursor:pointer;
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta:hover{ transform: translateY(-2px); box-shadow: var(--shadow-soft); filter:saturate(1.06); }
+    .cta:active{ transform: translateY(0); }
+    .cta .left{
+      display:flex; flex-direction:column; gap:2px;
+    }
+    .cta .left b{ font-size: 15px; }
+    .cta .left span{ font-size: 12px; color: var(--muted); }
+    .cta .icon{
+      width:44px;height:44px;border-radius:16px;
+      display:grid; place-items:center;
+      background: rgba(255,255,255,.75);
+      border: 1px solid rgba(255,255,255,.65);
+      box-shadow: 0 10px 22px rgba(0,0,0,.10);
+      font-size: 20px;
+    }
+
+    /* Seções */
+    .section{
+      display:none;
+      animation: appear .35s ease both;
+    }
+    .section.active{ display:block; }
+    @keyframes appear{
+      from{ opacity:0; transform: translateY(8px); }
+      to{ opacity:1; transform: translateY(0); }
+    }
+
+    .form-card{
+      padding: 18px;
+    }
+
+    .form-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 6px 4px 12px;
+      border-bottom: 1px solid rgba(11,18,32,.08);
+      margin-bottom: 14px;
+    }
+    .form-head h2{
+      margin:0;
+      font-family: "Baloo 2", cursive;
+      font-size: 22px;
+      line-height:1.1;
+    }
+    .form-head p{
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.35;
+    }
+
+    .steps{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      margin-top: 2px;
+    }
+    .step{
+      font-size:12px;
+      color: var(--muted);
+      padding: 6px 10px;
+      border-radius:999px;
+      background: rgba(11,18,32,.04);
+      border: 1px solid rgba(11,18,32,.06);
+    }
+    .step strong{ color: var(--text); }
+
+    form{
+      display:grid;
+      gap: 12px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    label{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      font-size: 13px;
+      color: #283045;
+      font-weight: 600;
+    }
+
+    .hint{
+      font-weight: 600;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top:-2px;
+    }
+
+    input, select{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(11,18,32,.14);
+      background: rgba(255,255,255,.92);
+      outline: none;
+      font: inherit;
+      color: var(--text);
+      transition: box-shadow .15s ease, border-color .15s ease, transform .10s ease;
+    }
+    input::placeholder{ color: rgba(91,100,116,.80); }
+    input:focus, select:focus{
+      border-color: rgba(19,196,255,.75);
+      box-shadow: var(--ring);
+    }
+
+    .divider{
+      margin: 6px 0 2px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(11,18,32,.18);
+      font-family: "Baloo 2", cursive;
+      font-size: 16px;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      margin-top: 4px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      appearance:none;
+      border:0;
+      border-radius: 16px;
+      padding: 12px 14px;
+      font-weight: 800;
+      cursor:pointer;
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      user-select:none;
+    }
+    .btn:focus{ outline:none; box-shadow: var(--ring2); }
+    .btn:active{ transform: translateY(1px); }
+
+    .btn-primary{
+      background: linear-gradient(135deg, var(--primary), var(--primary2));
+      color:#fff;
+      box-shadow: 0 14px 28px rgba(255,106,61,.28);
+    }
+    .btn-primary:hover{ filter:saturate(1.08) brightness(1.02); transform: translateY(-1px); }
+
+    .btn-ghost{
+      background: rgba(11,18,32,.06);
+      color:#22304A;
+      border: 1px solid rgba(11,18,32,.10);
+    }
+    .btn-ghost:hover{ transform: translateY(-1px); box-shadow: var(--shadow-soft); }
+
+    .btn-purple{
+      background: linear-gradient(135deg, rgba(155,92,255,1), rgba(19,196,255,1));
+      color:#fff;
+      box-shadow: 0 14px 28px rgba(155,92,255,.22);
+    }
+
+    .note{
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height:1.45;
+    }
+
+    footer{
+      padding: 16px;
+      text-align:center;
+      color: rgba(255,255,255,.92);
+      font-size: 12px;
+      text-shadow: 0 10px 25px rgba(0,0,0,.18);
+    }
+
+    /* Responsivo */
+    @media (max-width: 880px){
+      .hero{ grid-template-columns: 1fr; }
+      .grid{ grid-template-columns: 1fr; }
+      .topbar-inner{ padding: 12px 14px; }
+      h1{ font-size: 30px; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{ animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+      .blob{ display:none; }
+    }
+  
+    /* ===== Admin / Relatórios ===== */
+    .mini-note{ font-size:12px; color:var(--muted); margin:8px 0 0; line-height:1.45; }
+    .toolbar{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;
+      margin: 6px 0 0;
+    }
+    .stat-grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .stat{
+      background: rgba(255,255,255,.92);
+      border: 1px solid rgba(11,18,32,.10);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: var(--shadow-soft);
+      position:relative;
+      overflow:hidden;
+    }
+    .stat:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(420px 160px at 20% 0%, rgba(255,183,3,.18), transparent 60%),
+                  radial-gradient(420px 160px at 90% 20%, rgba(155,92,255,.14), transparent 60%);
+      pointer-events:none;
+    }
+    .stat > *{ position:relative; z-index:1; }
+    .stat .k{ font-size:12px; letter-spacing:.4px; color:var(--muted); font-weight:800; text-transform:uppercase; }
+    .stat .v{ font-size:28px; font-weight:900; margin-top:6px; }
+    .chart-card{
+      margin-top: 12px;
+      padding: 14px;
+    }
+    .chart-wrap{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 12px;
+      align-items:stretch;
+    }
+    .chart-box{
+      background: rgba(11,18,32,.03);
+      border: 1px solid rgba(11,18,32,.08);
+      border-radius: 18px;
+      padding: 12px;
+      min-height: 280px;
+    }
+    .chart-box canvas{ width:100% !important; height: 260px !important; }
+    .table-wrap{
+      overflow:auto;
+      border-radius:14px;
+      border:1px solid rgba(11,18,32,.10);
+      background:#fff;
+      margin-top: 10px;
+    }
+    table.rel{
+      width:100%;
+      border-collapse:collapse;
+      min-width: 820px;
+    }
+    table.rel th, table.rel td{
+      text-align:left;
+      padding: 10px;
+      font-size: 12px;
+      border-top: 1px solid rgba(11,18,32,.08);
+      white-space:nowrap;
+    }
+    table.rel thead th{
+      background: rgba(11,18,32,.04);
+      border-top: none;
+      font-size: 12px;
+    }
+    .pill-logout{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.26);
+      color:#fff;
+      font-size: 12px;
+      white-space:nowrap;
+      cursor:pointer;
+    }
+    .pill-logout:hover{ filter:saturate(1.05); }
+    .hidden{ display:none !important; }
+    @media (max-width: 880px){
+      .stat-grid{ grid-template-columns: 1fr; }
+      .chart-wrap{ grid-template-columns: 1fr; }
+      table.rel{ min-width: 760px; }
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <div class="app">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand" aria-label="Corrida Kids Ilhas 2026">
+          <div class="logo">🏃‍♀️</div>
+          <div class="title">
+            <b>Corrida Kids Ilhas 2026</b>
+            <span>Inscrições online + autorização do responsável</span>
+          </div>
+        </div>
+
+        <div class="pill" title="Data do evento">
+          <span class="dot" aria-hidden="true"></span>
+          <span><strong>12/04/2026</strong> • Comunidade</span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="wrap">
+
+        <!-- HOME -->
+        <section id="home" class="section active">
+          <div class="hero">
+            <div class="card hero-left">
+              <h1>🏅 1ª Corrida Kids Ilhas 2026 <span aria-hidden="true">🎭</span></h1>
+              <p class="subtitle">
+                Um evento comunitário <b>gratuito</b> e cheio de alegria! Faça a inscrição da criança para a Corrida Kids
+                e/ou para o <b>Show de Talentos</b>. A participação é mediante autorização do responsável.
+              </p>
+
+              <div class="badges" role="list">
+                <div class="badge" role="listitem">📍 <b>Ilhas</b> <small>bairro / comunidade</small></div>
+                <div class="badge" role="listitem">🆓 <b>Gratuito</b> <small>inscrição online</small></div>
+                <div class="badge" role="listitem">🛡️ <b>Autorização</b> <small>responsável</small></div>
+                <div class="badge" role="listitem">🎤 <b>Talentos</b> <small>até 5 min</small></div>
+              </div>
+
+
+            </div>
+
+            <div class="card hero-right">
+              <div class="cta-grid" aria-label="Ações principais">
+                <button class="cta" onclick="showSection('corrida')" type="button">
+                  <div class="left">
+                    <b>Fazer inscrição • Corrida Kids</b>
+                    <span>Cadastro rápido e organizado</span>
+                  </div>
+                  <div class="icon" aria-hidden="true">🏃</div>
+                </button>
+
+                <button class="cta" onclick="showSection('show')" type="button">
+                  <div class="left">
+                    <b>Fazer inscrição • Show de Talentos</b>
+                    <span>Música, dança, poesia, teatro…</span>
+                  </div>
+                  <div class="icon" aria-hidden="true">🎭</div>
+                </button>
+
+                <button class="cta" onclick="downloadRegulamento()" type="button">
+                  <div class="left">
+                    <b>Baixar regulamento</b>
+                    <span>Arquivo TXT para imprimir/compartilhar</span>
+                  </div>
+                  <div class="icon" aria-hidden="true">📄</div>
+                </button>
+              
+
+                <button class="cta" onclick="abrirRelatorios()" type="button">
+                  <div class="left">
+                    <b>Relatórios (Admin)</b>
+                    <span>Acesso restrito • Login</span>
+                  </div>
+                  <div class="icon" aria-hidden="true">📊</div>
+                </button>
+</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CORRIDA -->
+        <section id="corrida" class="section">
+          <div class="card form-card">
+            <div class="form-head">
+              <div>
+                <h2>Inscrição • Corrida Kids 🏃‍♂️</h2>
+                <p>Preencha os dados da criança e do responsável. Campos com * são obrigatórios.</p>
+              </div>
+              <div class="steps" aria-label="Etapas do formulário">
+                <span class="step"><strong>1</strong> Criança</span>
+                <span class="step"><strong>2</strong> Responsável</span>
+              </div>
+            </div>
+
+            <form id="corridaForm" autocomplete="on">
+              <div class="grid">
+                <label>
+                  Nome completo da criança *
+                  <input type="text" id="nome" placeholder="Ex.: Maria Eduarda Souza" required />
+                  <span class="hint">Como está no documento</span>
+                </label>
+
+                <label>
+                  Data de nascimento *
+                  <input type="date" id="nascimento" required />
+                </label>
+              </div>
+
+              <div class="grid">
+                <label>
+                  RG ou Certidão *
+                  <input type="text" id="documento" placeholder="Digite o número" required />
+                </label>
+
+                <label>
+                  Bairro *
+                  <input type="text" id="bairro" placeholder="Ex.: Ilhas" required />
+                </label>
+              </div>
+
+              <label>
+                Endereço completo *
+                <input type="text" id="endereco" placeholder="Rua, nº, complemento" required />
+              </label>
+
+              <div class="divider">Responsável 🧑‍🧑‍🧒</div>
+
+              <div class="grid">
+                <label>
+                  Nome do responsável *
+                  <input type="text" id="respNome" placeholder="Nome completo" required />
+                </label>
+
+                <label>
+                  CPF do responsável *
+                  <input type="text" id="respCpf" inputmode="numeric" placeholder="Somente números (ex.: 12345678900)" required />
+                  <span class="hint">Você pode digitar com ou sem pontuação</span>
+                </label>
+              </div>
+
+              <div class="grid">
+                <label>
+                  Telefone/WhatsApp *
+                  <input type="tel" id="respTelefone" inputmode="tel" placeholder="DDD + número (ex.: 27999998888)" required />
+                </label>
+
+                <label>
+                  E-mail *
+                  <input type="email" id="respEmail" placeholder="ex.: seuemail@gmail.com" required />
+                </label>
+              </div>
+
+              <div class="actions">
+                <button type="submit" class="btn btn-primary">✅ Enviar inscrição</button>
+                <button type="button" class="btn btn-ghost" onclick="showSection('home')">⬅️ Voltar</button>
+              </div>
+
+              <p class="note">
+                Ao enviar, você confirma que as informações são verdadeiras e que o responsável autoriza a participação.
+              </p>
+            </form>
+          </div>
+        </section>
+
+        <!-- SHOW -->
+        <section id="show" class="section">
+          <div class="card form-card">
+            <div class="form-head">
+              <div>
+                <h2>Inscrição • Show de Talentos 🎭</h2>
+                <p>Para apresentações infantis (música, dança, poesia, teatro, capoeira…). Duração máxima: 5 minutos.</p>
+              </div>
+              <div class="steps" aria-label="Etapas do formulário">
+                <span class="step"><strong>1</strong> Participante</span>
+                <span class="step"><strong>2</strong> Apresentação</span>
+                <span class="step"><strong>3</strong> Responsável</span>
+              </div>
+            </div>
+
+            <form id="showForm" autocomplete="on">
+              <div class="grid">
+                <label>
+                  Nome do participante *
+                  <input type="text" id="showNome" placeholder="Nome completo" required />
+                </label>
+
+                <label>
+                  Data de nascimento *
+                  <input type="date" id="showNascimento" required />
+                </label>
+              </div>
+
+              <div class="grid">
+                <label>
+                  Bairro *
+                  <input type="text" id="showBairro" placeholder="Ex.: Ilhas" required />
+                </label>
+
+                <label>
+                  Tipo de apresentação *
+                  <select id="tipoApresentacao" required>
+                    <option value="">Selecione</option>
+                    <option>Música</option>
+                    <option>Dança</option>
+                    <option>Poesia</option>
+                    <option>Teatro</option>
+                    <option>Capoeira</option>
+                    <option>Outro</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="grid">
+                <label>
+                  Nome da apresentação *
+                  <input type="text" id="nomeApresentacao" placeholder="Ex.: 'Aquarela'" required />
+                </label>
+
+                <label>
+                  Duração estimada *
+                  <input type="text" id="duracao" placeholder="Máx. 5 min (ex.: 3 min)" required />
+                </label>
+              </div>
+
+              <div class="divider">Responsável 🧑‍🧑‍🧒</div>
+
+              <div class="grid">
+                <label>
+                  Nome do responsável *
+                  <input type="text" id="showRespNome" placeholder="Nome completo" required />
+                </label>
+
+                <label>
+                  CPF do responsável *
+                  <input type="text" id="showRespCpf" inputmode="numeric" placeholder="Somente números (ex.: 12345678900)" required />
+                </label>
+              </div>
+
+              <div class="grid">
+                <label>
+                  Telefone/WhatsApp *
+                  <input type="tel" id="showRespTelefone" inputmode="tel" placeholder="DDD + número (ex.: 27999998888)" required />
+                </label>
+
+                <label>
+                  E-mail *
+                  <input type="email" id="showRespEmail" placeholder="ex.: seuemail@gmail.com" required />
+                </label>
+              </div>
+
+              <div class="actions">
+                <button type="submit" class="btn btn-primary">✅ Enviar inscrição</button>
+                <button type="button" class="btn btn-ghost" onclick="showSection('home')">⬅️ Voltar</button>
+                <button type="button" class="btn btn-purple" onclick="downloadRegulamento()">📄 Baixar regulamento</button>
+              </div>
+
+              <p class="note">
+                A organização pode ajustar a programação por segurança e adequação ao público infantil.
+              </p>
+            </form>
+          </div>
+        </section>
+
+
+        <!-- LOGIN (ADMIN) -->
+        <section id="login" class="section">
+          <div class="card form-card">
+            <div class="form-head">
+              <div>
+                <h2>Área do Organizador 🔐</h2>
+                <p>Login para acessar relatórios e exportações (admin-only).</p>
+              </div>
+              <div class="steps" aria-label="Status">
+                <span class="step" id="loginStatus"><strong>Não logado</strong></span>
+              </div>
+            </div>
+
+            <form id="loginForm" autocomplete="on">
+              <div class="grid">
+                <label>
+                  E-mail
+                  <input type="email" id="loginEmail" placeholder="Digite seu e-mail" required />
+                </label>
+
+                <label>
+                  Senha
+                  <input type="password" id="loginSenha" placeholder="Digite sua senha" required />
+                </label>
+              </div>
+
+              <div class="actions">
+                <button type="submit" class="btn btn-primary">🔓 Entrar</button>
+                <button type="button" class="btn btn-ghost" onclick="showSection('home')">⬅️ Voltar</button>
+              </div>
+
+              <p class="note">
+                Acesso restrito: somente usuários cadastrados como <b>admin</b> no Firestore (coleção <b>admins</b>).
+              </p>
+            </form>
+          </div>
+        </section>
+
+        <!-- RELATÓRIOS (ADMIN-ONLY) -->
+        <section id="relatorios" class="section">
+          <div class="card form-card">
+            <div class="form-head">
+              <div>
+                <h2>Relatórios de Inscritos 📊</h2>
+                <p>Filtre por tipo e período, veja contadores, gráfico animado e exporte Excel real.</p>
+              </div>
+              <div class="steps" aria-label="Status">
+                <span class="step" id="adminStatus"><strong>Verificando…</strong></span>
+              </div>
+            </div>
+
+            <div class="grid">
+              <label>
+                Tipo
+                <select id="filtroTipo">
+                  <option value="todos">Todos</option>
+                  <option value="corrida">Corrida</option>
+                  <option value="show">Show</option>
+                </select>
+                <span class="hint">Filtra Corrida / Show</span>
+              </label>
+
+              <label>
+                Gráfico
+                <select id="filtroGrafico">
+                  <option value="doughnut">Pizza (Doughnut)</option>
+                  <option value="bar">Barras</option>
+                </select>
+                <span class="hint">Animado</span>
+              </label>
+            </div>
+
+            <div class="grid">
+              <label>
+                Data inicial
+                <input type="date" id="dataInicio" />
+                <span class="hint">Opcional</span>
+              </label>
+
+              <label>
+                Data final
+                <input type="date" id="dataFim" />
+                <span class="hint">Opcional</span>
+              </label>
+            </div>
+
+            <div class="grid">
+              <label>
+                Nome (contém)
+                <input type="text" id="filtroNome" placeholder="Ex.: Maria" />
+              </label>
+
+              <label>
+                Bairro (contém)
+                <input type="text" id="filtroBairro" placeholder="Ex.: Ilhas" />
+              </label>
+            </div>
+
+            <div class="toolbar">
+              <div class="actions" style="margin:0;">
+                <button type="button" class="btn btn-primary" onclick="carregarRelatorios()">🔄 Atualizar</button>
+                <button type="button" class="btn btn-ghost" onclick="exportarXLSX()">📥 Exportar Excel (.xlsx)</button>
+                <button type="button" class="btn btn-ghost" onclick="exportarCSV()">📄 Exportar CSV</button>
+              </div>
+
+              <div class="actions" style="margin:0;">
+                <button type="button" class="btn btn-ghost" onclick="logout()">🚪 Sair</button>
+                <button type="button" class="btn btn-ghost" onclick="showSection('home')">⬅️ Voltar</button>
+              </div>
+            </div>
+
+            <p class="mini-note" id="relInfo">Dica: use o período para ver “inscritos da semana” e exportar só o filtrado.</p>
+
+            <div class="stat-grid">
+              <div class="stat">
+                <div class="k">Total • Corrida</div>
+                <div class="v" id="countCorrida">—</div>
+              </div>
+              <div class="stat">
+                <div class="k">Total • Show</div>
+                <div class="v" id="countShow">—</div>
+              </div>
+              <div class="stat">
+                <div class="k">Total • Geral</div>
+                <div class="v" id="countTotal">—</div>
+              </div>
+            </div>
+
+            <div class="card chart-card">
+              <div class="chart-wrap">
+                <div class="chart-box">
+                  <canvas id="graficoInscritos" aria-label="Gráfico de inscritos"></canvas>
+                </div>
+                <div>
+                  <div class="divider" style="margin-top:0;">Por bairro 🗺️</div>
+                  <div class="table-wrap">
+                    <table class="rel" aria-label="Tabela por bairro">
+                      <thead>
+                        <tr>
+                          <th>Bairro</th>
+                          <th>Corrida</th>
+                          <th>Show</th>
+                          <th>Total</th>
+                        </tr>
+                      </thead>
+                      <tbody id="bairroBody"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="divider">Lista de inscritos</div>
+            <div class="table-wrap">
+              <table class="rel" aria-label="Tabela de inscritos">
+                <thead>
+                  <tr>
+                    <th>Nº</th>
+                    <th>Tipo</th>
+                    <th>Nome</th>
+                    <th>Nascimento</th>
+                    <th>Bairro</th>
+                    <th>Responsável</th>
+                    <th>Telefone</th>
+                    <th>E-mail</th>
+                    <th>Criado em</th>
+                  </tr>
+                </thead>
+                <tbody id="relBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <footer>
+      Feito com carinho para a comunidade • 1ª Corrida Kids Ilhas 2026 💙
+    </footer>
+  </div>
+
+  
+  <!-- Chart.js (gráfico animado) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- SheetJS (Excel .xlsx real) -->
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+  <script>
+    // =========================
+    // CONFIG
+    // =========================
+    const firebaseConfig = {
+      apiKey: "AIzaSyAUaHzmMdWl8kVo_paanCCQYQFUefrm-g8",
+      authDomain: "corrida-kids.firebaseapp.com",
+      projectId: "corrida-kids",
+      storageBucket: "corrida-kids.firebasestorage.app",
+      messagingSenderId: "192264216284",
+      appId: "1:192264216284:web:329da8b98e959211051e19",
+      measurementId: "G-QZ7EEPGHNJ"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    // Coleções reais (como está no seu Firestore)
+    const COL_CORRIDA = "corridaInscricoes";
+    const COL_SHOW = "showInscricoes";
+    const COL_ADMINS = "admins";
+
+    // =========================
+    // UI
+    // =========================
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+      const el = document.getElementById(id);
+      if (el) el.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function downloadRegulamento() {
+      const texto =
+`REGULAMENTO OFICIAL
+1ª CORRIDA KIDS ILHAS 2026
+
+1) Evento comunitário gratuito.
+2) Data: 12/04/2026.
+3) Idade considerada: a que o participante completar até 31/12/2026.
+4) Inscrição exclusivamente online.
+5) Participação somente com autorização do responsável.
+6) Uso de imagem autorizado para fins institucionais.
+7) Apresentações do Show devem respeitar o público infantil.
+8) Organização poderá alterar a programação por segurança.
+
+Dúvidas e contato: (adicione aqui telefone/WhatsApp e/ou e-mail da organização).`;
+
+      const blob = new Blob([texto], { type: "text/plain;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "Regulamento_Corrida_Kids_Ilhas_2026.txt";
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
+
+    // =========================
+    // Número automático de inscrição (sem backend)
+    // - Único, legível e bom para controlar lista
+    // =========================
+    function gerarNumeroInscricao(prefixo) {
+      const d = new Date();
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, "0");
+      const dd = String(d.getDate()).padStart(2, "0");
+      const hh = String(d.getHours()).padStart(2, "0");
+      const mi = String(d.getMinutes()).padStart(2, "0");
+      const ss = String(d.getSeconds()).padStart(2, "0");
+      const r = String(Math.floor(Math.random() * 900) + 100); // 3 dígitos
+      return `${prefixo}-${yyyy}${mm}${dd}-${hh}${mi}${ss}-${r}`;
+    }
+
+    // =========================
+    // Validações leves (CPF/Telefone) — sem travar o usuário
+    // =========================
+    function onlyDigits(s){ return (s||"").toString().replace(/\D/g,""); }
+
+    // =========================
+    // Salvar inscrições
+    // =========================
+    async function salvarInscricaoCorrida() {
+      const dados = {
+        numero: gerarNumeroInscricao("CK"),
+        tipo: "corrida",
+        nome: document.getElementById("nome").value.trim(),
+        nascimento: document.getElementById("nascimento").value,
+        documento: document.getElementById("documento").value.trim(),
+        bairro: document.getElementById("bairro").value.trim(),
+        endereco: document.getElementById("endereco").value.trim(),
+        responsavel: {
+          nome: document.getElementById("respNome").value.trim(),
+          cpf: onlyDigits(document.getElementById("respCpf").value),
+          telefone: onlyDigits(document.getElementById("respTelefone").value),
+          email: document.getElementById("respEmail").value.trim()
+        },
+        criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      await db.collection(COL_CORRIDA).add(dados);
+      return dados.numero;
+    }
+
+    async function salvarInscricaoShow() {
+      const dados = {
+        numero: gerarNumeroInscricao("ST"),
+        tipo: "show",
+        nome: document.getElementById("showNome").value.trim(),
+        nascimento: document.getElementById("showNascimento").value,
+        bairro: document.getElementById("showBairro").value.trim(),
+        apresentacao: {
+          tipo: document.getElementById("tipoApresentacao").value,
+          nome: document.getElementById("nomeApresentacao").value.trim(),
+          duracao: document.getElementById("duracao").value.trim()
+        },
+        responsavel: {
+          nome: document.getElementById("showRespNome").value.trim(),
+          cpf: onlyDigits(document.getElementById("showRespCpf").value),
+          telefone: onlyDigits(document.getElementById("showRespTelefone").value),
+          email: document.getElementById("showRespEmail").value.trim()
+        },
+        criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      await db.collection(COL_SHOW).add(dados);
+      return dados.numero;
+    }
+
+    document.getElementById("corridaForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      try{
+        const numero = await salvarInscricaoCorrida();
+        alert(`✅ Inscrição registrada!\nNº: ${numero}`);
+        e.target.reset();
+        showSection("home");
+      }catch(err){
+        console.error(err);
+        alert("❌ Não foi possível enviar. Verifique sua internet e tente novamente.");
+      }
+    });
+
+    document.getElementById("showForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      try{
+        const numero = await salvarInscricaoShow();
+        alert(`✅ Inscrição registrada!\nNº: ${numero}`);
+        e.target.reset();
+        showSection("home");
+      }catch(err){
+        console.error(err);
+        alert("❌ Não foi possível enviar. Verifique sua internet e tente novamente.");
+      }
+    });
+
+    // =========================
+    // Admin-only
+    // =========================
+    async function isAdminUser(user){
+      if(!user) return false;
+      try{
+        const doc = await db.collection(COL_ADMINS).doc(user.uid).get();
+        if(!doc.exists) return false;
+        const data = doc.data() || {};
+        // aceita apenas ativo:true
+        return data.ativo === true;
+      }catch(err){
+        console.error(err);
+        return false;
+      }
+    }
+
+    async function abrirRelatorios(){
+      const user = auth.currentUser;
+      if(!user){
+        showSection("login");
+        return;
+      }
+      const ok = await isAdminUser(user);
+      if(!ok){
+        alert("❌ Seu usuário está logado, mas não está autorizado como ADMIN.");
+        showSection("login");
+        return;
+      }
+      showSection("relatorios");
+      carregarRelatorios();
+    }
+
+    async function logout(){
+      await auth.signOut();
+      alert("Você saiu.");
+      showSection("home");
+    }
+
+    // Login
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value.trim();
+      const senha = document.getElementById("loginSenha").value;
+
+      try{
+        await auth.signInWithEmailAndPassword(email, senha);
+        const ok = await isAdminUser(auth.currentUser);
+        if(!ok){
+          alert("❌ Login ok, mas este usuário não é ADMIN. Verifique a coleção admins/{uid}.");
+          return;
+        }
+        alert("✅ Login realizado!");
+        showSection("relatorios");
+        carregarRelatorios();
+      }catch(err){
+        console.error(err);
+        alert("❌ Não foi possível entrar. Verifique e-mail e senha.");
+      }
+    });
+
+    // =========================
+    // Relatórios (filtro + gráfico + export)
+    // =========================
+    let cacheRelatorios = [];      // dados crus carregados do Firestore
+    let ultimoFiltrado = [];       // resultado atual (após filtros)
+    let chartInstance = null;
+
+    function normaliza(txt){
+      return (txt || "").toString().toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu,"");
+    }
+
+    function parseDateInputToRange(){
+      const di = document.getElementById("dataInicio").value;
+      const df = document.getElementById("dataFim").value;
+
+      let start = null, end = null;
+      if(di){
+        const s = new Date(di + "T00:00:00");
+        start = s.getTime();
+      }
+      if(df){
+        const e = new Date(df + "T23:59:59");
+        end = e.getTime();
+      }
+      return {start, end};
+    }
+
+    function toMillisFromFirestore(ts){
+      // Firestore Timestamp -> ms
+      if(!ts) return null;
+      if(typeof ts.toMillis === "function") return ts.toMillis();
+      // fallback se vier como objeto
+      if(ts.seconds != null) return ts.seconds * 1000;
+      return null;
+    }
+
+    function aplicaFiltros(lista){
+      const tipo = document.getElementById("filtroTipo").value;
+      const nome = normaliza(document.getElementById("filtroNome").value);
+      const bairro = normaliza(document.getElementById("filtroBairro").value);
+      const {start, end} = parseDateInputToRange();
+
+      return lista.filter(it => {
+        if(tipo !== "todos" && it.tipo !== tipo) return false;
+        if(nome && !normaliza(it.nome).includes(nome)) return false;
+        if(bairro && !normaliza(it.bairro).includes(bairro)) return false;
+
+        const ms = it.criadoEmMs;
+        if(start != null && ms != null && ms < start) return false;
+        if(end != null && ms != null && ms > end) return false;
+
+        // se não tem criadoEm (antigo), deixa passar
+        return true;
+      });
+    }
+
+    function fmtData(ms){
+      if(!ms) return "-";
+      const d = new Date(ms);
+      const dd = String(d.getDate()).padStart(2,"0");
+      const mm = String(d.getMonth()+1).padStart(2,"0");
+      const yyyy = d.getFullYear();
+      const hh = String(d.getHours()).padStart(2,"0");
+      const mi = String(d.getMinutes()).padStart(2,"0");
+      return `${dd}/${mm}/${yyyy} ${hh}:${mi}`;
+    }
+
+    function atualizarResumo(lista){
+      const corrida = lista.filter(x => x.tipo === "corrida").length;
+      const show = lista.filter(x => x.tipo === "show").length;
+
+      document.getElementById("countCorrida").textContent = corrida;
+      document.getElementById("countShow").textContent = show;
+      document.getElementById("countTotal").textContent = corrida + show;
+
+      document.getElementById("relInfo").textContent = `Exibindo: ${lista.length} (Corrida: ${corrida} • Show: ${show})`;
+    }
+
+    function renderTabela(lista){
+      const tbody = document.getElementById("relBody");
+      tbody.innerHTML = "";
+
+      for(const it of lista){
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${it.numero || "-"}</td>
+          <td>${it.tipo}</td>
+          <td>${it.nome || "-"}</td>
+          <td>${it.nascimento || "-"}</td>
+          <td>${it.bairro || "-"}</td>
+          <td>${it.responsavelNome || "-"}</td>
+          <td>${it.responsavelTelefone || "-"}</td>
+          <td>${it.responsavelEmail || "-"}</td>
+          <td>${fmtData(it.criadoEmMs)}</td>
+        `;
+        tbody.appendChild(tr);
+      }
+    }
+
+    function montarTabelaBairro(lista){
+      const map = new Map();
+
+      for(const it of lista){
+        const b = (it.bairro || "").trim() || "Não informado";
+        if(!map.has(b)) map.set(b, {bairro:b, corrida:0, show:0});
+        const row = map.get(b);
+        if(it.tipo === "corrida") row.corrida++;
+        if(it.tipo === "show") row.show++;
+      }
+
+      const linhas = Array.from(map.values())
+        .map(x => ({...x, total: x.corrida + x.show}))
+        .sort((a,b) => b.total - a.total || a.bairro.localeCompare(b.bairro));
+
+      const tbody = document.getElementById("bairroBody");
+      tbody.innerHTML = "";
+      for(const r of linhas){
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${r.bairro}</td>
+          <td>${r.corrida}</td>
+          <td>${r.show}</td>
+          <td><b>${r.total}</b></td>
+        `;
+        tbody.appendChild(tr);
+      }
+      return linhas;
+    }
+
+    function atualizarGrafico(lista){
+      const tipoGrafico = document.getElementById("filtroGrafico").value;
+      const corrida = lista.filter(x => x.tipo === "corrida").length;
+      const show = lista.filter(x => x.tipo === "show").length;
+
+      const ctx = document.getElementById("graficoInscritos").getContext("2d");
+
+      const data = {
+        labels: ["Corrida", "Show"],
+        datasets: [{
+          label: "Inscritos",
+          data: [corrida, show],
+          borderWidth: 2
+        }]
+      };
+
+      const options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 900, easing: "easeOutQuart" },
+        plugins: {
+          legend: { position: "bottom" }
+        },
+        scales: (tipoGrafico === "bar") ? { y: { beginAtZero: true, ticks: { precision: 0 } } } : {}
+      };
+
+      if(chartInstance){
+        chartInstance.destroy();
+      }
+
+      chartInstance = new Chart(ctx, {
+        type: tipoGrafico,
+        data,
+        options
+      });
+    }
+
+    function atualizarTudo(){
+      ultimoFiltrado = aplicaFiltros(cacheRelatorios);
+      atualizarResumo(ultimoFiltrado);
+      renderTabela(ultimoFiltrado);
+      montarTabelaBairro(ultimoFiltrado);
+      atualizarGrafico(ultimoFiltrado);
+    }
+
+    async function carregarRelatorios(){
+      const user = auth.currentUser;
+
+      if(!user){
+        showSection("login");
+        return;
+      }
+
+      const ok = await isAdminUser(user);
+      document.getElementById("adminStatus").innerHTML = ok ? `<strong>Admin:</strong> ${user.email}` : "<strong>Sem permissão</strong>";
+      if(!ok){
+        alert("❌ Sem permissão de ADMIN. Verifique a coleção admins/{uid}.");
+        showSection("login");
+        return;
+      }
+
+      try{
+        const [corridaSnap, showSnap] = await Promise.all([
+          db.collection(COL_CORRIDA).orderBy("criadoEm","desc").limit(2000).get(),
+          db.collection(COL_SHOW).orderBy("criadoEm","desc").limit(2000).get()
+        ]);
+
+        const lista = [];
+
+        corridaSnap.forEach(doc=>{
+          const d = doc.data() || {};
+          const ms = toMillisFromFirestore(d.criadoEm);
+          lista.push({
+            numero: d.numero || d.numeroInscricao || "",
+            tipo: "corrida",
+            nome: d.nome || "",
+            nascimento: d.nascimento || "",
+            bairro: d.bairro || "",
+            responsavelNome: d?.responsavel?.nome || "",
+            responsavelTelefone: d?.responsavel?.telefone || "",
+            responsavelEmail: d?.responsavel?.email || "",
+            criadoEmMs: ms
+          });
+        });
+
+        showSnap.forEach(doc=>{
+          const d = doc.data() || {};
+          const ms = toMillisFromFirestore(d.criadoEm);
+          lista.push({
+            numero: d.numero || d.numeroInscricao || "",
+            tipo: "show",
+            nome: d.nome || "",
+            nascimento: d.nascimento || "",
+            bairro: d.bairro || "",
+            responsavelNome: d?.responsavel?.nome || "",
+            responsavelTelefone: d?.responsavel?.telefone || "",
+            responsavelEmail: d?.responsavel?.email || "",
+            criadoEmMs: ms
+          });
+        });
+
+        cacheRelatorios = lista;
+        atualizarTudo();
+
+      }catch(err){
+        console.error(err);
+        alert("❌ Erro ao carregar relatórios. Se aparecer 'Missing or insufficient permissions', confirme as Rules admin-only.");
+      }
+    }
+
+    // =========================
+    // Exportações
+    // =========================
+    function exportarCSV(){
+      const lista = ultimoFiltrado && ultimoFiltrado.length ? ultimoFiltrado : aplicaFiltros(cacheRelatorios);
+
+      const header = ["numero","tipo","nome","nascimento","bairro","responsavel","telefone","email","criadoEm"];
+      const rows = [header.join(";")];
+
+      for(const it of lista){
+        const row = [
+          it.numero || "",
+          it.tipo || "",
+          it.nome || "",
+          it.nascimento || "",
+          it.bairro || "",
+          it.responsavelNome || "",
+          it.responsavelTelefone || "",
+          it.responsavelEmail || "",
+          fmtData(it.criadoEmMs)
+        ].map(v => `"${(v??"").toString().replace(/"/g,'""').replace(/\r?\n/g," ")}"`).join(";");
+
+        rows.push(row);
+      }
+
+      const csv = "\uFEFF" + rows.join("\n");
+      const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "relatorio_inscritos.csv";
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
+
+    function exportarXLSX(){
+      const lista = ultimoFiltrado && ultimoFiltrado.length ? ultimoFiltrado : aplicaFiltros(cacheRelatorios);
+
+      // Planilha 1: Inscritos
+      const sheetData = [
+        ["Nº","Tipo","Nome","Nascimento","Bairro","Responsável","Telefone","E-mail","Criado em"]
+      ];
+      lista.forEach(it=>{
+        sheetData.push([
+          it.numero || "",
+          it.tipo || "",
+          it.nome || "",
+          it.nascimento || "",
+          it.bairro || "",
+          it.responsavelNome || "",
+          it.responsavelTelefone || "",
+          it.responsavelEmail || "",
+          fmtData(it.criadoEmMs)
+        ]);
+      });
+
+      // Planilha 2: Por bairro
+      const bairros = montarTabelaBairro(lista) || [];
+      const bairroData = [["Bairro","Corrida","Show","Total"]];
+      bairros.forEach(b=>{
+        bairroData.push([b.bairro, b.corrida, b.show, b.total]);
+      });
+
+      // Planilha 3: Resumo
+      const corrida = lista.filter(x=>x.tipo==="corrida").length;
+      const show = lista.filter(x=>x.tipo==="show").length;
+      const resumoData = [
+        ["Resumo","Valor"],
+        ["Total Corrida", corrida],
+        ["Total Show", show],
+        ["Total Geral", corrida + show],
+        ["Exportado em", new Date().toLocaleString("pt-BR")]
+      ];
+
+      const wb = XLSX.utils.book_new();
+      const ws1 = XLSX.utils.aoa_to_sheet(sheetData);
+      const ws2 = XLSX.utils.aoa_to_sheet(bairroData);
+      const ws3 = XLSX.utils.aoa_to_sheet(resumoData);
+
+      XLSX.utils.book_append_sheet(wb, ws3, "Resumo");
+      XLSX.utils.book_append_sheet(wb, ws2, "Por Bairro");
+      XLSX.utils.book_append_sheet(wb, ws1, "Inscritos");
+
+      XLSX.writeFile(wb, "relatorio_inscritos.xlsx");
+    }
+
+    // =========================
+    // Reatividade dos filtros
+    // =========================
+    ["filtroTipo","filtroGrafico","dataInicio","dataFim","filtroNome","filtroBairro"].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el){
+        el.addEventListener("input", atualizarTudo);
+        el.addEventListener("change", atualizarTudo);
+      }
+    });
+
+    // Status login no topo da área login/relatórios
+    auth.onAuthStateChanged(async (user)=>{
+      const loginStatus = document.getElementById("loginStatus");
+      const adminStatus = document.getElementById("adminStatus");
+
+      if(!user){
+        if(loginStatus) loginStatus.innerHTML = "<strong>Não logado</strong>";
+        if(adminStatus) adminStatus.innerHTML = "<strong>Não logado</strong>";
+        return;
+      }
+
+      const ok = await isAdminUser(user);
+      if(loginStatus) loginStatus.innerHTML = ok ? `<strong>Admin:</strong> ${user.email}` : `<strong>Logado:</strong> ${user.email}`;
+      if(adminStatus) adminStatus.innerHTML = ok ? `<strong>Admin:</strong> ${user.email}` : "<strong>Sem permissão</strong>";
+    });
+  </script>
+
+</body>
+</html>
