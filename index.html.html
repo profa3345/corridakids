@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1ª Corrida Kids Ilhas 2026</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Sora:wght@400;500;600;700&display=swap');
+
+    :root{
+      --bg-deep: #0a1628;
+      --accent1: #0090D8;
+      --accent2: #F85810;
+      --accent3: #F8B800;
+      --accent4: #98C000;
+      --card-bg: rgba(255,255,255,.97);
+      --text: #0f1c33;
+      --muted: #6b7a99;
+      --shadow: 0 24px 56px rgba(0,0,0,.22);
+      --shadow-soft: 0 8px 24px rgba(0,0,0,.12);
+      --radius: 24px;
+      --ring: 0 0 0 3px rgba(79,142,247,.35);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+
+    body {
+      font-family: 'Sora', system-ui, sans-serif;
+      color: var(--text);
+      overflow-x: hidden;
+      background: var(--bg-deep);
+      background-image:
+        radial-gradient(ellipse 900px 600px at 10% 0%, rgba(79,142,247,.28) 0%, transparent 65%),
+        radial-gradient(ellipse 700px 500px at 90% 20%, rgba(247,99,79,.20) 0%, transparent 60%),
+        radial-gradient(ellipse 600px 400px at 50% 90%, rgba(52,211,153,.15) 0%, transparent 60%);
+    }
+
+    /* ── Noise texture overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Blobs ── */
+    .blob {
+      position: fixed;
+      border-radius: 999px;
+      filter: blur(72px);
+      opacity: .28;
+      pointer-events: none;
+      z-index: 0;
+      animation: floaty 12s ease-in-out infinite;
+    }
+    .blob.b1 { width:520px; height:520px; background: var(--accent1); left: -180px; top: -80px; }
+    .blob.b2 { width:460px; height:460px; background: var(--accent2); right: -160px; top: 140px; animation-delay: -5s; }
+    .blob.b3 { width:440px; height:440px; background: var(--accent4); left: 30%; bottom: -200px; animation-delay: -9s; }
+    @keyframes floaty {
+      0%,100% { transform: translate(0,0) scale(1); }
+      50%      { transform: translate(14px,-20px) scale(1.04); }
+    }
+
+    /* ── App shell ── */
+    .app { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* ── Topbar ── */
+    .topbar {
+      position: sticky; top: 0; z-index: 10;
+      backdrop-filter: blur(20px) saturate(1.4);
+      background: rgba(10,22,40,.55);
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+    .topbar-inner {
+      max-width: 1020px; margin: 0 auto; padding: 13px 20px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 11px;
+      font-family: 'Nunito', cursive; color: #fff;
+    }
+    .brand .logo {
+      width: 40px; height: 40px; border-radius: 14px;
+      display: grid; place-items: center;
+      background: linear-gradient(135deg, var(--accent1), var(--accent4));
+      box-shadow: 0 8px 20px rgba(79,142,247,.38);
+      font-size: 18px;
+    }
+    .brand .title { display: flex; flex-direction: column; line-height: 1.1; }
+    .brand .title b { font-size: 15px; font-weight: 800; }
+    .brand .title span { font-size: 11.5px; opacity: .75; font-weight: 500; }
+
+    .pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 7px 14px; border-radius: 999px;
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.16);
+      color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap;
+      letter-spacing: .2px;
+    }
+    .pill .dot {
+      width: 7px; height: 7px; border-radius: 999px;
+      background: var(--accent3);
+      box-shadow: 0 0 0 3px rgba(251,191,36,.25);
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 0 3px rgba(251,191,36,.25); }
+      50%      { box-shadow: 0 0 0 6px rgba(251,191,36,.10); }
+    }
+
+    main { flex: 1; padding: 28px 18px 40px; }
+    .wrap { max-width: 1020px; margin: 0 auto; display: grid; gap: 20px; }
+
+    /* ── Hero ── */
+    .hero { display: grid; grid-template-columns: 1.3fr .7fr; gap: 16px; align-items: stretch; }
+    .hero > .card { display: flex; flex-direction: column; }
+    .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,.6); border-radius: var(--radius); box-shadow: var(--shadow); backdrop-filter: blur(4px); }
+
+    .hero-left { padding: 28px 28px 24px; position: relative; overflow: hidden; }
+    .hero-left::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(560px 220px at 0% 0%, rgba(79,142,247,.10), transparent 55%),
+        radial-gradient(480px 200px at 100% 100%, rgba(52,211,153,.09), transparent 60%);
+      pointer-events: none;
+    }
+    .hero-left > * { position: relative; z-index: 1; }
+
+    h1 {
+      font-family: 'Nunito', cursive;
+      font-size: 32px; font-weight: 900; line-height: 1.08;
+      letter-spacing: -.3px; color: var(--text);
+    }
+    .subtitle {
+      margin-top: 12px; color: var(--muted);
+      font-size: 14px; line-height: 1.6; max-width: 55ch;
+    }
+    .subtitle b { color: var(--text); }
+
+    .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 8px 13px; border-radius: 12px;
+      background: rgba(15,28,51,.05);
+      border: 1px solid rgba(15,28,51,.08);
+      font-size: 12.5px; font-weight: 600; color: var(--text);
+    }
+    .badge small { color: var(--muted); font-weight: 500; }
+
+    /* ── Hero Right ── */
+    .hero-right { padding: 16px; display: flex; flex-direction: column; }
+    .cta-grid { display: grid; grid-template-columns: 1fr; grid-template-rows: repeat(4, 1fr); gap: 10px; flex: 1; }
+    .cta {
+      border-radius: 18px; padding: 0 16px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      cursor: pointer; width: 100%; height: 100%;
+      border: 1px solid transparent;
+      transition: transform .18s ease, box-shadow .18s ease;
+      text-align: left;
+    }
+    .cta:nth-child(1) { background: linear-gradient(135deg, rgba(79,142,247,.14), rgba(79,142,247,.06)); border-color: rgba(79,142,247,.22); }
+    .cta:nth-child(2) { background: linear-gradient(135deg, rgba(247,99,79,.13), rgba(247,99,79,.05)); border-color: rgba(247,99,79,.20); }
+    .cta:nth-child(3) { background: linear-gradient(135deg, rgba(52,211,153,.13), rgba(52,211,153,.05)); border-color: rgba(52,211,153,.20); }
+    .cta:nth-child(4) { background: linear-gradient(135deg, rgba(251,191,36,.13), rgba(251,191,36,.05)); border-color: rgba(251,191,36,.20); }
+    .cta:hover { transform: translateY(-2px); box-shadow: var(--shadow-soft); }
+    .cta .left { display: flex; flex-direction: column; gap: 2px; }
+    .cta .left b { font-size: 13.5px; font-weight: 700; color: var(--text); }
+    .cta .left span { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+    .cta .icon {
+      width: 42px; height: 42px; border-radius: 14px;
+      display: grid; place-items: center;
+      background: rgba(255,255,255,.80);
+      border: 1px solid rgba(255,255,255,.9);
+      box-shadow: 0 6px 16px rgba(0,0,0,.08);
+      font-size: 18px; flex-shrink: 0;
+    }
+
+    /* ── Sections ── */
+    .section { display: none; animation: appear .32s ease both; }
+    .section.active { display: block; }
+    @keyframes appear { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── Form Card ── */
+    .form-card { padding: 24px 24px 20px; }
+
+    .form-head {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 14px;
+      padding-bottom: 16px; border-bottom: 1px solid rgba(15,28,51,.08); margin-bottom: 14px;
+    }
+    .form-head h2 { font-family: 'Nunito', cursive; font-size: 22px; font-weight: 800; line-height: 1.15; }
+    .form-head p { margin-top: 5px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+
+    .steps { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+    .step {
+      font-size: 11.5px; font-weight: 600; color: var(--muted);
+      padding: 5px 10px; border-radius: 999px;
+      background: rgba(15,28,51,.05);
+      border: 1px solid rgba(15,28,51,.08);
+    }
+    .step strong { color: var(--accent1); }
+
+    form { display: grid; gap: 14px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    label {
+      display: flex; flex-direction: column; gap: 6px;
+      font-size: 12.5px; font-weight: 700; color: #1e2d4a;
+      letter-spacing: .1px;
+    }
+    .hint { font-weight: 500; color: var(--muted); font-size: 11.5px; }
+
+    input, select {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 13px;
+      border: 1.5px solid rgba(15,28,51,.12);
+      background: #fff;
+      outline: none;
+      font: inherit;
+      font-size: 13.5px;
+      color: var(--text);
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    input::placeholder { color: rgba(107,122,153,.65); }
+    input:focus, select:focus { border-color: var(--accent1); box-shadow: var(--ring); }
+
+    .divider {
+      margin: 4px 0 0; padding-top: 14px;
+      border-top: 1px solid rgba(15,28,51,.08);
+      font-family: 'Nunito', cursive;
+      font-size: 15px; font-weight: 800; color: var(--text);
+    }
+
+    .actions { display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
+
+    .btn {
+      appearance: none; border: 0; border-radius: 14px; padding: 11px 18px;
+      font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 700;
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      user-select: none; letter-spacing: .1px;
+    }
+    .btn:focus { outline: none; box-shadow: var(--ring); }
+    .btn:active { transform: translateY(1px); }
+
+    .btn-primary { background: linear-gradient(135deg, var(--accent2), var(--accent3)); color: #fff; box-shadow: 0 10px 24px rgba(247,99,79,.28); }
+    .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.04); }
+
+    .btn-ghost { background: rgba(15,28,51,.06); color: #2a3a5c; border: 1.5px solid rgba(15,28,51,.10); }
+    .btn-ghost:hover { transform: translateY(-2px); box-shadow: var(--shadow-soft); }
+
+    .btn-purple { background: linear-gradient(135deg, var(--accent1), var(--accent4)); color: #fff; box-shadow: 0 10px 24px rgba(79,142,247,.28); }
+
+    .note { margin-top: 12px; font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+    footer { padding: 20px; text-align: center; color: rgba(255,255,255,.65); font-size: 12.5px; font-weight: 500; letter-spacing: .2px; }
+
+    /* ── Responsive ── */
+    @media (max-width: 880px){
+      .hero { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr; }
+      .topbar-inner { padding: 12px 14px; }
+      h1 { font-size: 27px; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      * { animation: none !important; transition: none !important; }
+      .blob { display: none; }
+    }
+
+    /* ── Admin / Relatórios ── */
+    .mini-note { font-size: 12px; color: var(--muted); margin: 8px 0 0; line-height: 1.5; }
+
+    .toolbar{
+      display:flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      margin: 10px 0 0;
+      padding: 10px 12px;
+      border-radius: 18px;
+      background: rgba(15,28,51,.03);
+      border: 1px solid rgba(15,28,51,.07);
+    }
+
+    /* ───────────── Ultra Premium Stats ───────────── */
+    .stat-grid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 18px;
+    }
+    .stat{
+      position: relative; overflow: hidden;
+      border-radius: 24px;
+      padding: 20px 20px 18px;
+      background:
+        radial-gradient(700px 220px at 0% 0%, rgba(79,142,247,.10), transparent 60%),
+        radial-gradient(700px 220px at 100% 100%, rgba(52,211,153,.09), transparent 60%),
+        linear-gradient(135deg, rgba(255,255,255,.98), rgba(248,251,255,.96));
+      border: 1px solid rgba(15,28,51,.10);
+      box-shadow: 0 16px 44px rgba(0,0,0,.10);
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .stat:hover{ transform: translateY(-4px); box-shadow: 0 22px 60px rgba(0,0,0,.14); filter: saturate(1.05); }
+    .stat::after{
+      content:""; position:absolute; inset:-2px; border-radius: 26px; pointer-events:none;
+      opacity:.55;
+      background: linear-gradient(135deg, rgba(79,142,247,.28), rgba(247,99,79,.18), rgba(52,211,153,.22));
+      filter: blur(16px);
+      z-index: 0;
+    }
+    .stat::before{
+      content:""; position:absolute; left: 16px; right: 16px; top: 12px; height: 4px;
+      border-radius: 999px; opacity: .95; z-index: 1;
+    }
+    .stat.s1::before{ background: linear-gradient(90deg, rgba(79,142,247,.95), rgba(79,142,247,.35)); }
+    .stat.s2::before{ background: linear-gradient(90deg, rgba(247,99,79,.95), rgba(247,99,79,.35)); }
+    .stat.s3::before{ background: linear-gradient(90deg, rgba(52,211,153,.95), rgba(52,211,153,.35)); }
+    .stat > *{ position: relative; z-index: 2; }
+    .stat-top{ display:flex; align-items:center; justify-content: space-between; gap: 12px; margin-top: 6px; }
+    .stat .k{ font-size: 12px; letter-spacing: .9px; color: var(--muted); font-weight: 900; text-transform: uppercase; }
+    .stat-ic{
+      width: 44px; height: 44px; border-radius: 16px; display:grid; place-items:center; font-size: 18px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(15,28,51,.08);
+      box-shadow: 0 10px 26px rgba(0,0,0,.08);
+    }
+    .stat .v{
+      margin-top: 12px; font-size: 44px; font-weight: 900; line-height: 1;
+      font-family: 'Nunito', cursive; letter-spacing: -1.2px; color: var(--text);
+      text-shadow: 0 10px 26px rgba(0,0,0,.08);
+    }
+    .stat .sub{ margin-top: 10px; font-size: 12.5px; color: rgba(107,122,153,.95); line-height: 1.4; }
+
+    /* ───────────── Premium Chart & Tables ───────────── */
+    .chart-card{
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 26px;
+      border: 1px solid rgba(255,255,255,.55);
+      background: radial-gradient(800px 220px at 0% 0%, rgba(79,142,247,.09), transparent 60%),
+                  radial-gradient(800px 240px at 100% 100%, rgba(247,99,79,.07), transparent 65%),
+                  linear-gradient(135deg, rgba(255,255,255,.97), rgba(248,251,255,.96));
+      box-shadow: 0 18px 56px rgba(0,0,0,.10);
+    }
+    .chart-wrap{
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+    .chart-box{
+      background: rgba(255,255,255,.60);
+      border: 1px solid rgba(15,28,51,.09);
+      border-radius: 18px;
+      padding: 12px;
+      min-height: 300px;
+      box-shadow: 0 10px 26px rgba(0,0,0,.06);
+      backdrop-filter: blur(10px) saturate(1.2);
+    }
+    .chart-box canvas{ width: 100% !important; height: 270px !important; }
+
+    .table-wrap{
+      overflow: auto;
+      border-radius: 16px;
+      border: 1px solid rgba(15,28,51,.10);
+      background: rgba(255,255,255,.88);
+      box-shadow: 0 10px 26px rgba(0,0,0,.06);
+      margin-top: 10px;
+    }
+
+    table.rel{
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 920px;
+    }
+    table.rel th, table.rel td{
+      text-align: left;
+      padding: 11px 12px;
+      font-size: 12.5px;
+      border-top: 1px solid rgba(15,28,51,.07);
+      white-space: nowrap;
+      color: rgba(15,28,51,.90);
+      vertical-align: middle;
+    }
+    table.rel thead th{
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: rgba(248,251,255,.98);
+      border-top: none;
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: .35px;
+      text-transform: uppercase;
+      color: rgba(107,122,153,.95);
+      backdrop-filter: blur(10px) saturate(1.2);
+    }
+    table.rel tbody tr:nth-child(even){ background: rgba(15,28,51,.02); }
+    table.rel tbody tr:hover{ background: rgba(79,142,247,.07); }
+
+    .rank{
+      display:inline-flex; align-items:center; gap: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(15,28,51,.10);
+      background: rgba(255,255,255,.70);
+      font-weight: 800;
+      font-size: 12px;
+    }
+
+    .mini-btn{
+      appearance:none;
+      border: 1px solid rgba(15,28,51,.12);
+      background: rgba(15,28,51,.04);
+      color: rgba(15,28,51,.88);
+      border-radius: 12px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease;
+      display:inline-flex; gap: 6px; align-items:center;
+      white-space: nowrap;
+    }
+    .mini-btn:hover{ transform: translateY(-1px); box-shadow: 0 10px 22px rgba(0,0,0,.08); }
+    .mini-btn:active{ transform: translateY(0); }
+
+    .hidden { display:none !important; }
+
+    @media (max-width: 880px){
+      .stat-grid{ grid-template-columns: 1fr; }
+      .stat .v{ font-size: 40px; }
+      .chart-wrap{ grid-template-columns: 1fr; }
+      table.rel{ min-width: 880px; }
+    }
+  
+    /* ── Logo image (replace emoji) ── */
+    .brand .logo img{
+      width: 72%;
+      height: 72%;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,.10));
+    }
+
+    /* ── Home hero photo ── */
+    .hero-photo{
+      width: 100%;
+      margin-top: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(15,28,51,.10);
+      box-shadow: 0 18px 44px rgba(0,0,0,.14);
+      display: block;
+    }
+    .hero-photo-caption{
+      margin-top: 10px;
+      font-size: 12px;
+      color: rgba(107,122,153,.95);
+      line-height: 1.45;
+    }
+
+  
+    /* ── Harmonização com a logo (cores mais vivas) ── */
+    .hero-left{
+      display: flex;
+      flex-direction: column;
+      justify-content: center; /* centraliza verticalmente o conteúdo no card */
+    }
+    .hero-logo-wrap{
+      display:flex;
+      justify-content:center;
+      margin: 0 0 14px;
+    }
+    .hero-logo-wrap img{
+      width: min(360px, 88%);
+      height: auto;
+      display:block;
+      filter: drop-shadow(0 14px 28px rgba(0,0,0,.22));
+    }
+    .hero-left h1, .hero-left .subtitle{ text-align: center; margin-left:auto; margin-right:auto; }
+    .hero-left .badges{ justify-content: center; }
+
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <div class="app">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand" aria-label="Corrida Kids Ilhas 2026">
+          <div class="logo"><img src="logo-evento-transparente-contorno-branco.png" alt="Logo do evento" /></div>
+          <div class="title">
+            <b>Corrida Kids Ilhas 2026</b>
+            <span>Inscrições online + autorização do responsável</span>
+          </div>
+        </div>
+
+        <div class="pill" title="Data do evento">
+          <span class="dot" aria-hidden="true"></span>
+          <span><strong>12/04/2026</strong> • Comunidade</span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="wrap">
+
+        <!-- HOME -->
+        <section id="home" class="section active">
+          <div class="hero">
+            <div class="card hero-left">
+              <div class="hero-logo-wrap"><img src="logo-evento-transparente-contorno-branco.png" alt="Logo Corrida Kids Ilhas 2026" loading="lazy" /></div>
+              <h1>🏅 1ª Corrida Kids Ilhas 2026 <span aria-hidden="true">🎭</span></h1>
+              <p class="subtitle">
+                Um evento comunitário <b>gratuito</b> e cheio de alegria! Faça a inscrição da criança para a Corrida Kids
+                e/ou para o <b>Show de Talentos</b>. A participação é mediante autorização do responsável.
+              </p>
+
+              <div class="badges" role="list">
+                <div class="badge" role="listitem">📍 <b>Ilha de Santa Maria</b> <small>bairro / comunidade</small></div>
+                <div class="badge" role="listitem">📍 <b>Ilha de Monte Belo</b> <small>bairro / comunidade</small></div>
+                <div class="badge" role="listitem">🆓 <b>Gratuito</b> <small>inscrição online</small></div>
+                <div class="badge" role="listitem">🛡️ <b>Autorização</b> <small>responsável</small></div>
+                <div class="badge" role="listitem">🎤 <b>Talentos</b> <small>até 5 min</small></div>
+              
+              
+
+              </div>
+            </div>
+
+            <div class="card hero-right">
+              <div class="cta-grid" aria-label="Ações principais">
+                <button class="cta" onclick="showSection('corrida')" type="button">
+                  <div class="left">
+                    <b>Fazer inscrição • Corrida Kids</b>
+                    <span>Cadastro rápido e organizado</span>
+                  </div>
+                  <div class="icon" aria-hidden="true">🏃</div>
+                </button>
+
+                <button class="cta" onclick="showSection('show')" type="button">
+                  <div class="left">
+                    <b>Fazer inscrição • Show de Talentos</b>
+                    <span>Música, dança, poesia, teatro…</span>
+                  </div>
+                  <div class="icon" aria-hidden="true">🎭</div>
+                </button>
+
+                <button class="cta" onclick="downloadRegulamento()" type="button">
+                  <div class="left">
+                    <b>Baixar regulamento</b>
+                    <span>Arquivo TXT para imprimir/compartilhar</span>
+                  </div>
+                  <div class="icon" aria-hidden="true">📄</div>
+                </button>
+
+                <button class="cta" onclick="abrirRelatorios()" type="button">
+                  <div class="left">
+                    <b>Relatórios (Admin)</b>
+                    <span>Acesso restrito • Login</span>
+                  </div>
+                  <div class="icon" aria-hidden="true">📊</div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CORRIDA -->
+        <section id="corrida" class="section">
+          <div class="card form-card">
+            <div class="form-head">
+              <div>
+                <h2>Inscrição • Corrida Kids 🏃‍♂️</h2>
+                <p>Preencha os dados da criança e do responsável. Campos com * são obrigatórios.</p>
+              </div>
+              <div class="steps" aria-label="Etapas do formulário">
+                <span class="step"><strong>1</strong> Criança</span>
+                <span class="step"><strong>2</strong> Responsável</span>
+              </div>
+            </div>
+
+            <form id="corridaForm" autocomplete="on">
+              <div class="grid">
+                <label>
+                  Nome completo da criança *
+                  <input type="text" id="nome" placeholder="Ex.: Maria Eduarda Souza" required />
+                  <span class="hint">Como está no documento</span>
+                </label>
+
+                <label>
+                  Data de nascimento *
+                  <input type="date" id="nascimento" required />
+                </label>
+              </div>
+
+              <div class="grid">
+                <label>
+                  RG ou Certidão *
+                  <input type="text" id="documento" placeholder="Digite o número" required />
+                </label>
+
+                <label>
+                  Bairro / Comunidade *
+                  <select id="bairroSel" required>
+                    <option value="">Selecione</option>
+                    <option>Ilha de Santa Maria</option>
+                    <option>Ilha de Monte Belo</option>
+                    <option value="OUTRO">Outro (digitar)</option>
+                  </select>
+                  <input class="hidden" type="text" id="bairroOutro" placeholder="Digite o bairro/comunidade" />
+                  <span class="hint">Padronizado para melhorar relatórios</span>
+                </label>
+              </div>
+
+              <label>
+                Endereço completo *
+                <input type="text" id="endereco" placeholder="Rua, nº, complemento" required />
+              </label>
+
+              <div class="divider">Responsável 🧑‍🧑‍🧒</div>
+
+              <div class="grid">
+                <label>
+                  Nome do responsável *
+                  <input type="text" id="respNome" placeholder="Nome completo" required />
+                </label>
+
+                <label>
+                  CPF do responsável *
+                  <input type="text" id="respCpf" inputmode="numeric" placeholder="Somente números (ex.: 12345678900)" required />
+                  <span class="hint">Você pode digitar com ou sem pontuação</span>
+                </label>
+              </div>
+
+              <div class="grid">
+                <label>
+                  Telefone/WhatsApp *
+                  <input type="tel" id="respTelefone" inputmode="tel" placeholder="DDD + número (ex.: 27999998888)" required />
+                </label>
+
+                <label>
+                  E-mail *
+                  <input type="email" id="respEmail" placeholder="ex.: seuemail@gmail.com" required />
+                </label>
+              </div>
+
+              <div class="actions">
+                <button type="submit" class="btn btn-primary">✅ Enviar inscrição</button>
+                <button type="button" class="btn btn-ghost" onclick="showSection('home')">⬅️ Voltar</button>
+              </div>
+
+              <p class="note">
+                Ao enviar, você confirma que as informações são verdadeiras e que o responsável autoriza a participação.
+              </p>
+            </form>
+          </div>
+        </section>
+
+        <!-- SHOW -->
+        <section id="show" class="section">
+          <div class="card form-card">
+            <div class="form-head">
+              <div>
+                <h2>Inscrição • Show de Talentos 🎭</h2>
+                <p>Para apresentações infantis (música, dança, poesia, teatro, capoeira…). Duração máxima: 5 minutos.</p>
+              </div>
+              <div class="steps" aria-label="Etapas do formulário">
+                <span class="step"><strong>1</strong> Participante</span>
+                <span class="step"><strong>2</strong> Apresentação</span>
+                <span class="step"><strong>3</strong> Responsável</span>
+              </div>
+            </div>
+
+            <form id="showForm" autocomplete="on">
+              <div class="grid">
+                <label>
+                  Nome do participante *
+                  <input type="text" id="showNome" placeholder="Nome completo" required />
+                </label>
+
+                <label>
+                  Data de nascimento *
+                  <input type="date" id="showNascimento" required />
+                </label>
+              </div>
+
+              <div class="grid">
+                <label>
+                  Bairro / Comunidade *
+                  <select id="showBairroSel" required>
+                    <option value="">Selecione</option>
+                    <option>Ilha de Santa Maria</option>
+                    <option>Ilha de Monte Belo</option>
+                    <option value="OUTRO">Outro (digitar)</option>
+                  </select>
+                  <input class="hidden" type="text" id="showBairroOutro" placeholder="Digite o bairro/comunidade" />
+                  <span class="hint">Padronizado para melhorar relatórios</span>
+                </label>
+
+                <label>
+                  Tipo de apresentação *
+                  <select id="tipoApresentacao" required>
+                    <option value="">Selecione</option>
+                    <option>Música</option>
+                    <option>Dança</option>
+                    <option>Poesia</option>
+                    <option>Teatro</option>
+                    <option>Capoeira</option>
+                    <option>Outro</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="grid">
+                <label>
+                  Nome da apresentação *
+                  <input type="text" id="nomeApresentacao" placeholder="Ex.: 'Aquarela'" required />
+                </label>
+
+                <label>
+                  Duração estimada *
+                  <input type="text" id="duracao" placeholder="Máx. 5 min (ex.: 3 min)" required />
+                </label>
+              </div>
+
+              <div class="divider">Responsável 🧑‍🧑‍🧒</div>
+
+              <div class="grid">
+                <label>
+                  Nome do responsável *
+                  <input type="text" id="showRespNome" placeholder="Nome completo" required />
+                </label>
+
+                <label>
+                  CPF do responsável *
+                  <input type="text" id="showRespCpf" inputmode="numeric" placeholder="Somente números (ex.: 12345678900)" required />
+                </label>
+              </div>
+
+              <div class="grid">
+                <label>
+                  Telefone/WhatsApp *
+                  <input type="tel" id="showRespTelefone" inputmode="tel" placeholder="DDD + número (ex.: 27999998888)" required />
+                </label>
+
+                <label>
+                  E-mail *
+                  <input type="email" id="showRespEmail" placeholder="ex.: seuemail@gmail.com" required />
+                </label>
+              </div>
+
+              <div class="actions">
+                <button type="submit" class="btn btn-primary">✅ Enviar inscrição</button>
+                <button type="button" class="btn btn-ghost" onclick="showSection('home')">⬅️ Voltar</button>
+                <button type="button" class="btn btn-purple" onclick="downloadRegulamento()">📄 Baixar regulamento</button>
+              </div>
+
+              <p class="note">
+                A organização pode ajustar a programação por segurança e adequação ao público infantil.
+              </p>
+            </form>
+          </div>
+        </section>
+
+        <!-- LOGIN (ADMIN) -->
+        <section id="login" class="section">
+          <div class="card form-card">
+            <div class="form-head">
+              <div>
+                <h2>Área do Organizador 🔐</h2>
+                <p>Login para acessar relatórios e exportações (admin-only).</p>
+              </div>
+              <div class="steps" aria-label="Status">
+                <span class="step" id="loginStatus"><strong>Não logado</strong></span>
+              </div>
+            </div>
+
+            <form id="loginForm" autocomplete="on">
+              <div class="grid">
+                <label>
+                  E-mail
+                  <input type="email" id="loginEmail" placeholder="Digite seu e-mail" required />
+                </label>
+
+                <label>
+                  Senha
+                  <input type="password" id="loginSenha" placeholder="Digite sua senha" required />
+                </label>
+              </div>
+
+              <div class="actions">
+                <button type="submit" class="btn btn-primary">🔓 Entrar</button>
+                <button type="button" class="btn btn-ghost" onclick="showSection('home')">⬅️ Voltar</button>
+              </div>
+
+              <p class="note">
+                Acesso restrito: somente usuários cadastrados como <b>admin</b> no Firestore (coleção <b>admins</b>).
+              </p>
+            </form>
+          </div>
+        </section>
+
+        <!-- RELATÓRIOS (ADMIN-ONLY) -->
+        <section id="relatorios" class="section">
+          <div class="card form-card">
+            <div class="form-head">
+              <div>
+                <h2>Relatórios de Inscritos 📊</h2>
+                <p>Filtre por tipo e período, veja contadores, gráfico animado e exporte Excel real.</p>
+              </div>
+              <div class="steps" aria-label="Status">
+                <span class="step" id="adminStatus"><strong>Verificando…</strong></span>
+              </div>
+            </div>
+
+            <div class="grid">
+              <label>
+                Tipo
+                <select id="filtroTipo">
+                  <option value="todos">Todos</option>
+                  <option value="corrida">Corrida</option>
+                  <option value="show">Show</option>
+                </select>
+                <span class="hint">Filtra Corrida / Show</span>
+              </label>
+
+              <label>
+                Gráfico
+                <select id="filtroGrafico">
+                  <option value="doughnut">Pizza (Doughnut)</option>
+                  <option value="bar">Barras</option>
+                </select>
+                <span class="hint">Animado</span>
+              </label>
+            </div>
+
+            <div class="grid">
+              <label>
+                Data inicial
+                <input type="date" id="dataInicio" />
+                <span class="hint">Opcional</span>
+              </label>
+
+              <label>
+                Data final
+                <input type="date" id="dataFim" />
+                <span class="hint">Opcional</span>
+              </label>
+            </div>
+
+            <div class="grid">
+              <label>
+                Nome (contém)
+                <input type="text" id="filtroNome" placeholder="Ex.: Maria" />
+              </label>
+
+              <label>
+                Bairro (contém)
+                <input type="text" id="filtroBairro" placeholder="Ex.: Ilha de Santa Maria" />
+              </label>
+            </div>
+
+            <div class="toolbar">
+              <div class="actions" style="margin:0;">
+                <button type="button" class="btn btn-primary" onclick="carregarRelatorios()">🔄 Atualizar</button>
+                <button type="button" class="btn btn-ghost" onclick="exportarXLSX()">📥 Exportar Excel (.xlsx)</button>
+                <button type="button" class="btn btn-ghost" onclick="exportarCSV()">📄 Exportar CSV</button>
+              </div>
+
+              <div class="actions" style="margin:0;">
+                <button type="button" class="btn btn-ghost" onclick="logout()">🚪 Sair</button>
+                <button type="button" class="btn btn-ghost" onclick="showSection('home')">⬅️ Voltar</button>
+              </div>
+            </div>
+
+            <p class="mini-note" id="relInfo">Dica: use o período para ver “inscritos da semana” e exportar só o filtrado.</p>
+
+            <!-- ULTRA PREMIUM STATS -->
+            <div class="stat-grid">
+              <div class="stat s1">
+                <div class="stat-top">
+                  <div class="k">Total • Corrida</div>
+                  <div class="stat-ic" aria-hidden="true">🏃</div>
+                </div>
+                <div class="v" id="countCorrida">—</div>
+                <div class="sub">Inscrições confirmadas na Corrida Kids</div>
+              </div>
+
+              <div class="stat s2">
+                <div class="stat-top">
+                  <div class="k">Total • Show</div>
+                  <div class="stat-ic" aria-hidden="true">🎭</div>
+                </div>
+                <div class="v" id="countShow">—</div>
+                <div class="sub">Inscrições confirmadas no Show de Talentos</div>
+              </div>
+
+              <div class="stat s3">
+                <div class="stat-top">
+                  <div class="k">Total • Geral</div>
+                  <div class="stat-ic" aria-hidden="true">✨</div>
+                </div>
+                <div class="v" id="countTotal">—</div>
+                <div class="sub">Total geral (Corrida + Show)</div>
+              </div>
+            </div>
+
+            <!-- PREMIUM CHART + BAIRRO -->
+            <div class="card chart-card">
+              <div class="chart-wrap">
+                <div class="chart-box">
+                  <canvas id="graficoInscritos" aria-label="Gráfico de inscritos"></canvas>
+                </div>
+
+                <div>
+                  <div class="divider" style="margin-top:0;">Por bairro 🗺️</div>
+                  <div class="table-wrap">
+                    <table class="rel" aria-label="Tabela por bairro" style="min-width:560px;">
+                      <thead>
+                        <tr>
+                          <th>Ranking</th>
+                          <th>Bairro</th>
+                          <th>Corrida</th>
+                          <th>Show</th>
+                          <th>Total</th>
+                        </tr>
+                      </thead>
+                      <tbody id="bairroBody"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="divider">Lista de inscritos</div>
+            <div class="table-wrap">
+              <table class="rel" aria-label="Tabela de inscritos">
+                <thead>
+                  <tr>
+                    <th>Nº</th>
+                    <th>Tipo</th>
+                    <th>Nome</th>
+                    <th>Nascimento</th>
+                    <th>Bairro</th>
+                    <th>Responsável</th>
+                    <th>Telefone</th>
+                    <th>WhatsApp</th>
+                    <th>E-mail</th>
+                    <th>Criado em</th>
+                  </tr>
+                </thead>
+                <tbody id="relBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <footer>
+      Feito com carinho para a comunidade • 1ª Corrida Kids Ilhas 2026 💙
+    </footer>
+  </div>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- SheetJS -->
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+  <script>
+    // =========================
+    // CONFIG
+    // =========================
+    const firebaseConfig = {
+      apiKey: "AIzaSyAUaHzmMdWl8kVo_paanCCQYQFUefrm-g8",
+      authDomain: "corrida-kids.firebaseapp.com",
+      projectId: "corrida-kids",
+      storageBucket: "corrida-kids.firebasestorage.app",
+      messagingSenderId: "192264216284",
+      appId: "1:192264216284:web:329da8b98e959211051e19",
+      measurementId: "G-QZ7EEPGHNJ"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    const COL_CORRIDA = "corridaInscricoes";
+    const COL_SHOW = "showInscricoes";
+    const COL_ADMINS = "admins";
+
+    // =========================
+    // UI
+    // =========================
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+      const el = document.getElementById(id);
+      if (el) el.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function downloadRegulamento() {
+      const texto =
+`REGULAMENTO OFICIAL
+1ª CORRIDA KIDS ILHAS 2026
+
+1) Evento comunitário gratuito.
+2) Data: 12/04/2026.
+3) Idade considerada: a que o participante completar até 31/12/2026.
+4) Inscrição exclusivamente online.
+5) Participação somente com autorização do responsável.
+6) Uso de imagem autorizado para fins institucionais.
+7) Apresentações do Show devem respeitar o público infantil.
+8) Organização poderá alterar a programação por segurança.
+
+Dúvidas e contato: (adicione aqui telefone/WhatsApp e/ou e-mail da organização).`;
+
+      const blob = new Blob([texto], { type: "text/plain;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "Regulamento_Corrida_Kids_Ilhas_2026.txt";
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
+
+    // =========================
+    // Nº automático
+    // =========================
+    function gerarNumeroInscricao(prefixo) {
+      const d = new Date();
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, "0");
+      const dd = String(d.getDate()).padStart(2, "0");
+      const hh = String(d.getHours()).padStart(2, "0");
+      const mi = String(d.getMinutes()).padStart(2, "0");
+      const ss = String(d.getSeconds()).padStart(2, "0");
+      const r = String(Math.floor(Math.random() * 900) + 100);
+      return `${prefixo}-${yyyy}${mm}${dd}-${hh}${mi}${ss}-${r}`;
+    }
+
+    function onlyDigits(s){ return (s||"").toString().replace(/\D/g,""); }
+
+    // =========================
+    // Bairro padronizado (select + outro)
+    // =========================
+    function setupBairroSelect(selId, otherId){
+      const sel = document.getElementById(selId);
+      const other = document.getElementById(otherId);
+      if(!sel || !other) return;
+
+      function toggle(){
+        const isOther = sel.value === "OUTRO";
+        other.classList.toggle("hidden", !isOther);
+        other.required = isOther;
+        if(!isOther) other.value = "";
+      }
+
+      sel.addEventListener("change", toggle);
+      toggle();
+    }
+
+    function getBairroValue(selId, otherId){
+      const sel = document.getElementById(selId);
+      const other = document.getElementById(otherId);
+      if(!sel) return "";
+      if(sel.value === "OUTRO"){
+        return (other?.value || "").trim();
+      }
+      return (sel.value || "").trim();
+    }
+
+    setupBairroSelect("bairroSel", "bairroOutro");
+    setupBairroSelect("showBairroSel", "showBairroOutro");
+
+    // =========================
+    // Salvar inscrições
+    // =========================
+    async function salvarInscricaoCorrida() {
+      const bairroFinal = getBairroValue("bairroSel", "bairroOutro");
+      const dados = {
+        numero: gerarNumeroInscricao("CK"),
+        tipo: "corrida",
+        nome: document.getElementById("nome").value.trim(),
+        nascimento: document.getElementById("nascimento").value,
+        documento: document.getElementById("documento").value.trim(),
+        bairro: bairroFinal,
+        endereco: document.getElementById("endereco").value.trim(),
+        responsavel: {
+          nome: document.getElementById("respNome").value.trim(),
+          cpf: onlyDigits(document.getElementById("respCpf").value),
+          telefone: onlyDigits(document.getElementById("respTelefone").value),
+          email: document.getElementById("respEmail").value.trim()
+        },
+        criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      await db.collection(COL_CORRIDA).add(dados);
+      return dados.numero;
+    }
+
+    async function salvarInscricaoShow() {
+      const bairroFinal = getBairroValue("showBairroSel", "showBairroOutro");
+      const dados = {
+        numero: gerarNumeroInscricao("ST"),
+        tipo: "show",
+        nome: document.getElementById("showNome").value.trim(),
+        nascimento: document.getElementById("showNascimento").value,
+        bairro: bairroFinal,
+        apresentacao: {
+          tipo: document.getElementById("tipoApresentacao").value,
+          nome: document.getElementById("nomeApresentacao").value.trim(),
+          duracao: document.getElementById("duracao").value.trim()
+        },
+        responsavel: {
+          nome: document.getElementById("showRespNome").value.trim(),
+          cpf: onlyDigits(document.getElementById("showRespCpf").value),
+          telefone: onlyDigits(document.getElementById("showRespTelefone").value),
+          email: document.getElementById("showRespEmail").value.trim()
+        },
+        criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      await db.collection(COL_SHOW).add(dados);
+      return dados.numero;
+    }
+
+    document.getElementById("corridaForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      try{
+        const numero = await salvarInscricaoCorrida();
+        alert(`✅ Inscrição registrada!\nNº: ${numero}`);
+        e.target.reset();
+        setupBairroSelect("bairroSel", "bairroOutro");
+        showSection("home");
+      }catch(err){
+        console.error(err);
+        alert("❌ Não foi possível enviar. Verifique sua internet e tente novamente.");
+      }
+    });
+
+    document.getElementById("showForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      try{
+        const numero = await salvarInscricaoShow();
+        alert(`✅ Inscrição registrada!\nNº: ${numero}`);
+        e.target.reset();
+        setupBairroSelect("showBairroSel", "showBairroOutro");
+        showSection("home");
+      }catch(err){
+        console.error(err);
+        alert("❌ Não foi possível enviar. Verifique sua internet e tente novamente.");
+      }
+    });
+
+    // =========================
+    // Admin-only
+    // =========================
+    async function isAdminUser(user){
+      if(!user) return false;
+      try{
+        const doc = await db.collection(COL_ADMINS).doc(user.uid).get();
+        if(!doc.exists) return false;
+        const data = doc.data() || {};
+        return data.ativo === true;
+      }catch(err){
+        console.error(err);
+        return false;
+      }
+    }
+
+    async function abrirRelatorios(){
+      const user = auth.currentUser;
+      if(!user){
+        showSection("login");
+        return;
+      }
+      const ok = await isAdminUser(user);
+      if(!ok){
+        alert("❌ Seu usuário está logado, mas não está autorizado como ADMIN.");
+        showSection("login");
+        return;
+      }
+      showSection("relatorios");
+      carregarRelatorios();
+    }
+
+    async function logout(){
+      await auth.signOut();
+      alert("Você saiu.");
+      showSection("home");
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value.trim();
+      const senha = document.getElementById("loginSenha").value;
+
+      try{
+        await auth.signInWithEmailAndPassword(email, senha);
+        const ok = await isAdminUser(auth.currentUser);
+        if(!ok){
+          alert("❌ Login ok, mas este usuário não é ADMIN. Verifique a coleção admins/{uid}.");
+          return;
+        }
+        alert("✅ Login realizado!");
+        showSection("relatorios");
+        carregarRelatorios();
+      }catch(err){
+        console.error(err);
+        alert("❌ Não foi possível entrar. Verifique e-mail e senha.");
+      }
+    });
+
+    // =========================
+    // Relatórios
+    // =========================
+    let cacheRelatorios = [];
+    let ultimoFiltrado = [];
+    let chartInstance = null;
+
+    function normaliza(txt){
+      return (txt || "").toString().toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu,"");
+    }
+
+    function parseDateInputToRange(){
+      const di = document.getElementById("dataInicio").value;
+      const df = document.getElementById("dataFim").value;
+
+      let start = null, end = null;
+      if(di){
+        const s = new Date(di + "T00:00:00");
+        start = s.getTime();
+      }
+      if(df){
+        const e = new Date(df + "T23:59:59");
+        end = e.getTime();
+      }
+      return {start, end};
+    }
+
+    function toMillisFromFirestore(ts){
+      if(!ts) return null;
+      if(typeof ts.toMillis === "function") return ts.toMillis();
+      if(ts.seconds != null) return ts.seconds * 1000;
+      return null;
+    }
+
+    function aplicaFiltros(lista){
+      const tipo = document.getElementById("filtroTipo").value;
+      const nome = normaliza(document.getElementById("filtroNome").value);
+      const bairro = normaliza(document.getElementById("filtroBairro").value);
+      const {start, end} = parseDateInputToRange();
+
+      return lista.filter(it => {
+        if(tipo !== "todos" && it.tipo !== tipo) return false;
+        if(nome && !normaliza(it.nome).includes(nome)) return false;
+        if(bairro && !normaliza(it.bairro).includes(bairro)) return false;
+
+        const ms = it.criadoEmMs;
+        if(start != null && ms != null && ms < start) return false;
+        if(end != null && ms != null && ms > end) return false;
+
+        return true;
+      });
+    }
+
+    function fmtData(ms){
+      if(!ms) return "-";
+      const d = new Date(ms);
+      const dd = String(d.getDate()).padStart(2,"0");
+      const mm = String(d.getMonth()+1).padStart(2,"0");
+      const yyyy = d.getFullYear();
+      const hh = String(d.getHours()).padStart(2,"0");
+      const mi = String(d.getMinutes()).padStart(2,"0");
+      return `${dd}/${mm}/${yyyy} ${hh}:${mi}`;
+    }
+
+    // Ultra: count up
+    function animarNumero(el, novoValor){
+      const start = Number(el.dataset.val || 0);
+      const end = Number(novoValor || 0);
+      const dur = 650;
+      const t0 = performance.now();
+
+      function step(t){
+        const p = Math.min(1, (t - t0) / dur);
+        const v = Math.round(start + (end - start) * (1 - Math.pow(1 - p, 3)));
+        el.textContent = v;
+        if(p < 1) requestAnimationFrame(step);
+        else el.dataset.val = String(end);
+      }
+      requestAnimationFrame(step);
+    }
+
+    function atualizarResumo(lista){
+      const corrida = lista.filter(x => x.tipo === "corrida").length;
+      const show = lista.filter(x => x.tipo === "show").length;
+
+      animarNumero(document.getElementById("countCorrida"), corrida);
+      animarNumero(document.getElementById("countShow"), show);
+      animarNumero(document.getElementById("countTotal"), corrida + show);
+
+      document.getElementById("relInfo").textContent = `Exibindo: ${lista.length} (Corrida: ${corrida} • Show: ${show})`;
+    }
+
+    function copiarTexto(txt){
+      const t = (txt || "").toString();
+      if(!t){ alert("Sem telefone para copiar."); return; }
+      navigator.clipboard?.writeText(t).then(()=> {
+        // feedback discreto
+      }).catch(()=> alert("Não foi possível copiar. Tente manualmente."));
+    }
+
+    function abrirWhats(telefone){
+      const fone = (telefone || "").toString().replace(/\D/g,"");
+      if(!fone){ alert("Sem telefone para abrir WhatsApp."); return; }
+      const url = "https://wa.me/55" + fone;
+      window.open(url, "_blank");
+    }
+
+    function renderTabela(lista){
+      const tbody = document.getElementById("relBody");
+      tbody.innerHTML = "";
+
+      for(const it of lista){
+        const tel = (it.responsavelTelefone || "").toString();
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${it.numero || "-"}</td>
+          <td>${it.tipo}</td>
+          <td>${it.nome || "-"}</td>
+          <td>${it.nascimento || "-"}</td>
+          <td>${it.bairro || "-"}</td>
+          <td>${it.responsavelNome || "-"}</td>
+          <td>${tel || "-"}</td>
+          <td>
+            <button class="mini-btn" type="button" data-tel="${tel}">📲 Whats</button>
+          </td>
+          <td>${it.responsavelEmail || "-"}</td>
+          <td>${fmtData(it.criadoEmMs)}</td>
+        `;
+
+        const btn = tr.querySelector("button[data-tel]");
+        btn?.addEventListener("click", () => {
+          const t = btn.getAttribute("data-tel") || "";
+          copiarTexto(t);
+          abrirWhats(t);
+        });
+
+        tbody.appendChild(tr);
+      }
+    }
+
+    function medal(rank){
+      if(rank === 1) return "🥇";
+      if(rank === 2) return "🥈";
+      if(rank === 3) return "🥉";
+      return "🏷️";
+    }
+
+    function montarTabelaBairro(lista){
+      const map = new Map();
+
+      for(const it of lista){
+        const b = (it.bairro || "").trim() || "Não informado";
+        if(!map.has(b)) map.set(b, {bairro:b, corrida:0, show:0});
+        const row = map.get(b);
+        if(it.tipo === "corrida") row.corrida++;
+        if(it.tipo === "show") row.show++;
+      }
+
+      const linhas = Array.from(map.values())
+        .map(x => ({...x, total: x.corrida + x.show}))
+        .sort((a,b) => b.total - a.total || a.bairro.localeCompare(b.bairro));
+
+      const tbody = document.getElementById("bairroBody");
+      tbody.innerHTML = "";
+
+      linhas.forEach((r, idx) => {
+        const rank = idx + 1;
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><span class="rank">${medal(rank)} #${rank}</span></td>
+          <td>${r.bairro}</td>
+          <td>${r.corrida}</td>
+          <td>${r.show}</td>
+          <td><b>${r.total}</b></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      return linhas;
+    }
+
+    function atualizarGrafico(lista){
+      const tipoGrafico = document.getElementById("filtroGrafico").value;
+      const corrida = lista.filter(x => x.tipo === "corrida").length;
+      const show = lista.filter(x => x.tipo === "show").length;
+
+      const ctx = document.getElementById("graficoInscritos").getContext("2d");
+      const data = {
+        labels: ["Corrida", "Show"],
+        datasets: [{ label: "Inscritos", data: [corrida, show], borderWidth: 2 }]
+      };
+
+      const options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 900, easing: "easeOutQuart" },
+        plugins: { legend: { position: "bottom" } },
+        scales: (tipoGrafico === "bar") ? { y: { beginAtZero: true, ticks: { precision: 0 } } } : {}
+      };
+
+      if(chartInstance) chartInstance.destroy();
+      chartInstance = new Chart(ctx, { type: tipoGrafico, data, options });
+    }
+
+    function atualizarTudo(){
+      ultimoFiltrado = aplicaFiltros(cacheRelatorios);
+      atualizarResumo(ultimoFiltrado);
+      renderTabela(ultimoFiltrado);
+      montarTabelaBairro(ultimoFiltrado);
+      atualizarGrafico(ultimoFiltrado);
+    }
+
+    async function carregarRelatorios(){
+      const user = auth.currentUser;
+      if(!user){ showSection("login"); return; }
+
+      const ok = await isAdminUser(user);
+      document.getElementById("adminStatus").innerHTML = ok ? `<strong>Admin:</strong> ${user.email}` : "<strong>Sem permissão</strong>";
+      if(!ok){
+        alert("❌ Sem permissão de ADMIN. Verifique a coleção admins/{uid}.");
+        showSection("login");
+        return;
+      }
+
+      try{
+        const [corridaSnap, showSnap] = await Promise.all([
+          db.collection(COL_CORRIDA).orderBy("criadoEm","desc").limit(2000).get(),
+          db.collection(COL_SHOW).orderBy("criadoEm","desc").limit(2000).get()
+        ]);
+
+        const lista = [];
+
+        corridaSnap.forEach(doc=>{
+          const d = doc.data() || {};
+          const ms = toMillisFromFirestore(d.criadoEm);
+          lista.push({
+            numero: d.numero || d.numeroInscricao || "",
+            tipo: "corrida",
+            nome: d.nome || "",
+            nascimento: d.nascimento || "",
+            bairro: d.bairro || "",
+            responsavelNome: d?.responsavel?.nome || "",
+            responsavelTelefone: d?.responsavel?.telefone || "",
+            responsavelEmail: d?.responsavel?.email || "",
+            criadoEmMs: ms
+          });
+        });
+
+        showSnap.forEach(doc=>{
+          const d = doc.data() || {};
+          const ms = toMillisFromFirestore(d.criadoEm);
+          lista.push({
+            numero: d.numero || d.numeroInscricao || "",
+            tipo: "show",
+            nome: d.nome || "",
+            nascimento: d.nascimento || "",
+            bairro: d.bairro || "",
+            responsavelNome: d?.responsavel?.nome || "",
+            responsavelTelefone: d?.responsavel?.telefone || "",
+            responsavelEmail: d?.responsavel?.email || "",
+            criadoEmMs: ms
+          });
+        });
+
+        cacheRelatorios = lista;
+        atualizarTudo();
+
+      }catch(err){
+        console.error(err);
+        alert("❌ Erro ao carregar relatórios. Se aparecer 'Missing or insufficient permissions', confirme as Rules admin-only.");
+      }
+    }
+
+    // =========================
+    // Exportações
+    // =========================
+    function exportarCSV(){
+      const lista = ultimoFiltrado && ultimoFiltrado.length ? ultimoFiltrado : aplicaFiltros(cacheRelatorios);
+
+      const header = ["numero","tipo","nome","nascimento","bairro","responsavel","telefone","email","criadoEm"];
+      const rows = [header.join(";")];
+
+      for(const it of lista){
+        const row = [
+          it.numero || "",
+          it.tipo || "",
+          it.nome || "",
+          it.nascimento || "",
+          it.bairro || "",
+          it.responsavelNome || "",
+          it.responsavelTelefone || "",
+          it.responsavelEmail || "",
+          fmtData(it.criadoEmMs)
+        ].map(v => `"${(v??"").toString().replace(/"/g,'""').replace(/\r?\n/g," ")}"`).join(";");
+
+        rows.push(row);
+      }
+
+      const csv = "\uFEFF" + rows.join("\n");
+      const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "relatorio_inscritos.csv";
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
+
+    function exportarXLSX(){
+      const lista = ultimoFiltrado && ultimoFiltrado.length ? ultimoFiltrado : aplicaFiltros(cacheRelatorios);
+
+      const sheetData = [["Nº","Tipo","Nome","Nascimento","Bairro","Responsável","Telefone","E-mail","Criado em"]];
+      lista.forEach(it=>{
+        sheetData.push([
+          it.numero || "",
+          it.tipo || "",
+          it.nome || "",
+          it.nascimento || "",
+          it.bairro || "",
+          it.responsavelNome || "",
+          it.responsavelTelefone || "",
+          it.responsavelEmail || "",
+          fmtData(it.criadoEmMs)
+        ]);
+      });
+
+      const bairros = montarTabelaBairro(lista) || [];
+      const bairroData = [["Bairro","Corrida","Show","Total"]];
+      bairros.forEach(b=> bairroData.push([b.bairro, b.corrida, b.show, b.total]));
+
+      const corrida = lista.filter(x=>x.tipo==="corrida").length;
+      const show = lista.filter(x=>x.tipo==="show").length;
+      const resumoData = [
+        ["Resumo","Valor"],
+        ["Total Corrida", corrida],
+        ["Total Show", show],
+        ["Total Geral", corrida + show],
+        ["Exportado em", new Date().toLocaleString("pt-BR")]
+      ];
+
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(resumoData), "Resumo");
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(bairroData), "Por Bairro");
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(sheetData), "Inscritos");
+      XLSX.writeFile(wb, "relatorio_inscritos.xlsx");
+    }
+
+    // Reatividade
+    ["filtroTipo","filtroGrafico","dataInicio","dataFim","filtroNome","filtroBairro"].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el){
+        el.addEventListener("input", atualizarTudo);
+        el.addEventListener("change", atualizarTudo);
+      }
+    });
+
+    // Status
+    auth.onAuthStateChanged(async (user)=>{
+      const loginStatus = document.getElementById("loginStatus");
+      const adminStatus = document.getElementById("adminStatus");
+
+      if(!user){
+        if(loginStatus) loginStatus.innerHTML = "<strong>Não logado</strong>";
+        if(adminStatus) adminStatus.innerHTML = "<strong>Não logado</strong>";
+        return;
+      }
+
+      const ok = await isAdminUser(user);
+      if(loginStatus) loginStatus.innerHTML = ok ? `<strong>Admin:</strong> ${user.email}` : `<strong>Logado:</strong> ${user.email}`;
+      if(adminStatus) adminStatus.innerHTML = ok ? `<strong>Admin:</strong> ${user.email}` : "<strong>Sem permissão</strong>";
+    });
+  </script>
+</body>
+</html>
