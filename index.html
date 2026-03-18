@@ -158,7 +158,7 @@
 
     /* ── Hero Right ── */
     .hero-right { padding: 16px; display: flex; flex-direction: column; }
-    .cta-grid { display: grid; grid-template-columns: 1fr; grid-template-rows: repeat(4, 1fr); gap: 10px; flex: 1; }
+    .cta-grid { display: grid; grid-template-columns: 1fr; grid-template-rows: repeat(6, 1fr); gap: 10px; flex: 1; }
     .cta {
       border-radius: 18px; padding: 0 16px;
       display: flex; align-items: center; justify-content: space-between; gap: 12px;
@@ -474,19 +474,238 @@
       flex-direction: column;
       justify-content: center; /* centraliza verticalmente o conteúdo no card */
     }
-    .hero-logo-wrap{
+    .hero-logos-wrap{
       display:flex;
       justify-content:center;
+      align-items: center;
+      gap: 10px;
       margin: 0 0 14px;
+      flex-wrap: wrap;
     }
-    .hero-logo-wrap img{
-      width: min(360px, 88%);
+    .hero-logo-item{
+      width: min(220px, 42%);
       height: auto;
       display:block;
       filter: drop-shadow(0 14px 28px rgba(0,0,0,.22));
+      transition: transform .2s ease;
     }
+    .hero-logo-item:hover{ transform: scale(1.04); }
     .hero-left h1, .hero-left .subtitle{ text-align: center; margin-left:auto; margin-right:auto; }
     .hero-left .badges{ justify-content: center; }
+
+    /* ── Videos Section ── */
+    .videos-section { margin-top: 20px; }
+    .videos-section h2 {
+      font-family: 'Nunito', cursive;
+      font-size: 22px; font-weight: 900;
+      color: #fff; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .videos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 20px;
+    }
+    .video-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,.6);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .video-card:hover { transform: translateY(-4px); box-shadow: 0 32px 64px rgba(0,0,0,.28); }
+    .video-embed {
+      position: relative; width: 100%; padding-top: 56.25%;
+      background: #000;
+    }
+    .video-embed iframe {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; border: 0;
+    }
+    .video-info {
+      padding: 16px 18px;
+    }
+    .video-info h3 {
+      font-family: 'Nunito', cursive;
+      font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 6px;
+    }
+    .video-info p {
+      font-size: 12.5px; color: var(--muted); line-height: 1.5; margin-bottom: 12px;
+    }
+    .share-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 8px 14px; border-radius: 12px;
+      background: linear-gradient(135deg, rgba(79,142,247,.14), rgba(79,142,247,.06));
+      border: 1px solid rgba(79,142,247,.28);
+      color: var(--accent1); font-size: 12px; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .share-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(79,142,247,.20); }
+    .share-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    /* ── Thumbnail player (antes do embed carregar) ── */
+    .yt-thumb {
+      position: absolute; inset: 0;
+      cursor: pointer; background: #000;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+    .yt-thumb img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: cover; opacity: .85;
+      transition: opacity .2s;
+    }
+    .yt-thumb:hover img { opacity: .65; }
+    .yt-play-btn {
+      position: relative; z-index: 2;
+      width: 68px; height: 68px; border-radius: 50%;
+      background: #ff0000;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; color: #fff; padding-left: 4px;
+      box-shadow: 0 8px 28px rgba(0,0,0,.5);
+      transition: transform .2s, background .2s;
+    }
+    .yt-thumb:hover .yt-play-btn { transform: scale(1.1); background: #cc0000; }
+    .yt-play-label {
+      position: relative; z-index: 2;
+      margin-top: 12px; color: #fff; font-weight: 700; font-size: 13px;
+      background: rgba(0,0,0,.5); padding: 5px 14px; border-radius: 999px;
+    }
+    .yt-thumb.loading .yt-play-btn { background: #666; }
+
+    /* ── Video fallback ── */
+    .vid-fallback {
+      position: absolute; inset: 0;
+      background: #000;
+    }
+    .vid-fallback img {
+      width: 100%; height: 100%; object-fit: cover; opacity: .75;
+    }
+    .play-overlay {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 10px;
+      text-decoration: none;
+      background: rgba(0,0,0,.35);
+      transition: background .2s;
+    }
+    .play-overlay:hover { background: rgba(0,0,0,.55); }
+    .play-btn {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: #ff0000;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; color: #fff;
+      box-shadow: 0 8px 24px rgba(0,0,0,.4);
+      transition: transform .2s;
+    }
+    .play-overlay:hover .play-btn { transform: scale(1.12); }
+    .play-label {
+      color: #fff; font-weight: 700; font-size: 14px;
+      text-shadow: 0 2px 8px rgba(0,0,0,.6);
+      background: rgba(0,0,0,.45);
+      padding: 6px 14px; border-radius: 999px;
+    }
+
+    .copy-toast {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: #1e2d4a; color: #fff; padding: 10px 20px; border-radius: 999px;
+      font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none;
+      transition: opacity .3s, transform .3s; z-index: 999;
+    }
+    .copy-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    @media (max-width: 640px) {
+      .videos-grid { grid-template-columns: 1fr; }
+      .hero-logo-item { width: min(160px, 44%); }
+    }
+
+    /* ── Cronograma ── */
+    .cronograma-section { margin-top: 20px; }
+    .cronograma-section h2 {
+      font-family: 'Nunito', cursive;
+      font-size: 22px; font-weight: 900;
+      color: #fff; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .cronograma-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,.6);
+      overflow: hidden;
+    }
+    .crono-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid rgba(15,28,51,.07);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .crono-header-icon {
+      width: 48px; height: 48px; border-radius: 16px; flex-shrink: 0;
+      display: grid; place-items: center; font-size: 22px;
+      background: linear-gradient(135deg, var(--accent1), var(--accent4));
+      box-shadow: 0 8px 20px rgba(79,142,247,.28);
+    }
+    .crono-header h3 {
+      font-family: 'Nunito', cursive; font-size: 18px;
+      font-weight: 900; color: var(--text); margin: 0;
+    }
+    .crono-header p { font-size: 12.5px; color: var(--muted); margin: 2px 0 0; }
+    .crono-list { padding: 8px 0 16px; }
+    .crono-item {
+      display: flex; align-items: center; gap: 0;
+      padding: 0 24px; position: relative;
+    }
+    .crono-item:not(:last-child) .crono-line { height: 100%; }
+    .crono-time-col {
+      width: 80px; flex-shrink: 0;
+      text-align: right; padding-right: 16px;
+    }
+    .crono-time {
+      font-family: 'Nunito', cursive; font-size: 14px;
+      font-weight: 900; color: var(--accent1);
+      white-space: nowrap;
+    }
+    .crono-connector {
+      display: flex; flex-direction: column;
+      align-items: center; flex-shrink: 0;
+      width: 32px;
+    }
+    .crono-dot {
+      width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0;
+      border: 3px solid #fff;
+      box-shadow: 0 0 0 2px currentColor;
+      margin: 12px 0;
+      z-index: 1;
+    }
+    .crono-dot.corrida { color: var(--accent1); background: var(--accent1); }
+    .crono-dot.show    { color: var(--accent2); background: var(--accent2); }
+    .crono-dot.start   { color: var(--accent4); background: var(--accent4); }
+    .crono-vline {
+      width: 2px; background: rgba(15,28,51,.08);
+      flex: 1; min-height: 24px;
+    }
+    .crono-content {
+      flex: 1; padding: 10px 0 10px 16px;
+    }
+    .crono-label {
+      font-size: 14px; font-weight: 700; color: var(--text);
+      line-height: 1.3;
+    }
+    .crono-sub {
+      font-size: 12px; color: var(--muted); margin-top: 2px;
+    }
+    .crono-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px; border-radius: 999px;
+      font-size: 11px; font-weight: 700; margin-top: 5px;
+    }
+    .crono-badge.corrida { background: rgba(79,142,247,.12); color: var(--accent1); }
+    .crono-badge.show    { background: rgba(248,88,16,.12);  color: var(--accent2); }
+    .crono-badge.start   { background: rgba(152,192,0,.15);  color: #5a7a00; }
+    @media (max-width: 640px) {
+      .crono-time-col { width: 60px; }
+      .crono-time { font-size: 12.5px; }
+    }
 
   </style>
 </head>
@@ -495,6 +714,7 @@
   <div class="blob b1"></div>
   <div class="blob b2"></div>
   <div class="blob b3"></div>
+  <div class="copy-toast" id="copyToast">✅ Link copiado!</div>
 
   <div class="app">
     <header class="topbar">
@@ -509,7 +729,7 @@
 
         <div class="pill" title="Data do evento">
           <span class="dot" aria-hidden="true"></span>
-          <span><strong>24/05/2026</strong> • Comunidade</span>
+          <span><strong>Junho 2026</strong> • Dia a Definir</span>
         </div>
       </div>
     </header>
@@ -521,8 +741,11 @@
         <section id="home" class="section active">
           <div class="hero">
             <div class="card hero-left">
-              <div class="hero-logo-wrap"><img src="logo1.png" alt="Logo Corrida Kids Ilhas 2026" loading="lazy" /></div>
-              <h1>🏅 1ª Corrida Kids Ilhas 2026 <span aria-hidden="true">🎭</span></h1>
+              <div class="hero-logos-wrap">
+                <img src="logo1.png" alt="Logo Corrida Kids Ilhas 2026" loading="lazy" class="hero-logo-item" />
+                <img src="logo_show.png" alt="Logo Show de Talentos" loading="lazy" class="hero-logo-item" />
+              </div>
+              <h1>🏅 Corrida Kids &amp; Show de Talentos 🎭</h1>
               <p class="subtitle">
                 Um evento comunitário <b>gratuito</b> e cheio de alegria! Faça a inscrição da criança para a Corrida Kids
                 e/ou para o <b>Show de Talentos</b>. A participação é mediante autorização do responsável.
@@ -558,6 +781,14 @@
                   <div class="icon" aria-hidden="true">🎭</div>
                 </button>
 
+                <button class="cta" onclick="showSection('trajeto')" type="button">
+                  <div class="left">
+                    <b>Trajeto &amp; Categorias</b>
+                    <span>Percurso, grupos e distâncias</span>
+                  </div>
+                  <div class="icon" aria-hidden="true">🗺️</div>
+                </button>
+
                 <button class="cta" onclick="downloadRegulamento()" type="button">
                   <div class="left">
                     <b>Baixar regulamento</b>
@@ -573,12 +804,189 @@
                   </div>
                   <div class="icon" aria-hidden="true">📊</div>
                 </button>
+
+                <button class="cta" onclick="showSection('diagnostico')" type="button">
+                  <div class="left">
+                    <b>🔬 Diagnóstico Firebase</b>
+                    <span>Testa conexão com o banco de dados</span>
+                  </div>
+                  <div class="icon" aria-hidden="true">🛠️</div>
+                </button>
               </div>
             </div>
           </div>
-        </section>
 
-        <!-- CORRIDA -->
+          <!-- CRONOGRAMA -->
+          <div class="cronograma-section">
+            <h2>📅 Cronograma do Evento</h2>
+            <div class="cronograma-card">
+              <div class="crono-header">
+                <div class="crono-header-icon">🏁</div>
+                <div>
+                  <h3>Programação Oficial — Junho 2026</h3>
+                  <p>Ilha de Santa Maria &amp; Ilha de Monte Belo • Evento gratuito</p>
+                </div>
+              </div>
+              <div class="crono-list">
+
+                <!-- 8h00 -->
+                <div class="crono-item">
+                  <div class="crono-time-col"><span class="crono-time">8h00</span></div>
+                  <div class="crono-connector">
+                    <div class="crono-dot start"></div>
+                    <div class="crono-vline"></div>
+                  </div>
+                  <div class="crono-content">
+                    <div class="crono-label">Concentração dos participantes</div>
+                    <div class="crono-sub">Chegada, organização e boas-vindas</div>
+                    <span class="crono-badge start">🟢 Abertura</span>
+                  </div>
+                </div>
+
+                <!-- 8h15 -->
+                <div class="crono-item">
+                  <div class="crono-time-col"><span class="crono-time">8h15</span></div>
+                  <div class="crono-connector">
+                    <div class="crono-dot corrida"></div>
+                    <div class="crono-vline"></div>
+                  </div>
+                  <div class="crono-content">
+                    <div class="crono-label">Corrida — Grupo 1</div>
+                    <div class="crono-sub">Categoria 6 e 7 anos</div>
+                    <span class="crono-badge corrida">🏃 Corrida Kids</span>
+                  </div>
+                </div>
+
+                <!-- 8h50 -->
+                <div class="crono-item">
+                  <div class="crono-time-col"><span class="crono-time">8h50</span></div>
+                  <div class="crono-connector">
+                    <div class="crono-dot corrida"></div>
+                    <div class="crono-vline"></div>
+                  </div>
+                  <div class="crono-content">
+                    <div class="crono-label">Corrida — Grupo 2</div>
+                    <div class="crono-sub">Categoria 8 e 9 anos</div>
+                    <span class="crono-badge corrida">🏃 Corrida Kids</span>
+                  </div>
+                </div>
+
+                <!-- 9h20 -->
+                <div class="crono-item">
+                  <div class="crono-time-col"><span class="crono-time">9h20</span></div>
+                  <div class="crono-connector">
+                    <div class="crono-dot corrida"></div>
+                    <div class="crono-vline"></div>
+                  </div>
+                  <div class="crono-content">
+                    <div class="crono-label">Corrida — Grupo 3</div>
+                    <div class="crono-sub">Categoria 10 a 12 anos</div>
+                    <span class="crono-badge corrida">🏃 Corrida Kids</span>
+                  </div>
+                </div>
+
+                <!-- 9h50 -->
+                <div class="crono-item">
+                  <div class="crono-time-col"><span class="crono-time">9h50</span></div>
+                  <div class="crono-connector">
+                    <div class="crono-dot corrida"></div>
+                    <div class="crono-vline"></div>
+                  </div>
+                  <div class="crono-content">
+                    <div class="crono-label">Corrida — Grupo 4</div>
+                    <div class="crono-sub">Categoria 13 a 15 anos</div>
+                    <span class="crono-badge corrida">🏃 Corrida Kids</span>
+                  </div>
+                </div>
+
+                <!-- 11h00 -->
+                <div class="crono-item">
+                  <div class="crono-time-col"><span class="crono-time">11h00</span></div>
+                  <div class="crono-connector">
+                    <div class="crono-dot show"></div>
+                  </div>
+                  <div class="crono-content">
+                    <div class="crono-label">Início do Show de Talentos</div>
+                    <div class="crono-sub">Música, dança, poesia, teatro, capoeira e muito mais!</div>
+                    <span class="crono-badge show">🎭 Show de Talentos</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- VÍDEOS DO EVENTO -->
+          <div class="videos-section">
+            <h2>🎬 Vídeos do Evento</h2>
+            <div id="fileProtocolWarning" class="hidden" style="background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.4);border-radius:16px;padding:14px 18px;margin-bottom:16px;font-size:13px;color:var(--text);line-height:1.6;">
+              ⚠️ <strong>Você está abrindo o site como arquivo local.</strong> O YouTube bloqueia embeds em arquivos locais por segurança.<br>
+              Para os vídeos funcionarem, o site precisa estar em um servidor (hospedagem, GitHub Pages, etc.).<br>
+              Ao clicar em ▶, o vídeo abrirá diretamente no YouTube.
+            </div>
+            <div class="videos-grid">
+
+              <div class="video-card">
+                <div class="video-embed" id="vid1">
+                  <div class="yt-thumb" onclick="loadYtEmbed('vid1','LBH8zNm88cM')" title="Clique para assistir">
+                    <img src="https://img.youtube.com/vi/LBH8zNm88cM/hqdefault.jpg" alt="Thumbnail vídeo 1" />
+                    <div class="yt-play-btn">▶</div>
+                    <div class="yt-play-label">Clique para assistir</div>
+                  </div>
+                  <div class="vid-fallback hidden" id="vid1-fb">
+                    <img src="https://img.youtube.com/vi/LBH8zNm88cM/hqdefault.jpg" alt="Thumbnail do vídeo" />
+                    <a href="https://youtu.be/LBH8zNm88cM" target="_blank" rel="noopener" class="play-overlay">
+                      <span class="play-btn">▶</span>
+                      <span class="play-label">Assistir no YouTube</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="video-info">
+                  <h3>🏃 Corrida Kids Ilhas — Momentos Incríveis</h3>
+                  <p>Reviva a emoção da nossa corrida infantil! Crianças cheias de energia e muita alegria nas Ilhas.</p>
+                  <div class="share-actions">
+                    <button class="share-btn" onclick="compartilharVideo('https://youtu.be/LBH8zNm88cM', this)">
+                      📤 Compartilhar link
+                    </button>
+                    <a class="share-btn" href="https://wa.me/?text=Assista%20esse%20v%C3%ADdeo%20incrível%20da%20Corrida%20Kids%20Ilhas%202026!%20%F0%9F%8F%83%20https%3A%2F%2Fyoutu.be%2FLBH8zNm88cM" target="_blank" rel="noopener">
+                      💬 Enviar no WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="video-card">
+                <div class="video-embed" id="vid2">
+                  <div class="yt-thumb" onclick="loadYtEmbed('vid2','-qMvTZLPXeE')" title="Clique para assistir">
+                    <img src="https://img.youtube.com/vi/-qMvTZLPXeE/hqdefault.jpg" alt="Thumbnail vídeo 2" />
+                    <div class="yt-play-btn">▶</div>
+                    <div class="yt-play-label">Clique para assistir</div>
+                  </div>
+                  <div class="vid-fallback hidden" id="vid2-fb">
+                    <img src="https://img.youtube.com/vi/-qMvTZLPXeE/hqdefault.jpg" alt="Thumbnail do vídeo" />
+                    <a href="https://youtu.be/-qMvTZLPXeE" target="_blank" rel="noopener" class="play-overlay">
+                      <span class="play-btn">▶</span>
+                      <span class="play-label">Assistir no YouTube</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="video-info">
+                  <h3>🎭 Show de Talentos — Mostre seu Talento!</h3>
+                  <p>Música, dança, teatro e muito mais! Veja como nossos pequenos brilharam no palco das Ilhas.</p>
+                  <div class="share-actions">
+                    <button class="share-btn" onclick="compartilharVideo('https://youtu.be/-qMvTZLPXeE', this)">
+                      📤 Compartilhar link
+                    </button>
+                    <a class="share-btn" href="https://wa.me/?text=Assista%20o%20Show%20de%20Talentos%20das%20Ilhas%202026!%20%F0%9F%8E%AD%20https%3A%2F%2Fyoutu.be%2F-qMvTZLPXeE" target="_blank" rel="noopener">
+                      💬 Enviar no WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
         <section id="corrida" class="section">
           <div class="card form-card">
             <div class="form-head">
@@ -968,6 +1376,28 @@
           </div>
         </section>
 
+        <!-- DIAGNÓSTICO FIREBASE -->
+        <section id="diagnostico" class="section">
+          <div class="card form-card">
+            <div class="form-head">
+              <div>
+                <h2>🔬 Diagnóstico Firebase</h2>
+                <p>Verifica se a conexão com o banco de dados está funcionando corretamente (leitura, escrita e autenticação).</p>
+              </div>
+              <button class="btn btn-ghost" onclick="showSection('home')" type="button">⬅️ Voltar</button>
+            </div>
+            <div style="margin-top:8px;">
+              <button id="diagBtn" class="btn btn-primary" onclick="testarFirebase()" type="button">
+                🚀 Iniciar diagnóstico
+              </button>
+            </div>
+            <div id="diagLog" style="margin-top:16px;display:flex;flex-direction:column;gap:2px;"></div>
+            <p class="note" style="margin-top:16px;">
+              O diagnóstico cria e remove automaticamente um documento de teste na coleção <code>_diagnostico</code>. Nenhum dado real é alterado.
+            </p>
+          </div>
+        </section>
+
       </div>
     </main>
 
@@ -976,630 +1406,775 @@
     </footer>
   </div>
 
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <!-- SheetJS -->
-  <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
-
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-
+  <!-- ✅ GRÁFICO NATIVO — sem dependência externa, funciona file:// e qualquer servidor -->
   <script>
-    // =========================
-    // CONFIG
-    // =========================
-    const firebaseConfig = {
-      apiKey: "AIzaSyAUaHzmMdWl8kVo_paanCCQYQFUefrm-g8",
-      authDomain: "corrida-kids.firebaseapp.com",
-      projectId: "corrida-kids",
-      storageBucket: "corrida-kids.firebasestorage.app",
-      messagingSenderId: "192264216284",
-      appId: "1:192264216284:web:329da8b98e959211051e19",
-      measurementId: "G-QZ7EEPGHNJ"
+  (function(){
+    /* ── Mini Chart Engine (Canvas 2D puro) ── */
+    const COLORS = {
+      corrida: { fill:'rgba(79,142,247,0.82)', stroke:'#4f8ef7' },
+      show:    { fill:'rgba(247,99,79,0.82)',  stroke:'#f7634f' }
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const auth = firebase.auth();
-
-    const COL_CORRIDA = "corridaInscricoes";
-    const COL_SHOW = "showInscricoes";
-    const COL_ADMINS = "admins";
-
-    // =========================
-    // UI
-    // =========================
-    function showSection(id) {
-      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-      const el = document.getElementById(id);
-      if (el) el.classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    function drawBar(ctx, labels, values, colors, W, H){
+      ctx.clearRect(0,0,W,H);
+      const pad={t:24,r:20,b:48,l:44};
+      const cW=W-pad.l-pad.r, cH=H-pad.t-pad.b;
+      const max=Math.max(...values,1);
+      const step=Math.ceil(max/4)||1;
+      const ticks=[...Array(5)].map((_,i)=>i*step);
+      ctx.font='11px Sora,sans-serif'; ctx.fillStyle='#6b7a99'; ctx.textAlign='right';
+      ticks.forEach(t=>{
+        const y=pad.t+cH-(t/max)*cH;
+        ctx.fillText(t,pad.l-6,y+4);
+        ctx.beginPath(); ctx.strokeStyle='rgba(15,28,51,.08)'; ctx.lineWidth=1;
+        ctx.moveTo(pad.l,y); ctx.lineTo(pad.l+cW,y); ctx.stroke();
+      });
+      const bW=Math.min(72, cW/labels.length*.55);
+      labels.forEach((lbl,i)=>{
+        const x=pad.l+(i+.5)*(cW/labels.length)-bW/2;
+        const bH=(values[i]/max)*cH||0;
+        const y=pad.t+cH-bH;
+        const r=8;
+        ctx.beginPath();
+        ctx.moveTo(x+r,y); ctx.lineTo(x+bW-r,y);
+        ctx.quadraticCurveTo(x+bW,y,x+bW,y+r);
+        ctx.lineTo(x+bW,y+bH); ctx.lineTo(x,y+bH); ctx.lineTo(x,y+r);
+        ctx.quadraticCurveTo(x,y,x+r,y);
+        ctx.closePath();
+        ctx.fillStyle=colors[i].fill; ctx.fill();
+        ctx.strokeStyle=colors[i].stroke; ctx.lineWidth=1.5; ctx.stroke();
+        ctx.fillStyle='#0f1c33'; ctx.font='bold 12px Sora,sans-serif'; ctx.textAlign='center';
+        if(values[i]>0) ctx.fillText(values[i], x+bW/2, y-6);
+        ctx.fillStyle='#6b7a99'; ctx.font='12px Sora,sans-serif';
+        ctx.fillText(lbl, x+bW/2, H-10);
+      });
     }
 
-    function downloadRegulamento() {
-      const texto =
-`REGULAMENTO OFICIAL
-1ª CORRIDA KIDS ILHAS 2026
-
-1) Evento comunitário gratuito.
-2) Data: 24/05/2026.
-3) Idade considerada: a que o participante completar até 31/12/2026.
-4) Inscrição exclusivamente online.
-5) Participação somente com autorização do responsável.
-6) Uso de imagem autorizado para fins institucionais.
-7) Apresentações do Show devem respeitar o público infantil.
-8) Organização poderá alterar a programação por segurança.
-
-Dúvidas e contato: (adicione aqui telefone/WhatsApp e/ou e-mail da organização).`;
-
-      const blob = new Blob([texto], { type: "text/plain;charset=utf-8" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "Regulamento_Corrida_Kids_Ilhas_2026.txt";
-      link.click();
-      URL.revokeObjectURL(link.href);
-    }
-
-    // =========================
-    // Nº automático
-    // =========================
-    function gerarNumeroInscricao(prefixo) {
-      const d = new Date();
-      const yyyy = d.getFullYear();
-      const mm = String(d.getMonth() + 1).padStart(2, "0");
-      const dd = String(d.getDate()).padStart(2, "0");
-      const hh = String(d.getHours()).padStart(2, "0");
-      const mi = String(d.getMinutes()).padStart(2, "0");
-      const ss = String(d.getSeconds()).padStart(2, "0");
-      const r = String(Math.floor(Math.random() * 900) + 100);
-      return `${prefixo}-${yyyy}${mm}${dd}-${hh}${mi}${ss}-${r}`;
-    }
-
-    function onlyDigits(s){ return (s||"").toString().replace(/\D/g,""); }
-
-    // =========================
-    // Bairro padronizado (select + outro)
-    // =========================
-    function setupBairroSelect(selId, otherId){
-      const sel = document.getElementById(selId);
-      const other = document.getElementById(otherId);
-      if(!sel || !other) return;
-
-      function toggle(){
-        const isOther = sel.value === "OUTRO";
-        other.classList.toggle("hidden", !isOther);
-        other.required = isOther;
-        if(!isOther) other.value = "";
-      }
-
-      sel.addEventListener("change", toggle);
-      toggle();
-    }
-
-    function getBairroValue(selId, otherId){
-      const sel = document.getElementById(selId);
-      const other = document.getElementById(otherId);
-      if(!sel) return "";
-      if(sel.value === "OUTRO"){
-        return (other?.value || "").trim();
-      }
-      return (sel.value || "").trim();
-    }
-
-    setupBairroSelect("bairroSel", "bairroOutro");
-    setupBairroSelect("showBairroSel", "showBairroOutro");
-
-    // =========================
-    // Salvar inscrições
-    // =========================
-    async function salvarInscricaoCorrida() {
-      const bairroFinal = getBairroValue("bairroSel", "bairroOutro");
-      const dados = {
-        numero: gerarNumeroInscricao("CK"),
-        tipo: "corrida",
-        nome: document.getElementById("nome").value.trim(),
-        nascimento: document.getElementById("nascimento").value,
-        documento: document.getElementById("documento").value.trim(),
-        bairro: bairroFinal,
-        endereco: document.getElementById("endereco").value.trim(),
-        responsavel: {
-          nome: document.getElementById("respNome").value.trim(),
-          cpf: onlyDigits(document.getElementById("respCpf").value),
-          telefone: onlyDigits(document.getElementById("respTelefone").value),
-          email: document.getElementById("respEmail").value.trim()
-        },
-        criadoEm: firebase.firestore.FieldValue.serverTimestamp()
-      };
-
-      await db.collection(COL_CORRIDA).add(dados);
-      return dados.numero;
-    }
-
-    async function salvarInscricaoShow() {
-      const bairroFinal = getBairroValue("showBairroSel", "showBairroOutro");
-      const dados = {
-        numero: gerarNumeroInscricao("ST"),
-        tipo: "show",
-        nome: document.getElementById("showNome").value.trim(),
-        nascimento: document.getElementById("showNascimento").value,
-        bairro: bairroFinal,
-        apresentacao: {
-          tipo: document.getElementById("tipoApresentacao").value,
-          nome: document.getElementById("nomeApresentacao").value.trim(),
-          duracao: document.getElementById("duracao").value.trim()
-        },
-        responsavel: {
-          nome: document.getElementById("showRespNome").value.trim(),
-          cpf: onlyDigits(document.getElementById("showRespCpf").value),
-          telefone: onlyDigits(document.getElementById("showRespTelefone").value),
-          email: document.getElementById("showRespEmail").value.trim()
-        },
-        criadoEm: firebase.firestore.FieldValue.serverTimestamp()
-      };
-
-      await db.collection(COL_SHOW).add(dados);
-      return dados.numero;
-    }
-
-    document.getElementById("corridaForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      try{
-        const numero = await salvarInscricaoCorrida();
-        alert(`✅ Inscrição registrada!\nNº: ${numero}`);
-        e.target.reset();
-        setupBairroSelect("bairroSel", "bairroOutro");
-        showSection("home");
-      }catch(err){
-        console.error(err);
-        alert("❌ Não foi possível enviar. Verifique sua internet e tente novamente.");
-      }
-    });
-
-    document.getElementById("showForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      try{
-        const numero = await salvarInscricaoShow();
-        alert(`✅ Inscrição registrada!\nNº: ${numero}`);
-        e.target.reset();
-        setupBairroSelect("showBairroSel", "showBairroOutro");
-        showSection("home");
-      }catch(err){
-        console.error(err);
-        alert("❌ Não foi possível enviar. Verifique sua internet e tente novamente.");
-      }
-    });
-
-    // =========================
-    // Admin-only
-    // =========================
-    async function isAdminUser(user){
-      if(!user) return false;
-      try{
-        const doc = await db.collection(COL_ADMINS).doc(user.uid).get();
-        if(!doc.exists) return false;
-        const data = doc.data() || {};
-        return data.ativo === true;
-      }catch(err){
-        console.error(err);
-        return false;
-      }
-    }
-
-    async function abrirRelatorios(){
-      const user = auth.currentUser;
-      if(!user){
-        showSection("login");
-        return;
-      }
-      const ok = await isAdminUser(user);
-      if(!ok){
-        alert("❌ Seu usuário está logado, mas não está autorizado como ADMIN.");
-        showSection("login");
-        return;
-      }
-      showSection("relatorios");
-      carregarRelatorios();
-    }
-
-    async function logout(){
-      await auth.signOut();
-      alert("Você saiu.");
-      showSection("home");
-    }
-
-    document.getElementById("loginForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = document.getElementById("loginEmail").value.trim();
-      const senha = document.getElementById("loginSenha").value;
-
-      try{
-        await auth.signInWithEmailAndPassword(email, senha);
-        const ok = await isAdminUser(auth.currentUser);
-        if(!ok){
-          alert("❌ Login ok, mas este usuário não é ADMIN. Verifique a coleção admins/{uid}.");
-          return;
+    function drawDoughnut(ctx, labels, values, colors, W, H){
+      ctx.clearRect(0,0,W,H);
+      const total=values.reduce((a,b)=>a+b,0)||1;
+      const cx=W/2, cy=H/2-14, r=Math.min(cx,cy)-18, inner=r*.58;
+      let angle=-Math.PI/2;
+      values.forEach((v,i)=>{
+        const slice=(v/total)*Math.PI*2;
+        ctx.beginPath();
+        ctx.moveTo(cx,cy);
+        ctx.arc(cx,cy,r,angle,angle+slice);
+        ctx.closePath();
+        ctx.fillStyle=colors[i].fill; ctx.fill();
+        ctx.strokeStyle='#fff'; ctx.lineWidth=3; ctx.stroke();
+        /* label */
+        const mid=angle+slice/2;
+        const lx=cx+Math.cos(mid)*(r*.72), ly=cy+Math.sin(mid)*(r*.72);
+        if(v>0){
+          ctx.fillStyle='#fff'; ctx.font='bold 13px Sora,sans-serif'; ctx.textAlign='center';
+          ctx.fillText(v, lx, ly+5);
         }
-        alert("✅ Login realizado!");
-        showSection("relatorios");
-        carregarRelatorios();
-      }catch(err){
-        console.error(err);
-        alert("❌ Não foi possível entrar. Verifique e-mail e senha.");
+        angle+=slice;
+      });
+      /* hole */
+      ctx.beginPath(); ctx.arc(cx,cy,inner,0,Math.PI*2);
+      ctx.fillStyle='#fff'; ctx.fill();
+      /* center text */
+      const tot=values.reduce((a,b)=>a+b,0);
+      ctx.fillStyle='#0f1c33'; ctx.font='bold 22px Nunito,sans-serif'; ctx.textAlign='center';
+      ctx.fillText(tot, cx, cy+4);
+      ctx.fillStyle='#6b7a99'; ctx.font='11px Sora,sans-serif';
+      ctx.fillText('total', cx, cy+18);
+      /* legend */
+      labels.forEach((lbl,i)=>{
+        const lx=18, ly=H-28+i*18;
+        ctx.fillStyle=colors[i].fill;
+        ctx.fillRect(lx,ly-10,14,14);
+        ctx.fillStyle='#0f1c33'; ctx.font='12px Sora,sans-serif'; ctx.textAlign='left';
+        ctx.fillText(`${lbl}: ${values[i]}`, lx+18, ly+1);
+      });
+    }
+
+    window.MiniChart = { drawBar, drawDoughnut, COLORS };
+  })();
+  </script>
+
+  <!-- ✅ XLSX NATIVO — exporta CSV como .csv e Excel básico como .xls (sem biblioteca) -->
+  <script>
+  (function(){
+    /* Exporta dados como arquivo CSV real (abre no Excel) */
+    function exportCSVAsXLS(sheetData, filename){
+      const bom='\uFEFF';
+      const csv=sheetData.map(row=>row.map(cell=>{
+        const s=(cell===null||cell===undefined)?'':String(cell);
+        return s.includes(',')||s.includes('"')||s.includes('\n') ? `"${s.replace(/"/g,'""')}"` : s;
+      }).join(',')).join('\r\n');
+      const blob=new Blob([bom+csv],{type:'text/csv;charset=utf-8'});
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(blob);
+      a.download=filename;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    window.XLSX = {
+      utils:{
+        book_new:()=>({sheets:{},order:[]}),
+        book_append_sheet:(wb,data,name)=>{ wb.sheets[name]=data; wb.order.push(name); },
+        aoa_to_sheet:(aoa)=>aoa
+      },
+      writeFile:(wb, fname)=>{
+        /* Junta todas as abas num único CSV separado por linha em branco */
+        const rows=[];
+        wb.order.forEach(name=>{
+          rows.push([`=== ${name} ===`]);
+          (wb.sheets[name]||[]).forEach(r=>rows.push(r));
+          rows.push([]);
+        });
+        exportCSVAsXLS(rows, fname.replace('.xlsx','.csv'));
+      }
+    };
+  })();
+  </script>
+
+  <!-- ✅ Firebase via compat scripts (carregamento síncrono garantido) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+  <script>
+  // ================================================================
+  // CONFIG FIREBASE
+  // ================================================================
+  const _FBCFG = {
+    apiKey:            "AIzaSyAUaHzmMdWl8kVo_paanCCQYQFUefrm-g8",
+    authDomain:        "corrida-kids.firebaseapp.com",
+    projectId:         "corrida-kids",
+    storageBucket:     "corrida-kids.firebasestorage.app",
+    messagingSenderId: "192264216284",
+    appId:             "1:192264216284:web:329da8b98e959211051e19"
+  };
+
+  let db, auth, FIREBASE_OK = false;
+
+  function _initFirebase() {
+    if (typeof firebase === 'undefined') return false;
+    try {
+      // evita duplo initializeApp
+      if (!firebase.apps.length) firebase.initializeApp(_FBCFG);
+      db   = firebase.firestore();
+      auth = firebase.auth();
+      FIREBASE_OK = true;
+      return true;
+    } catch(e) { console.error('Firebase init error:', e); return false; }
+  }
+
+  // Tenta imediatamente; se ainda não carregou, aguarda window.load
+  if (!_initFirebase()) {
+    window.addEventListener('load', function() {
+      if (!_initFirebase()) {
+        _showFbBanner();
+      } else {
+        _startAuthObserver();
       }
     });
-
-    // =========================
-    // Relatórios
-    // =========================
-    let cacheRelatorios = [];
-    let ultimoFiltrado = [];
-    let chartInstance = null;
-
-    function normaliza(txt){
-      return (txt || "").toString().toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu,"");
+  } else {
+    // já carregou — inicia observer quando DOM estiver pronto
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', _startAuthObserver);
+    } else {
+      _startAuthObserver();
     }
+  }
 
-    function parseDateInputToRange(){
-      const di = document.getElementById("dataInicio").value;
-      const df = document.getElementById("dataFim").value;
+  function _showFbBanner() {
+    const b = document.createElement('div');
+    b.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#1e2d4a;color:#fff;' +
+      'text-align:center;padding:12px 20px;font-size:13px;font-family:Sora,sans-serif;' +
+      'display:flex;align-items:center;justify-content:center;gap:10px;';
+    b.innerHTML = '<span>⚠️ <strong>Banco de dados indisponível.</strong> ' +
+      'Inscrições e painel admin precisam de internet.</span>' +
+      '<button onclick="this.parentElement.remove()" style="background:rgba(255,255,255,.15);' +
+      'border:none;color:#fff;padding:5px 12px;border-radius:8px;cursor:pointer;">Fechar</button>';
+    document.body.appendChild(b);
+  }
 
-      let start = null, end = null;
-      if(di){
-        const s = new Date(di + "T00:00:00");
-        start = s.getTime();
+  function _startAuthObserver() {
+    if (!FIREBASE_OK) return;
+    auth.onAuthStateChanged(async function(user) {
+      const ls = document.getElementById('loginStatus');
+      const as = document.getElementById('adminStatus');
+      if (!user) {
+        if (ls) ls.innerHTML = '<strong>Não logado</strong>';
+        if (as) as.innerHTML = '<strong>Não logado</strong>';
+        return;
       }
-      if(df){
-        const e = new Date(df + "T23:59:59");
-        end = e.getTime();
-      }
-      return {start, end};
+      const ok = await isAdminUser(user);
+      if (ls) ls.innerHTML = ok ? `<strong>Admin:</strong> ${user.email}` : `<strong>Logado:</strong> ${user.email}`;
+      if (as) as.innerHTML = ok ? `<strong>Admin:</strong> ${user.email}` : '<strong>Sem permissão</strong>';
+    });
+  }
+
+  // ================================================================
+  // DIAGNÓSTICO FIREBASE
+  // ================================================================
+  async function testarFirebase() {
+    const log = document.getElementById('diagLog');
+    const btn = document.getElementById('diagBtn');
+    if (!log || !btn) return;
+
+    function linha(icone, texto, cor) {
+      const d = document.createElement('div');
+      d.style.cssText = `padding:8px 12px;border-radius:10px;margin:4px 0;font-size:13px;font-weight:600;background:${cor||'rgba(15,28,51,.05)'};display:flex;gap:8px;align-items:center;`;
+      d.innerHTML = `<span style="font-size:16px">${icone}</span><span>${texto}</span>`;
+      log.appendChild(d);
     }
 
-    function toMillisFromFirestore(ts){
-      if(!ts) return null;
-      if(typeof ts.toMillis === "function") return ts.toMillis();
-      if(ts.seconds != null) return ts.seconds * 1000;
-      return null;
+    log.innerHTML = '';
+    btn.disabled = true;
+    btn.textContent = '⏳ Testando...';
+
+    // 1. Firebase carregado?
+    if (typeof firebase === 'undefined') {
+      linha('❌', 'Firebase SDK não carregou. Verifique sua conexão com a internet.', 'rgba(247,99,79,.12)');
+      btn.disabled = false; btn.textContent = '🔄 Testar novamente';
+      return;
     }
+    linha('✅', 'Firebase SDK carregado com sucesso', 'rgba(52,211,153,.12)');
 
-    function aplicaFiltros(lista){
-      const tipo = document.getElementById("filtroTipo").value;
-      const nome = normaliza(document.getElementById("filtroNome").value);
-      const bairro = normaliza(document.getElementById("filtroBairro").value);
-      const {start, end} = parseDateInputToRange();
+    // 2. Inicializado?
+    if (!FIREBASE_OK) {
+      linha('❌', 'Firebase não foi inicializado corretamente.', 'rgba(247,99,79,.12)');
+      btn.disabled = false; btn.textContent = '🔄 Testar novamente';
+      return;
+    }
+    linha('✅', `App inicializado — projeto: ${_FBCFG.projectId}`, 'rgba(52,211,153,.12)');
 
-      return lista.filter(it => {
-        if(tipo !== "todos" && it.tipo !== tipo) return false;
-        if(nome && !normaliza(it.nome).includes(nome)) return false;
-        if(bairro && !normaliza(it.bairro).includes(bairro)) return false;
-
-        const ms = it.criadoEmMs;
-        if(start != null && ms != null && ms < start) return false;
-        if(end != null && ms != null && ms > end) return false;
-
-        return true;
+    // 3. Teste de ESCRITA no Firestore
+    linha('⏳', 'Testando escrita no Firestore...', 'rgba(251,191,36,.10)');
+    let docRef = null;
+    try {
+      docRef = await db.collection('_diagnostico').add({
+        teste: true,
+        ts: firebase.firestore.FieldValue.serverTimestamp(),
+        origem: 'diagnóstico_site'
       });
+      log.lastChild.remove();
+      linha('✅', `Firestore escrita OK — doc criado: ${docRef.id}`, 'rgba(52,211,153,.12)');
+    } catch(e) {
+      log.lastChild.remove();
+      linha('❌', `Firestore escrita FALHOU: ${e.message}`, 'rgba(247,99,79,.12)');
     }
 
-    function fmtData(ms){
-      if(!ms) return "-";
-      const d = new Date(ms);
-      const dd = String(d.getDate()).padStart(2,"0");
-      const mm = String(d.getMonth()+1).padStart(2,"0");
-      const yyyy = d.getFullYear();
-      const hh = String(d.getHours()).padStart(2,"0");
-      const mi = String(d.getMinutes()).padStart(2,"0");
-      return `${dd}/${mm}/${yyyy} ${hh}:${mi}`;
-    }
-
-    // Ultra: count up
-    function animarNumero(el, novoValor){
-      const start = Number(el.dataset.val || 0);
-      const end = Number(novoValor || 0);
-      const dur = 650;
-      const t0 = performance.now();
-
-      function step(t){
-        const p = Math.min(1, (t - t0) / dur);
-        const v = Math.round(start + (end - start) * (1 - Math.pow(1 - p, 3)));
-        el.textContent = v;
-        if(p < 1) requestAnimationFrame(step);
-        else el.dataset.val = String(end);
+    // 4. Teste de LEITURA no Firestore (lê o mesmo doc que acabou de criar)
+    linha('⏳', 'Testando leitura no Firestore...', 'rgba(251,191,36,.10)');
+    try {
+      if (!docRef) throw new Error('Sem doc para ler — escrita falhou antes');
+      const snap = await docRef.get();
+      log.lastChild.remove();
+      if (snap.exists) {
+        linha('✅', `Firestore leitura OK — doc ${snap.id} lido com sucesso`, 'rgba(52,211,153,.12)');
+      } else {
+        linha('⚠️', 'Doc criado mas não encontrado na leitura — tente novamente', 'rgba(251,191,36,.12)');
       }
-      requestAnimationFrame(step);
+    } catch(e) {
+      log.lastChild.remove();
+      linha('❌', `Firestore leitura FALHOU: ${e.message}`, 'rgba(247,99,79,.12)');
     }
 
-    function atualizarResumo(lista){
-      const corrida = lista.filter(x => x.tipo === "corrida").length;
-      const show = lista.filter(x => x.tipo === "show").length;
-
-      animarNumero(document.getElementById("countCorrida"), corrida);
-      animarNumero(document.getElementById("countShow"), show);
-      animarNumero(document.getElementById("countTotal"), corrida + show);
-
-      document.getElementById("relInfo").textContent = `Exibindo: ${lista.length} (Corrida: ${corrida} • Show: ${show})`;
+    // 5. Limpeza do doc de teste
+    if (docRef) {
+      try { await docRef.delete(); linha('✅', 'Doc de teste removido automaticamente', 'rgba(52,211,153,.12)'); } catch(e) {}
     }
 
-    function copiarTexto(txt){
-      const t = (txt || "").toString();
-      if(!t){ alert("Sem telefone para copiar."); return; }
-      navigator.clipboard?.writeText(t).then(()=> {
-        // feedback discreto
-      }).catch(()=> alert("Não foi possível copiar. Tente manualmente."));
-    }
-
-    function abrirWhats(telefone){
-      const fone = (telefone || "").toString().replace(/\D/g,"");
-      if(!fone){ alert("Sem telefone para abrir WhatsApp."); return; }
-      const url = "https://wa.me/55" + fone;
-      window.open(url, "_blank");
-    }
-
-    function renderTabela(lista){
-      const tbody = document.getElementById("relBody");
-      tbody.innerHTML = "";
-
-      for(const it of lista){
-        const tel = (it.responsavelTelefone || "").toString();
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${it.numero || "-"}</td>
-          <td>${it.tipo}</td>
-          <td>${it.nome || "-"}</td>
-          <td>${it.nascimento || "-"}</td>
-          <td>${it.bairro || "-"}</td>
-          <td>${it.responsavelNome || "-"}</td>
-          <td>${tel || "-"}</td>
-          <td>
-            <button class="mini-btn" type="button" data-tel="${tel}">📲 Whats</button>
-          </td>
-          <td>${it.responsavelEmail || "-"}</td>
-          <td>${fmtData(it.criadoEmMs)}</td>
-        `;
-
-        const btn = tr.querySelector("button[data-tel]");
-        btn?.addEventListener("click", () => {
-          const t = btn.getAttribute("data-tel") || "";
-          copiarTexto(t);
-          abrirWhats(t);
-        });
-
-        tbody.appendChild(tr);
-      }
-    }
-
-    function medal(rank){
-      if(rank === 1) return "🥇";
-      if(rank === 2) return "🥈";
-      if(rank === 3) return "🥉";
-      return "🏷️";
-    }
-
-    function montarTabelaBairro(lista){
-      const map = new Map();
-
-      for(const it of lista){
-        const b = (it.bairro || "").trim() || "Não informado";
-        if(!map.has(b)) map.set(b, {bairro:b, corrida:0, show:0});
-        const row = map.get(b);
-        if(it.tipo === "corrida") row.corrida++;
-        if(it.tipo === "show") row.show++;
-      }
-
-      const linhas = Array.from(map.values())
-        .map(x => ({...x, total: x.corrida + x.show}))
-        .sort((a,b) => b.total - a.total || a.bairro.localeCompare(b.bairro));
-
-      const tbody = document.getElementById("bairroBody");
-      tbody.innerHTML = "";
-
-      linhas.forEach((r, idx) => {
-        const rank = idx + 1;
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td><span class="rank">${medal(rank)} #${rank}</span></td>
-          <td>${r.bairro}</td>
-          <td>${r.corrida}</td>
-          <td>${r.show}</td>
-          <td><b>${r.total}</b></td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      return linhas;
-    }
-
-    function atualizarGrafico(lista){
-      const tipoGrafico = document.getElementById("filtroGrafico").value;
-      const corrida = lista.filter(x => x.tipo === "corrida").length;
-      const show = lista.filter(x => x.tipo === "show").length;
-
-      const ctx = document.getElementById("graficoInscritos").getContext("2d");
-      const data = {
-        labels: ["Corrida", "Show"],
-        datasets: [{ label: "Inscritos", data: [corrida, show], borderWidth: 2 }]
-      };
-
-      const options = {
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: { duration: 900, easing: "easeOutQuart" },
-        plugins: { legend: { position: "bottom" } },
-        scales: (tipoGrafico === "bar") ? { y: { beginAtZero: true, ticks: { precision: 0 } } } : {}
-      };
-
-      if(chartInstance) chartInstance.destroy();
-      chartInstance = new Chart(ctx, { type: tipoGrafico, data, options });
-    }
-
-    function atualizarTudo(){
-      ultimoFiltrado = aplicaFiltros(cacheRelatorios);
-      atualizarResumo(ultimoFiltrado);
-      renderTabela(ultimoFiltrado);
-      montarTabelaBairro(ultimoFiltrado);
-      atualizarGrafico(ultimoFiltrado);
-    }
-
-    async function carregarRelatorios(){
+    // 6. Autenticação
+    linha('⏳', 'Verificando Auth...', 'rgba(251,191,36,.10)');
+    try {
       const user = auth.currentUser;
-      if(!user){ showSection("login"); return; }
-
-      const ok = await isAdminUser(user);
-      document.getElementById("adminStatus").innerHTML = ok ? `<strong>Admin:</strong> ${user.email}` : "<strong>Sem permissão</strong>";
-      if(!ok){
-        alert("❌ Sem permissão de ADMIN. Verifique a coleção admins/{uid}.");
-        showSection("login");
-        return;
+      log.lastChild.remove();
+      if (user) {
+        const ok = await isAdminUser(user);
+        linha('✅', `Auth ativo — logado como: ${user.email} ${ok?'(ADMIN ✅)':'(sem permissão admin)'}`, 'rgba(52,211,153,.12)');
+      } else {
+        linha('✅', 'Auth OK — nenhum usuário logado no momento', 'rgba(52,211,153,.12)');
       }
-
-      try{
-        const [corridaSnap, showSnap] = await Promise.all([
-          db.collection(COL_CORRIDA).orderBy("criadoEm","desc").limit(2000).get(),
-          db.collection(COL_SHOW).orderBy("criadoEm","desc").limit(2000).get()
-        ]);
-
-        const lista = [];
-
-        corridaSnap.forEach(doc=>{
-          const d = doc.data() || {};
-          const ms = toMillisFromFirestore(d.criadoEm);
-          lista.push({
-            numero: d.numero || d.numeroInscricao || "",
-            tipo: "corrida",
-            nome: d.nome || "",
-            nascimento: d.nascimento || "",
-            bairro: d.bairro || "",
-            responsavelNome: d?.responsavel?.nome || "",
-            responsavelTelefone: d?.responsavel?.telefone || "",
-            responsavelEmail: d?.responsavel?.email || "",
-            criadoEmMs: ms
-          });
-        });
-
-        showSnap.forEach(doc=>{
-          const d = doc.data() || {};
-          const ms = toMillisFromFirestore(d.criadoEm);
-          lista.push({
-            numero: d.numero || d.numeroInscricao || "",
-            tipo: "show",
-            nome: d.nome || "",
-            nascimento: d.nascimento || "",
-            bairro: d.bairro || "",
-            responsavelNome: d?.responsavel?.nome || "",
-            responsavelTelefone: d?.responsavel?.telefone || "",
-            responsavelEmail: d?.responsavel?.email || "",
-            criadoEmMs: ms
-          });
-        });
-
-        cacheRelatorios = lista;
-        atualizarTudo();
-
-      }catch(err){
-        console.error(err);
-        alert("❌ Erro ao carregar relatórios. Se aparecer 'Missing or insufficient permissions', confirme as Rules admin-only.");
-      }
+    } catch(e) {
+      log.lastChild.remove();
+      linha('❌', `Auth FALHOU: ${e.message}`, 'rgba(247,99,79,.12)');
     }
 
-    // =========================
-    // Exportações
-    // =========================
-    function exportarCSV(){
-      const lista = ultimoFiltrado && ultimoFiltrado.length ? ultimoFiltrado : aplicaFiltros(cacheRelatorios);
+    linha('🏁', 'Diagnóstico concluído!', 'rgba(79,142,247,.10)');
+    btn.disabled = false;
+    btn.textContent = '🔄 Testar novamente';
+  }
 
-      const header = ["numero","tipo","nome","nascimento","bairro","responsavel","telefone","email","criadoEm"];
-      const rows = [header.join(";")];
+  // ================================================================
+  // COLEÇÕES
+  // ================================================================
+  const COL_CORRIDA = 'corridaInscricoes';
+  const COL_SHOW    = 'showInscricoes';
+  const COL_ADMINS  = 'admins';
 
-      for(const it of lista){
-        const row = [
-          it.numero || "",
-          it.tipo || "",
-          it.nome || "",
-          it.nascimento || "",
-          it.bairro || "",
-          it.responsavelNome || "",
-          it.responsavelTelefone || "",
-          it.responsavelEmail || "",
-          fmtData(it.criadoEmMs)
-        ].map(v => `"${(v??"").toString().replace(/"/g,'""').replace(/\r?\n/g," ")}"`).join(";");
+  // ================================================================
+  // HELPERS UI
+  // ================================================================
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    const el = document.getElementById(id);
+    if (el) el.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
-        rows.push(row);
-      }
+  function loadYtEmbed(wrapId, videoId) {
+    const wrap = document.getElementById(wrapId);
+    if (!wrap) return;
+    const thumb = wrap.querySelector('.yt-thumb');
+    if (thumb) thumb.classList.add('loading');
 
-      const csv = "\uFEFF" + rows.join("\n");
-      const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "relatorio_inscritos.csv";
-      link.click();
-      URL.revokeObjectURL(link.href);
+    // Se estiver rodando em file://, o YouTube bloqueia o embed por falta de referrer
+    // Nesse caso, abre direto no YouTube
+    if (window.location.protocol === 'file:') {
+      window.open('https://youtu.be/' + videoId, '_blank');
+      if (thumb) thumb.classList.remove('loading');
+      return;
     }
 
-    function exportarXLSX(){
-      const lista = ultimoFiltrado && ultimoFiltrado.length ? ultimoFiltrado : aplicaFiltros(cacheRelatorios);
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    iframe.allowFullscreen = true;
+    iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+    iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+    iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;';
+    iframe.title = 'Vídeo do Evento';
 
-      const sheetData = [["Nº","Tipo","Nome","Nascimento","Bairro","Responsável","Telefone","E-mail","Criado em"]];
-      lista.forEach(it=>{
-        sheetData.push([
-          it.numero || "",
-          it.tipo || "",
-          it.nome || "",
-          it.nascimento || "",
-          it.bairro || "",
-          it.responsavelNome || "",
-          it.responsavelTelefone || "",
-          it.responsavelEmail || "",
-          fmtData(it.criadoEmMs)
-        ]);
+    iframe.onload = function() { if (thumb) thumb.remove(); };
+
+    const timeout = setTimeout(function() {
+      try {
+        const doc = iframe.contentDocument;
+        if (doc && (!doc.body || doc.body.innerHTML === '')) showYtFallback(wrapId, videoId);
+        else if (thumb) thumb.remove();
+      } catch(e) { if (thumb) thumb.remove(); }
+    }, 5000);
+
+    iframe.onerror = function() { clearTimeout(timeout); showYtFallback(wrapId, videoId); };
+    wrap.appendChild(iframe);
+  }
+
+  function showYtFallback(wrapId, videoId) {
+    const wrap = document.getElementById(wrapId);
+    if (!wrap) return;
+    const thumb = wrap.querySelector('.yt-thumb');
+    const fb = document.getElementById(wrapId + '-fb');
+    const iframes = wrap.querySelectorAll('iframe');
+    if (thumb) thumb.remove();
+    iframes.forEach(f => f.remove());
+    if (fb) fb.classList.remove('hidden');
+  }
+
+  function vidFallback(wrapId) {
+    const wrap = document.getElementById(wrapId);
+    if (!wrap) return;
+    const iframe = wrap.querySelector('iframe');
+    const fb = document.getElementById(wrapId + '-fb');
+    if (iframe) iframe.style.display = 'none';
+    if (fb) fb.classList.remove('hidden');
+  }
+
+  window.addEventListener('message', function(e) {
+    if (!e.data || typeof e.data !== 'object') return;
+    if (e.data.event === 'onError' && [101,150,153].includes(e.data.info)) {
+      document.querySelectorAll('.video-embed iframe').forEach(function(iframe) {
+        try { if (iframe.contentWindow === e.source) { const w = iframe.closest('.video-embed'); if (w) vidFallback(w.id); } } catch(ex) {}
       });
+    }
+  });
 
-      const bairros = montarTabelaBairro(lista) || [];
-      const bairroData = [["Bairro","Corrida","Show","Total"]];
-      bairros.forEach(b=> bairroData.push([b.bairro, b.corrida, b.show, b.total]));
-
-      const corrida = lista.filter(x=>x.tipo==="corrida").length;
-      const show = lista.filter(x=>x.tipo==="show").length;
-      const resumoData = [
-        ["Resumo","Valor"],
-        ["Total Corrida", corrida],
-        ["Total Show", show],
-        ["Total Geral", corrida + show],
-        ["Exportado em", new Date().toLocaleString("pt-BR")]
-      ];
-
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(resumoData), "Resumo");
-      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(bairroData), "Por Bairro");
-      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(sheetData), "Inscritos");
-      XLSX.writeFile(wb, "relatorio_inscritos.xlsx");
+  window.addEventListener('load', function() {
+    // Aviso de protocolo file://
+    if (window.location.protocol === 'file:') {
+      const w = document.getElementById('fileProtocolWarning');
+      if (w) w.classList.remove('hidden');
     }
 
-    // Reatividade
-    ["filtroTipo","filtroGrafico","dataInicio","dataFim","filtroNome","filtroBairro"].forEach(id=>{
-      const el = document.getElementById(id);
-      if(el){
-        el.addEventListener("input", atualizarTudo);
-        el.addEventListener("change", atualizarTudo);
-      }
+    [['vid1','LBH8zNm88cM'],['vid2','-qMvTZLPXeE']].forEach(function(pair) {
+      const wrap = document.getElementById(pair[0]);
+      if (!wrap) return;
+      const iframe = wrap.querySelector('iframe');
+      if (!iframe) return;
+      setTimeout(function() {
+        try { const doc = iframe.contentDocument; if (doc && (!doc.body || doc.body.innerHTML === '')) vidFallback(pair[0]); } catch(ex) {}
+      }, 4000);
     });
+  });
 
-    // Status
-    auth.onAuthStateChanged(async (user)=>{
-      const loginStatus = document.getElementById("loginStatus");
-      const adminStatus = document.getElementById("adminStatus");
+  function compartilharVideo(url) {
+    if (navigator.share) {
+      navigator.share({ title: 'Corrida Kids & Show de Talentos Ilhas 2026', url: url }).catch(()=>{});
+    } else {
+      navigator.clipboard.writeText(url).then(function() {
+        const t = document.getElementById('copyToast');
+        t.classList.add('show');
+        setTimeout(function(){ t.classList.remove('show'); }, 2500);
+      });
+    }
+  }
 
-      if(!user){
-        if(loginStatus) loginStatus.innerHTML = "<strong>Não logado</strong>";
-        if(adminStatus) adminStatus.innerHTML = "<strong>Não logado</strong>";
-        return;
-      }
+  function downloadRegulamento() {
+    const txt = `REGULAMENTO OFICIAL\n1ª CORRIDA KIDS ILHAS 2026\n\n1) Evento comunitário gratuito.\n2) Data: Junho 2026 (dia a definir).\n3) Idade considerada: a que o participante completar até 31/12/2026.\n4) Inscrição exclusivamente online.\n5) Participação somente com autorização do responsável.\n6) Uso de imagem autorizado para fins institucionais.\n7) Apresentações do Show devem respeitar o público infantil.\n8) Organização poderá alterar a programação por segurança.\n\nDúvidas: (adicione telefone/WhatsApp e e-mail da organização).`;
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([txt], {type:'text/plain;charset=utf-8'}));
+    a.download = 'Regulamento_Corrida_Kids_Ilhas_2026.txt';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
 
-      const ok = await isAdminUser(user);
-      if(loginStatus) loginStatus.innerHTML = ok ? `<strong>Admin:</strong> ${user.email}` : `<strong>Logado:</strong> ${user.email}`;
-      if(adminStatus) adminStatus.innerHTML = ok ? `<strong>Admin:</strong> ${user.email}` : "<strong>Sem permissão</strong>";
+  // ================================================================
+  // NÚMERO DE INSCRIÇÃO
+  // ================================================================
+  function gerarNumeroInscricao(prefixo) {
+    const d = new Date();
+    const p = n => String(n).padStart(2,'0');
+    return `${prefixo}-${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}-${Math.floor(Math.random()*900)+100}`;
+  }
+  function onlyDigits(s){ return (s||'').toString().replace(/\D/g,''); }
+
+  // ================================================================
+  // BAIRRO SELECT
+  // ================================================================
+  function setupBairroSelect(selId, otherId) {
+    const sel = document.getElementById(selId);
+    const other = document.getElementById(otherId);
+    if (!sel || !other) return;
+    function toggle() {
+      const isOther = sel.value === 'OUTRO';
+      other.classList.toggle('hidden', !isOther);
+      other.required = isOther;
+      if (!isOther) other.value = '';
+    }
+    sel.addEventListener('change', toggle);
+    toggle();
+  }
+  function getBairroValue(selId, otherId) {
+    const sel = document.getElementById(selId);
+    const other = document.getElementById(otherId);
+    if (!sel) return '';
+    return sel.value === 'OUTRO' ? (other?.value||'').trim() : (sel.value||'').trim();
+  }
+  setupBairroSelect('bairroSel',     'bairroOutro');
+  setupBairroSelect('showBairroSel', 'showBairroOutro');
+
+  // ================================================================
+  // SALVAR INSCRIÇÕES
+  // ================================================================
+  async function salvarInscricaoCorrida() {
+    if (!FIREBASE_OK) throw new Error('Firebase indisponível. Verifique sua conexão.');
+    const dados = {
+      numero:     gerarNumeroInscricao('CK'),
+      tipo:       'corrida',
+      nome:       document.getElementById('nome').value.trim(),
+      nascimento: document.getElementById('nascimento').value,
+      documento:  document.getElementById('documento').value.trim(),
+      bairro:     getBairroValue('bairroSel','bairroOutro'),
+      endereco:   document.getElementById('endereco').value.trim(),
+      responsavel: {
+        nome:     document.getElementById('respNome').value.trim(),
+        cpf:      onlyDigits(document.getElementById('respCpf').value),
+        telefone: onlyDigits(document.getElementById('respTelefone').value),
+        email:    document.getElementById('respEmail').value.trim()
+      },
+      criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    await db.collection(COL_CORRIDA).add(dados);
+    return dados.numero;
+  }
+
+  async function salvarInscricaoShow() {
+    if (!FIREBASE_OK) throw new Error('Firebase indisponível. Verifique sua conexão.');
+    const dados = {
+      numero:     gerarNumeroInscricao('ST'),
+      tipo:       'show',
+      nome:       document.getElementById('showNome').value.trim(),
+      nascimento: document.getElementById('showNascimento').value,
+      bairro:     getBairroValue('showBairroSel','showBairroOutro'),
+      apresentacao: {
+        tipo:    document.getElementById('tipoApresentacao').value,
+        nome:    document.getElementById('nomeApresentacao').value.trim(),
+        duracao: document.getElementById('duracao').value.trim()
+      },
+      responsavel: {
+        nome:     document.getElementById('showRespNome').value.trim(),
+        cpf:      onlyDigits(document.getElementById('showRespCpf').value),
+        telefone: onlyDigits(document.getElementById('showRespTelefone').value),
+        email:    document.getElementById('showRespEmail').value.trim()
+      },
+      criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    await db.collection(COL_SHOW).add(dados);
+    return dados.numero;
+  }
+
+  document.getElementById('corridaForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    try {
+      const num = await salvarInscricaoCorrida();
+      alert(`✅ Inscrição registrada!\nNº: ${num}`);
+      e.target.reset();
+      setupBairroSelect('bairroSel','bairroOutro');
+      showSection('home');
+    } catch(err) { console.error(err); alert('❌ ' + err.message); }
+  });
+
+  document.getElementById('showForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    try {
+      const num = await salvarInscricaoShow();
+      alert(`✅ Inscrição registrada!\nNº: ${num}`);
+      e.target.reset();
+      setupBairroSelect('showBairroSel','showBairroOutro');
+      showSection('home');
+    } catch(err) { console.error(err); alert('❌ ' + err.message); }
+  });
+
+  // ================================================================
+  // ADMIN
+  // ================================================================
+  async function isAdminUser(user) {
+    if (!user || !FIREBASE_OK) return false;
+    try {
+      const snap = await db.collection(COL_ADMINS).doc(user.uid).get();
+      return snap.exists && (snap.data()||{}).ativo === true;
+    } catch(e) { console.error(e); return false; }
+  }
+
+  async function abrirRelatorios() {
+    if (!FIREBASE_OK) { alert('❌ Firebase indisponível. Conecte à internet.'); return; }
+    const user = auth.currentUser;
+    if (!user) { showSection('login'); return; }
+    const ok = await isAdminUser(user);
+    if (!ok) { alert('❌ Usuário não autorizado como ADMIN.'); showSection('login'); return; }
+    showSection('relatorios');
+    carregarRelatorios();
+  }
+
+  async function logout() {
+    if (!FIREBASE_OK) return;
+    await auth.signOut();
+    alert('Você saiu.');
+    showSection('home');
+  }
+
+  document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    if (!FIREBASE_OK) { alert('❌ Firebase indisponível.'); return; }
+    const email = document.getElementById('loginEmail').value.trim();
+    const senha = document.getElementById('loginSenha').value;
+    try {
+      await auth.signInWithEmailAndPassword(email, senha);
+      const ok = await isAdminUser(auth.currentUser);
+      if (!ok) { alert('❌ Usuário não autorizado como ADMIN.'); return; }
+      alert('✅ Login realizado!');
+      showSection('relatorios');
+      carregarRelatorios();
+    } catch(err) { console.error(err); alert('❌ Não foi possível entrar. Verifique e-mail e senha.'); }
+  });
+
+  // ================================================================
+  // RELATÓRIOS
+  // ================================================================
+  let cacheRelatorios = [];
+  let ultimoFiltrado  = [];
+
+  function normaliza(txt) {
+    return (txt||'').toString().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu,'');
+  }
+
+  function parseDateInputToRange() {
+    const di = document.getElementById('dataInicio').value;
+    const df = document.getElementById('dataFim').value;
+    let start = null, end = null;
+    if (di) { start = new Date(di + 'T00:00:00'); }
+    if (df) { end   = new Date(df + 'T23:59:59'); }
+    return { start, end };
+  }
+
+  function toMillisFromFirestore(ts) {
+    if (!ts) return 0;
+    if (typeof ts.toMillis === 'function') return ts.toMillis();
+    if (ts.seconds) return ts.seconds * 1000 + Math.floor((ts.nanoseconds||0)/1e6);
+    return 0;
+  }
+
+  function fmtData(ms) {
+    if (!ms) return '';
+    return new Date(ms).toLocaleString('pt-BR');
+  }
+
+  function aplicaFiltros(lista) {
+    const tipo   = document.getElementById('filtroTipo')?.value || '';
+    const nome   = normaliza(document.getElementById('filtroNome')?.value || '');
+    const bairro = normaliza(document.getElementById('filtroBairro')?.value || '');
+    const { start, end } = parseDateInputToRange();
+    return lista.filter(function(it) {
+      if (tipo && it.tipo !== tipo) return false;
+      if (nome && !normaliza(it.nome).includes(nome)) return false;
+      if (bairro && !normaliza(it.bairro).includes(bairro)) return false;
+      if (start && it.criadoEmMs && it.criadoEmMs < start.getTime()) return false;
+      if (end   && it.criadoEmMs && it.criadoEmMs > end.getTime())   return false;
+      return true;
     });
+  }
+
+  function atualizarResumo(lista) {
+    const corrida = lista.filter(x => x.tipo==='corrida').length;
+    const show    = lista.filter(x => x.tipo==='show').length;
+    const el = function(id){ return document.getElementById(id); };
+    if (el('totalCorrida')) el('totalCorrida').textContent = corrida;
+    if (el('totalShow'))    el('totalShow').textContent    = show;
+    if (el('totalGeral'))   el('totalGeral').textContent   = corrida + show;
+  }
+
+  function montarTabelaBairro(lista) {
+    const map = {};
+    lista.forEach(function(it) {
+      const b = it.bairro || '(sem bairro)';
+      if (!map[b]) map[b] = { bairro:b, corrida:0, show:0, total:0 };
+      map[b][it.tipo]++;
+      map[b].total++;
+    });
+    const linhas = Object.values(map).sort((a,b) => b.total - a.total);
+    const tbody = document.getElementById('bairroBody');
+    if (!tbody) return linhas;
+    tbody.innerHTML = '';
+    linhas.forEach(function(r, i) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td><span class="rank">#${i+1}</span></td><td>${r.bairro}</td><td>${r.corrida}</td><td>${r.show}</td><td><b>${r.total}</b></td>`;
+      tbody.appendChild(tr);
+    });
+    return linhas;
+  }
+
+  function renderTabela(lista) {
+    const tbody = document.getElementById('inscritosBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    lista.forEach(function(it) {
+      const tr = document.createElement('tr');
+      const tag = it.tipo==='corrida'
+        ? '<span style="background:rgba(79,142,247,.12);color:#4f8ef7;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:700;">Corrida</span>'
+        : '<span style="background:rgba(247,99,79,.12);color:#f7634f;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:700;">Show</span>';
+      tr.innerHTML = `<td>${it.numero}</td><td>${tag}</td><td>${it.nome}</td><td>${it.nascimento}</td><td>${it.bairro}</td><td>${it.responsavelNome}</td><td>${it.responsavelTelefone}</td><td>${it.responsavelEmail}</td><td>${fmtData(it.criadoEmMs)}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function atualizarGrafico(lista) {
+    const tipoGrafico = document.getElementById('filtroGrafico')?.value || 'doughnut';
+    const corrida = lista.filter(x => x.tipo==='corrida').length;
+    const show    = lista.filter(x => x.tipo==='show').length;
+    const canvas  = document.getElementById('graficoInscritos');
+    if (!canvas) return;
+    const box = canvas.parentElement;
+    canvas.width  = box.clientWidth  || 320;
+    canvas.height = box.clientHeight || 270;
+    const ctx = canvas.getContext('2d');
+    const labels = ['Corrida','Show'];
+    const values = [corrida, show];
+    const colors = [MiniChart.COLORS.corrida, MiniChart.COLORS.show];
+    if (tipoGrafico === 'bar') {
+      MiniChart.drawBar(ctx, labels, values, colors, canvas.width, canvas.height);
+    } else {
+      MiniChart.drawDoughnut(ctx, labels, values, colors, canvas.width, canvas.height);
+    }
+  }
+
+  function atualizarTudo() {
+    ultimoFiltrado = aplicaFiltros(cacheRelatorios);
+    atualizarResumo(ultimoFiltrado);
+    renderTabela(ultimoFiltrado);
+    montarTabelaBairro(ultimoFiltrado);
+    atualizarGrafico(ultimoFiltrado);
+  }
+
+  async function carregarRelatorios() {
+    if (!FIREBASE_OK) return;
+    const user = auth.currentUser;
+    if (!user) { showSection('login'); return; }
+    const ok = await isAdminUser(user);
+    const as = document.getElementById('adminStatus');
+    if (as) as.innerHTML = ok ? `<strong>Admin:</strong> ${user.email}` : '<strong>Sem permissão</strong>';
+    if (!ok) { alert('❌ Sem permissão de ADMIN.'); showSection('login'); return; }
+    try {
+      const [cs, ss] = await Promise.all([
+        db.collection(COL_CORRIDA).orderBy('criadoEm','desc').limit(2000).get(),
+        db.collection(COL_SHOW).orderBy('criadoEm','desc').limit(2000).get()
+      ]);
+      const lista = [];
+      cs.forEach(function(d) {
+        const r = d.data()||{};
+        lista.push({ numero:r.numero||'', tipo:'corrida', nome:r.nome||'', nascimento:r.nascimento||'',
+          bairro:r.bairro||'', responsavelNome:r?.responsavel?.nome||'',
+          responsavelTelefone:r?.responsavel?.telefone||'', responsavelEmail:r?.responsavel?.email||'',
+          criadoEmMs: toMillisFromFirestore(r.criadoEm) });
+      });
+      ss.forEach(function(d) {
+        const r = d.data()||{};
+        lista.push({ numero:r.numero||'', tipo:'show', nome:r.nome||'', nascimento:r.nascimento||'',
+          bairro:r.bairro||'', responsavelNome:r?.responsavel?.nome||'',
+          responsavelTelefone:r?.responsavel?.telefone||'', responsavelEmail:r?.responsavel?.email||'',
+          criadoEmMs: toMillisFromFirestore(r.criadoEm) });
+      });
+      cacheRelatorios = lista;
+      atualizarTudo();
+    } catch(err) {
+      console.error(err);
+      alert('❌ Erro ao carregar relatórios.');
+    }
+  }
+
+  // ================================================================
+  // EXPORTAÇÕES
+  // ================================================================
+  function exportarCSV() {
+    const lista = ultimoFiltrado.length ? ultimoFiltrado : aplicaFiltros(cacheRelatorios);
+    const header = ['numero','tipo','nome','nascimento','bairro','responsavel','telefone','email','criadoEm'];
+    const rows = [header.join(';')];
+    lista.forEach(function(it) {
+      rows.push([it.numero||'',it.tipo||'',it.nome||'',it.nascimento||'',it.bairro||'',
+        it.responsavelNome||'',it.responsavelTelefone||'',it.responsavelEmail||'',fmtData(it.criadoEmMs)]
+        .map(v=>`"${String(v).replace(/"/g,'""')}"`) .join(';'));
+    });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8'}));
+    a.download = 'relatorio_inscritos.csv';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  function exportarXLSX() {
+    const lista = ultimoFiltrado.length ? ultimoFiltrado : aplicaFiltros(cacheRelatorios);
+    const sheetData = [['Nº','Tipo','Nome','Nascimento','Bairro','Responsável','Telefone','E-mail','Criado em']];
+    lista.forEach(function(it) {
+      sheetData.push([it.numero||'',it.tipo||'',it.nome||'',it.nascimento||'',it.bairro||'',
+        it.responsavelNome||'',it.responsavelTelefone||'',it.responsavelEmail||'',fmtData(it.criadoEmMs)]);
+    });
+    const bairros = montarTabelaBairro(lista)||[];
+    const bairroData = [['Bairro','Corrida','Show','Total']];
+    bairros.forEach(function(b){ bairroData.push([b.bairro,b.corrida,b.show,b.total]); });
+    const corrida = lista.filter(x=>x.tipo==='corrida').length;
+    const show    = lista.filter(x=>x.tipo==='show').length;
+    const resumoData = [['Resumo','Valor'],['Total Corrida',corrida],['Total Show',show],
+      ['Total Geral',corrida+show],['Exportado em',new Date().toLocaleString('pt-BR')]];
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(resumoData), 'Resumo');
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(bairroData), 'Por Bairro');
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(sheetData),  'Inscritos');
+    XLSX.writeFile(wb, 'relatorio_inscritos.csv');
+  }
+
+  // Reatividade filtros
+  ['filtroTipo','filtroGrafico','dataInicio','dataFim','filtroNome','filtroBairro'].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (el) { el.addEventListener('input', atualizarTudo); el.addEventListener('change', atualizarTudo); }
+  });
+
   </script>
 </body>
 </html>
