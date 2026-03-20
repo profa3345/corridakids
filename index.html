@@ -1288,8 +1288,10 @@
       display: flex; flex-direction: column; align-items: center;
       gap: 4px; margin: 8px auto 0; opacity: .45; cursor: pointer;
       animation: scrollBounce 2s ease-in-out infinite;
-      width: fit-content;
+      width: 100%; text-align: center; padding: 8px 0;
+      transition: opacity .4s ease;
     }
+    .scroll-hint.hidden { opacity: 0; pointer-events: none; }
     .scroll-hint span { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: .5px; text-transform: uppercase; }
     .scroll-hint-arrow { font-size: 18px; }
     @keyframes scrollBounce {
@@ -3511,8 +3513,8 @@ Guarde este número para apresentar no dia do evento!`;
       const el  = document.getElementById('contadorInscricoes');
       const elC = document.getElementById('countCorrida');
       const elS = document.getElementById('countShow');
-      if (elC) elC.textContent = totalC;
-      if (elS) elS.textContent = totalS;
+      if (elC) animarContador(elC, totalC);
+      if (elS) animarContador(elS, totalS);
       if (el && (totalC > 0 || totalS > 0)) {
         el.style.display = 'flex';
         el.style.animation = 'appear .5s cubic-bezier(.34,1.56,.64,1) both';
@@ -3532,6 +3534,21 @@ Guarde este número para apresentar no dia do evento!`;
   }
 
 
+
+  function animarContador(el, target) {
+    if (!el || isNaN(target)) return;
+    const start = parseInt(el.textContent) || 0;
+    if (start === target) { el.textContent = target; return; }
+    const dur = 600, steps = 20, inc = (target - start) / steps;
+    let cur = start, i = 0;
+    const timer = setInterval(function() {
+      i++;
+      cur += inc;
+      el.textContent = Math.round(i < steps ? cur : target);
+      if (i >= steps) clearInterval(timer);
+    }, dur / steps);
+  }
+
   // ================================================================
   // ENCERRAMENTO DE INSCRIÇÕES
   // ================================================================
@@ -3545,6 +3562,7 @@ Guarde este número para apresentar no dia do evento!`;
       const encerrado = data.inscricoesEncerradas === true;
       const atualizadoEm = data.atualizadoEm;
       aplicarStatusInscricoes(encerrado, atualizadoEm);
+
     } catch(e) { /* silencioso */ }
   }
 
@@ -3562,7 +3580,7 @@ Guarde este número para apresentar no dia do evento!`;
       const dataEl = document.getElementById('bannerEncerradoData');
       if (dataEl && encerrado && atualizadoEm) {
         try {
-          const ms = typeof atualizadoEm.toMillis === 'function' ? atualizadoEm.toMillis() : atualizadoEm;
+          const ms = typeof atualizadoEm.toMillis === 'function' ? atualizadoEm.toMillis() : (atualizadoEm instanceof Date ? atualizadoEm.getTime() : atualizadoEm);
           dataEl.textContent = 'Encerradas em ' + new Date(ms).toLocaleString('pt-BR');
         } catch(e) { dataEl.textContent = ''; }
       }
@@ -3595,7 +3613,9 @@ Guarde este número para apresentar no dia do evento!`;
           aviso.className = 'encerrado-aviso';
           aviso.style.cssText = 'background:rgba(255,87,34,.10);border:1.5px solid rgba(255,87,34,.30);border-radius:14px;padding:14px 18px;margin-bottom:16px;font-size:13.5px;font-weight:700;color:var(--text);text-align:center;';
           aviso.textContent = '🔒 As inscrições foram encerradas pelos organizadores.';
-          form.insertBefore(aviso, form.firstChild);
+          const firstEl = form.querySelector('label, .fstep, .divider, .grid');
+          if (firstEl) form.insertBefore(aviso, firstEl);
+          else form.insertBefore(aviso, form.firstChild);
         }
         if (submitBtn) { submitBtn.disabled = true; submitBtn.style.opacity = '.4'; }
       } else {
@@ -3619,8 +3639,6 @@ Guarde este número para apresentar no dia do evento!`;
     }
 
     window._inscricoesEncerradas = encerrado;
-    const statusEl = document.getElementById('statusEncerradoAdmin');
-    if (statusEl) statusEl.style.borderColor = encerrado ? 'rgba(255,87,34,.35)' : 'rgba(7,23,46,.08)';
   }
 
   async function toggleEncerrarInscricoes() {
@@ -3639,15 +3657,15 @@ Guarde este número para apresentar no dia do evento!`;
     const modal = document.createElement('div');
     modal.id = 'modalConfirmEncerrar';
     modal.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(2,8,24,.85);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;';
-    modal.innerHTML = \`<div style="background:#fff;border-radius:20px;padding:28px 24px;max-width:380px;width:100%;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.45);">
-      <div style="font-size:36px;margin-bottom:12px;">\${icone}</div>
-      <h3 style="font-size:16px;font-weight:800;color:#07172e;margin:0 0 10px;">\${encerrado ? 'Reabrir inscrições?' : 'Encerrar inscrições?'}</h3>
-      <p style="font-size:13px;color:#3d5068;line-height:1.6;margin:0 0 22px;">\${msg}</p>
+    modal.innerHTML = `<div style="background:#fff;border-radius:20px;padding:28px 24px;max-width:380px;width:100%;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.45);">
+      <div style="font-size:36px;margin-bottom:12px;">${icone}</div>
+      <h3 style="font-size:16px;font-weight:800;color:#07172e;margin:0 0 10px;">${encerrado ? 'Reabrir inscrições?' : 'Encerrar inscrições?'}</h3>
+      <p style="font-size:13px;color:#3d5068;line-height:1.6;margin:0 0 22px;">${msg}</p>
       <div style="display:flex;gap:10px;justify-content:center;">
         <button onclick="document.getElementById('modalConfirmEncerrar').remove()" style="flex:1;padding:11px 0;border-radius:12px;border:1.5px solid rgba(7,23,46,.15);background:#f5f5f5;font-weight:700;font-size:13px;cursor:pointer;">Cancelar</button>
-        <button id="btnConfirmOk" style="flex:1;padding:11px 0;border-radius:12px;border:0;background:\${encerrado ? '#2e7d32' : '#c62828'};color:#fff;font-weight:800;font-size:13px;cursor:pointer;">\${labelOk}</button>
+        <button id="btnConfirmOk" style="flex:1;padding:11px 0;border-radius:12px;border:0;background:${encerrado ? '#2e7d32' : '#c62828'};color:#fff;font-weight:800;font-size:13px;cursor:pointer;">${labelOk}</button>
       </div>
-    </div>\`;
+    </div>`;
     document.body.appendChild(modal);
 
     document.getElementById('btnConfirmOk').onclick = async function() {
@@ -3659,7 +3677,7 @@ Guarde este número para apresentar no dia do evento!`;
           { inscricoesEncerradas: !encerrado, atualizadoEm: firebase.firestore.FieldValue.serverTimestamp() },
           { merge: true }
         );
-        aplicarStatusInscricoes(!encerrado);
+        aplicarStatusInscricoes(!encerrado, !encerrado ? new Date() : null);
         showToast((encerrado ? '✅ Inscrições reabertas!' : '🔒 Inscrições encerradas!'), 'sucesso');
       } catch(e) {
         showToast('❌ Erro ao salvar: ' + esc(e.message), 'erro');
@@ -4469,6 +4487,20 @@ Guarde este número para apresentar no dia do evento!`;
     });
   });
 
+
+
+  /* ── Scroll hint: esconde após primeiro scroll ── */
+  (function() {
+    const hint = document.querySelector('.scroll-hint');
+    if (!hint) return;
+    function hideHint() {
+      if (window.scrollY > 80) {
+        hint.classList.add('hidden');
+        window.removeEventListener('scroll', hideHint);
+      }
+    }
+    window.addEventListener('scroll', hideHint, { passive: true });
+  })();
 
   /* ── Android back button — navega entre etapas ── */
   (function() {
