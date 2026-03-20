@@ -3,15 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>1ª Corrida Kids Ilhas 2026</title>
+  <title>🏃 Corrida Kids Ilhas — Vem aí!</title>
+  <meta name="description" content="Venha viver a emoção da nossa corrida infantil! Crianças cheias de energia e muita alegria nas Ilhas. Evento gratuito para crianças de 6 a 15 anos — Ilhas de Santa Maria e Monte Belo, Cariacica-ES." />
+  <meta property="og:title" content="🏃 Corrida Kids Ilhas — Vem aí!" />
+  <meta property="og:description" content="Venha viver a emoção da nossa corrida infantil! Crianças cheias de energia e muita alegria nas Ilhas. Inscrição online gratuita!" />
+  <meta property="og:image" content="logo1.png" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏃</text></svg>" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=Sora:wght@400;500;600;700&display=swap');
-
     :root{
       --bg-deep: #020818;
       --bg-mid: #050e24;
@@ -25,7 +30,7 @@
       --glass: rgba(255,255,255,.08);
       --glass-border: rgba(255,255,255,.14);
       --text: #07172e;
-      --muted: #5a6a8a;
+      --muted: #445570;
       --shadow: 0 32px 80px rgba(0,0,0,.42);
       --shadow-soft: 0 8px 32px rgba(0,0,0,.18);
       --radius: 28px;
@@ -175,7 +180,7 @@
     .brand .logo img { width:78%; height:78%; object-fit:contain; filter:drop-shadow(0 3px 7px rgba(0,0,0,.18)); }
     .brand .title { display:flex; flex-direction:column; line-height:1.18; }
     .brand .title b { font-size:15.5px; font-weight:900; letter-spacing:.1px; }
-    .brand .title span { font-size:11px; opacity:.65; font-weight:500; letter-spacing:.2px; }
+    .brand .title span { font-size:11px; opacity:.88; font-weight:600; letter-spacing:.2px; }
 
     .pill {
       display: inline-flex; align-items: center; gap: 9px;
@@ -390,12 +395,12 @@
       font-size: 12px; font-weight: 800; color: #1a2e50;
       letter-spacing: .2px; text-transform: uppercase;
     }
-    .hint { font-weight:500; color:var(--muted); font-size:11.5px; text-transform:none; letter-spacing:0; }
+    .hint { font-weight:600; color:#3d5068; font-size:11.5px; text-transform:none; letter-spacing:0; }
 
     input, select {
       width: 100%; padding: 13px 16px;
       border-radius: 14px; border: 1.5px solid rgba(7,23,46,.11);
-      background: #fff; outline: none;
+      background: #fff; outline: none; /* ring via box-shadow no :focus */
       font: inherit; font-size: 14px; color: var(--text);
       transition: border-color .18s, box-shadow .18s, transform .18s;
       box-shadow: 0 2px 8px rgba(0,0,0,.04);
@@ -434,7 +439,8 @@
       transition: left .5s ease;
     }
     .btn:hover::before { left:160%; }
-    .btn:focus { outline:none; }
+    .btn:focus-visible { outline: 2.5px solid var(--accent1); outline-offset: 3px; }
+    .btn:focus:not(:focus-visible) { outline: none; }
     .btn:active { transform: scale(.96) translateY(2px) !important; }
 
     .btn-primary {
@@ -463,7 +469,53 @@
     }
     .btn-admin:hover { transform:translateY(-2px); filter:brightness(1.20); }
 
-    .note { margin-top:12px; font-size:12px; color:var(--muted); line-height:1.6; }
+    .note { margin-top:12px; font-size:12.5px; color:#3d5068; line-height:1.6; font-weight:500; }
+
+    /* ── Termo de Autorização ── */
+    .termo-box {
+      margin-top: 18px;
+      border: 1.5px solid rgba(0,194,255,.28);
+      border-radius: 18px;
+      background: rgba(0,194,255,.04);
+      overflow: hidden;
+    }
+    .termo-header {
+      background: linear-gradient(135deg, rgba(0,194,255,.12), rgba(105,255,71,.06));
+      padding: 13px 18px;
+      display: flex; align-items: center; gap: 10px;
+      border-bottom: 1px solid rgba(0,194,255,.14);
+      font-weight: 800; font-size: 13.5px; color: var(--text);
+    }
+    .termo-body {
+      padding: 14px 18px;
+      font-size: 12.5px; color: var(--muted); line-height: 1.75;
+      max-height: 160px; overflow-y: auto;
+    }
+    .termo-body::-webkit-scrollbar { width: 4px; }
+    .termo-body::-webkit-scrollbar-thumb { background: rgba(0,194,255,.35); border-radius: 99px; }
+    .termo-footer {
+      padding: 12px 18px 16px;
+      border-top: 1px solid rgba(0,194,255,.10);
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .termo-check-row {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; font-weight: 700; color: var(--text); cursor: pointer;
+    }
+    .termo-check-row input[type="checkbox"] {
+      width: 18px; height: 18px; accent-color: var(--accent1); cursor: pointer; flex-shrink: 0;
+    }
+    .termo-assinatura label {
+      font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 5px; display: block;
+    }
+    .termo-assinatura input {
+      width: 100%; padding: 9px 14px; border-radius: 12px;
+      border: 1.5px solid rgba(7,23,46,.13);
+      font-size: 13px; font-family: var(--font-body);
+      background: #fff; color: var(--text);
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .termo-assinatura input:focus { outline: none; border-color: var(--accent1); box-shadow: var(--ring); }
 
     /* ── Section titles ── */
     .section-title {
@@ -491,7 +543,7 @@
     .video-embed iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
     .video-info { padding: 20px 22px; }
     .video-info h3 { font-family:var(--font-display); font-size:17px; font-weight:700; color:var(--text); margin-bottom:8px; }
-    .video-info p { font-size:12.5px; color:var(--muted); line-height:1.6; margin-bottom:14px; }
+    .video-info p { font-size:13px; color:#3d5068; line-height:1.6; margin-bottom:14px; font-weight:500; }
     .share-btn {
       display:inline-flex; align-items:center; gap:7px;
       padding: 8px 16px; border-radius:12px;
@@ -586,7 +638,7 @@
     .crono-vline { width:2px; background:rgba(7,23,46,.07); flex:1; min-height:28px; }
     .crono-content { flex:1; padding:13px 0 13px 20px; }
     .crono-label { font-size:14px; font-weight:700; color:var(--text); line-height:1.3; }
-    .crono-sub { font-size:12px; color:var(--muted); margin-top:3px; }
+    .crono-sub { font-size:12.5px; color:#3d5068; margin-top:3px; font-weight:500; }
     .crono-badge {
       display:inline-flex; align-items:center; gap:5px;
       padding:3px 11px; border-radius:999px;
@@ -680,7 +732,7 @@
     .stat.s3::before { background:linear-gradient(90deg, var(--accent4), rgba(105,255,71,.2)); box-shadow:0 0 14px rgba(105,255,71,.6); }
     .stat > * { position:relative; z-index:2; }
     .stat-top { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:10px; }
-    .stat .k { font-size:11px; letter-spacing:1px; color:var(--muted); font-weight:900; text-transform:uppercase; }
+    .stat .k { font-size:11.5px; letter-spacing:1px; color:#3d5068; font-weight:900; text-transform:uppercase; }
     .stat-ic { width:50px; height:50px; border-radius:18px; display:grid; place-items:center; font-size:22px; background:rgba(255,255,255,.82); border:1px solid rgba(7,23,46,.07); box-shadow:0 8px 24px rgba(0,0,0,.08); }
     .stat .v { margin-top:16px; font-size:52px; font-weight:900; line-height:1; font-family:var(--font-num); letter-spacing:-2px; color:var(--text); }
     .stat .sub { margin-top:10px; font-size:12.5px; color:rgba(90,106,138,.90); line-height:1.4; }
@@ -778,6 +830,19 @@
       #confettiCanvas { display:none; }
     }
 
+    /* ── Dispositivos com hardware fraco: reduz animações pesadas ── */
+    @media (max-width: 480px) {
+      .blob { filter: blur(70px); opacity: .12; animation-duration: 30s !important; }
+      .blob.b3, .blob.b4, .blob.b5 { display: none; }
+      body::after { animation: none; }
+      .hero-stars span { animation-duration: 3.5s !important; }
+      .crono-header-icon { animation: none; }
+    }
+    @media (max-width: 768px) {
+      .blob.b5 { display: none; }
+      .blob { opacity: .14; }
+    }
+
     /* ── Admin Portal Unified Card ── */
     .cta-admin-unified {
       border-radius: 18px; padding: 15px 16px;
@@ -813,7 +878,7 @@
     .admin-badge-tag { font-size:10px; font-weight:800; padding:2px 9px; border-radius:999px; background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.16); color:rgba(255,255,255,.80); letter-spacing:.4px; }
     .admin-badge-new { background:linear-gradient(135deg, rgba(255,60,172,.30), rgba(0,194,255,.22)); border-color:rgba(255,60,172,.42); color:#ffb3e0; }
     .cta-admin-unified .admin-unified-left b { font-size:14px; font-weight:800; color:#fff; letter-spacing:.1px; }
-    .cta-admin-unified .admin-unified-left span { font-size:11.5px; color:rgba(255,255,255,.50); font-weight:500; }
+    .cta-admin-unified .admin-unified-left span { font-size:11.5px; color:rgba(255,255,255,.78); font-weight:600; }
     .admin-unified-icons { flex-shrink:0; position:relative; z-index:1; }
     .admin-icon-stack { position:relative; width:54px; height:46px; }
     .admin-icon-main {
@@ -949,6 +1014,195 @@
       color: var(--text); white-space: nowrap; letter-spacing: .3px; flex-shrink: 0;
     }
 
+
+    /* ── Multi-step progress bar ── */
+    .step-progress {
+      display: flex; align-items: center; gap: 0;
+      margin-bottom: 28px; position: relative;
+    }
+    .step-item {
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
+      flex: 1; position: relative; z-index: 1;
+    }
+    .step-circle {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800;
+      border: 2px solid rgba(7,23,46,.12);
+      background: #fff; color: var(--muted);
+      transition: all .3s cubic-bezier(.34,1.56,.64,1);
+      position: relative; z-index: 2;
+    }
+    .step-item.active .step-circle {
+      background: var(--accent1); border-color: var(--accent1);
+      color: #fff; box-shadow: 0 4px 16px rgba(0,194,255,.40);
+      transform: scale(1.12);
+    }
+    .step-item.done .step-circle {
+      background: var(--accent4); border-color: var(--accent4); color: #07172e;
+    }
+    .step-label {
+      font-size: 10px; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .4px; white-space: nowrap;
+    }
+    .step-item.active .step-label { color: var(--accent1); font-weight: 900; }
+    .step-item.done .step-label { color: #3a8a00; }
+    .step-line {
+      flex: 1; height: 2px; background: rgba(7,23,46,.08);
+      margin-top: -22px; position: relative; z-index: 0;
+      transition: background .3s;
+    }
+    .step-line.done { background: var(--accent4); }
+
+    /* ── Form steps panels ── */
+    .fstep { display: none; }
+    .fstep.active { display: grid; gap: 16px; animation: stepIn .32s cubic-bezier(.34,1.56,.64,1) both; }
+    @keyframes stepIn {
+      from { opacity:0; transform: translateX(18px) scale(.98); }
+      to   { opacity:1; transform: none; }
+    }
+    .fstep.back { animation: stepBack .32s cubic-bezier(.34,1.56,.64,1) both; }
+    @keyframes stepBack {
+      from { opacity:0; transform: translateX(-18px) scale(.98); }
+      to   { opacity:1; transform: none; }
+    }
+
+    /* ── Step nav buttons ── */
+    .step-nav { display:flex; gap:10px; margin-top:8px; flex-wrap:wrap; }
+    .btn-next {
+      background: linear-gradient(135deg, var(--accent1), #0099cc);
+      color: #fff; box-shadow: 0 8px 24px rgba(0,194,255,.35);
+      flex: 1;
+    }
+    .btn-next:hover { transform:translateY(-2px) scale(1.02); filter:brightness(1.08); }
+
+    /* ── Input validation states ── */
+    input.valid   { border-color: #3a8a00 !important; background: rgba(105,255,71,.04) !important; }
+    input.invalid { border-color: #e53935 !important; background: rgba(229,57,53,.04) !important; }
+    .field-msg {
+      font-size: 11px; font-weight: 700; margin-top: 2px;
+      display: none; letter-spacing: .1px;
+    }
+    .field-msg.ok   { color: #2e7d32; display: block; }
+    .field-msg.erro { color: #c62828; display: block; }
+
+    /* ── Pre-fill banner ── */
+    .prefill-banner {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(0,194,255,.10), rgba(0,194,255,.04));
+      border: 1.5px solid rgba(0,194,255,.28); margin-bottom: 4px;
+      font-size: 13px; font-weight: 600; color: var(--text);
+    }
+    .prefill-banner span { flex:1; }
+    .prefill-banner button {
+      font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 10px;
+      background: var(--accent1); color: #fff; border: 0; cursor: pointer;
+      transition: transform .18s, filter .18s;
+    }
+    .prefill-banner button:hover { transform:scale(1.04); filter:brightness(1.1); }
+
+    /* ── Tela de confirmação ── */
+    .confirm-section {
+      display: none; flex-direction: column; align-items: center;
+      padding: 48px 32px 40px; text-align: center; gap: 0;
+    }
+    .confirm-section.active { display: flex; animation: appear .5s cubic-bezier(.34,1.56,.64,1) both; }
+    .confirm-icon {
+      width: 88px; height: 88px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent4), #00e676);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 40px; margin-bottom: 24px;
+      box-shadow: 0 12px 40px rgba(105,255,71,.40);
+      animation: confirmPop .6s cubic-bezier(.34,1.56,.64,1) .1s both;
+    }
+    @keyframes confirmPop {
+      from { transform: scale(0) rotate(-20deg); opacity:0; }
+      to   { transform: scale(1) rotate(0deg); opacity:1; }
+    }
+    .confirm-title { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .confirm-sub   { font-size: 14px; color: var(--muted); line-height: 1.65; max-width: 44ch; margin-bottom: 28px; }
+    .confirm-num-box {
+      background: linear-gradient(135deg, rgba(0,194,255,.10), rgba(105,255,71,.08));
+      border: 2px solid rgba(0,194,255,.30); border-radius: 20px;
+      padding: 20px 36px; margin-bottom: 28px; width: 100%; max-width: 360px;
+    }
+    .confirm-num-label { font-size: 11px; font-weight: 900; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+    .confirm-num { font-family: var(--font-num); font-size: 38px; font-weight: 900; color: var(--text); letter-spacing: 3px; }
+    .confirm-tipo { font-size: 13px; font-weight: 600; color: var(--muted); margin-top: 4px; }
+    .confirm-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 420px; }
+    .btn-whatsapp {
+      background: linear-gradient(135deg, #25d366, #128c7e);
+      color: #fff; box-shadow: 0 8px 24px rgba(37,211,102,.35);
+      flex: 1; min-width: 180px;
+    }
+    .btn-whatsapp:hover { transform:translateY(-2px) scale(1.03); filter:brightness(1.08); }
+    .confirm-tip {
+      margin-top: 20px; font-size: 12.5px; color: var(--muted);
+      line-height: 1.6; max-width: 42ch;
+      background: rgba(255,214,0,.10); border: 1px solid rgba(255,214,0,.28);
+      border-radius: 12px; padding: 12px 16px;
+    }
+
+
+    /* ── Imprimir comprovante ── */
+    .btn-print {
+      background: rgba(7,23,46,.06); color: #1a2e50;
+      border: 1.5px solid rgba(7,23,46,.14);
+    }
+    .btn-print:hover { transform:translateY(-2px); box-shadow:var(--shadow-soft); background:rgba(7,23,46,.09); }
+
+    @media print {
+      body > *:not(.app) { display: none !important; }
+      .app > header, .app > footer { display: none !important; }
+      .section { display: none !important; }
+      .section.active { display: block !important; }
+      .confirm-actions, .confirm-tip, #scrollBar,
+      #floatEmojis, #confettiCanvas, .blob { display: none !important; }
+      .card { box-shadow: none !important; border: 1px solid #ccc !important; }
+      .confirm-section { padding: 24px !important; display: flex !important; flex-direction: column; align-items: center; }
+      .confirm-icon { display: none !important; }
+      .confirm-num { font-size: 48px !important; letter-spacing: 4px; }
+      body::before, body::after { display: none !important; }
+    }
+
+    /* ── Card camisa do evento ── */
+    .camisa-card {
+      display: flex; align-items: center; gap: 28px;
+      padding: 22px 24px; border-radius: 20px; margin-top: 6px;
+      background: linear-gradient(135deg, rgba(0,194,255,.10), rgba(105,255,71,.07));
+      border: 1.5px solid rgba(0,194,255,.28);
+      transition: transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s;
+    }
+    .camisa-card:hover { transform: translateY(-3px); box-shadow: 0 16px 48px rgba(0,194,255,.18); }
+    .camisa-img-wrap {
+      flex-shrink: 0; width: 160px; height: 160px;
+      border-radius: 16px; overflow: hidden;
+      box-shadow: 0 12px 36px rgba(0,0,0,.18);
+      background: #fff;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .camisa-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+    }
+    .camisa-card:hover .camisa-img-wrap img { transform: scale(1.06); }
+    .camisa-info { flex: 1; }
+    .camisa-info h4 {
+      font-family: var(--font-display); font-size: 20px; font-weight: 700;
+      color: var(--text); margin-bottom: 8px;
+    }
+    .camisa-info p { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 12px; }
+    .camisa-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 14px; border-radius: 999px; font-size: 12px; font-weight: 800;
+      background: rgba(0,194,255,.12); border: 1.5px solid rgba(0,194,255,.28); color: var(--text);
+    }
+    @media (max-width: 600px) {
+      .camisa-card { flex-direction: column; text-align: center; }
+      .camisa-img-wrap { width: 200px; height: 200px; }
+    }
+
   </style>
 </head>
 
@@ -966,11 +1220,11 @@
   <div class="app">
     <header class="topbar">
       <div class="topbar-inner">
-        <div class="brand" aria-label="Corrida Kids Ilhas 2026">
+        <div class="brand" aria-label="Corrida Kids Ilhas — Vem aí!">
           <div class="logo"><img src="logo2.png" alt="Logo do evento" /></div>
           <div class="title">
-            <b>Corrida Kids Ilhas 2026</b>
-            <span>Inscrições online + autorização do responsável</span>
+            <b>Corrida Kids Ilhas — Vem aí!</b>
+            <span>Venha viver a emoção da corrida infantil nas Ilhas!</span>
           </div>
         </div>
 
@@ -999,7 +1253,7 @@
               <h1>Corrida Kids &amp; Show de Talentos</h1>
               <p class="subtitle">
                 Um evento comunitário <b>gratuito</b> e cheio de alegria! Faça a inscrição da criança para a Corrida Kids
-                e/ou para o <b>Show de Talentos</b>. A participação é mediante autorização do responsável.
+                e/ou para o <b>Show de Talentos</b>. A participação de menores de idade no Show de Talentos é mediante autorização do responsável.
               </p>
 
               <div class="badges" role="list">
@@ -1195,8 +1449,8 @@
                   </div>
                 </div>
                 <div class="video-info">
-                  <h3>🏃 Corrida Kids Ilhas — Momentos Incríveis</h3>
-                  <p>Reviva a emoção da nossa corrida infantil! Crianças cheias de energia e muita alegria nas Ilhas.</p>
+                  <h3>🏃 Corrida Kids Ilhas — Vem aí!</h3>
+                  <p>Venha viver a emoção da nossa corrida infantil! Crianças cheias de energia e muita alegria nas Ilhas.</p>
                   <div class="share-actions">
                     <button class="share-btn" onclick="compartilharVideo('https://youtu.be/LBH8zNm88cM', this)">
                       📤 Compartilhar link
@@ -1245,90 +1499,164 @@
             <div class="form-head">
               <div>
                 <h2>Inscrição • Corrida Kids 🏃‍♂️</h2>
-                <p>Preencha os dados da criança e do responsável. Campos com * são obrigatórios.</p>
+                <p>Preencha os dados em 3 etapas rápidas. Campos com * são obrigatórios.</p>
               </div>
-              <div class="steps" aria-label="Etapas do formulário">
-                <span class="step"><strong>1</strong> Criança</span>
-                <span class="step"><strong>2</strong> Responsável</span>
+            </div>
+
+            <!-- PROGRESS BAR -->
+            <div class="step-progress" id="cProgressBar">
+              <div class="step-item active" id="cStep1Item">
+                <div class="step-circle">1</div>
+                <span class="step-label">Autorização</span>
+              </div>
+              <div class="step-line" id="cLine1"></div>
+              <div class="step-item" id="cStep2Item">
+                <div class="step-circle">2</div>
+                <span class="step-label">Criança</span>
+              </div>
+              <div class="step-line" id="cLine2"></div>
+              <div class="step-item" id="cStep3Item">
+                <div class="step-circle">3</div>
+                <span class="step-label">Responsável</span>
               </div>
             </div>
 
             <form id="corridaForm" autocomplete="on">
-              <div class="grid">
-                <label>
-                  Nome completo da criança *
-                  <input type="text" id="nome" placeholder="Ex.: Maria Eduarda Souza" required />
-                  <span class="hint">Como está no documento</span>
-                </label>
-
-                <label>
-                  Data de nascimento *
-                  <input type="date" id="nascimento" required oninput="calcCategoria('nascimento','categoriaBox')" />
+              <!-- Honeypot anti-bot: visualmente oculto, humanos não preenchem -->
+              <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;overflow:hidden;" aria-hidden="true" tabindex="-1">
+                <label>Não preencha este campo
+                  <input type="text" id="hp_corrida" name="website" tabindex="-1" autocomplete="off" />
                 </label>
               </div>
 
-              <!-- CATEGORIA AUTO -->
-              <div id="categoriaBox" class="categoria-box hidden" aria-live="polite"></div>
-
-              <div class="grid">
-                <label>
-                  RG ou Certidão *
-                  <input type="text" id="documento" placeholder="Digite o número" required />
-                </label>
-
-                <label>
-                  Bairro / Comunidade *
-                  <select id="bairroSel" required>
-                    <option value="">Selecione</option>
-                    <option>Ilha de Santa Maria</option>
-                    <option>Ilha de Monte Belo</option>
-                    <option value="OUTRO">Outro (digitar)</option>
-                  </select>
-                  <input class="hidden" type="text" id="bairroOutro" placeholder="Digite o bairro/comunidade" />
-                  <span class="hint">Padronizado para melhorar relatórios</span>
-                </label>
+              <!-- ETAPA 1: AUTORIZAÇÃO (PRIMEIRO!) -->
+              <div class="fstep active" id="cFStep1">
+                <div class="divider" style="margin-top:0;">📋 Termo de Autorização</div>
+                <div class="termo-box" style="margin-top:0;">
+                  <div class="termo-header">Leia antes de prosseguir</div>
+                  <div class="termo-body">
+                    Eu, responsável legal pela criança inscrita, declaro que:<br><br>
+                    <strong>1.</strong> Autorizo a participação do(a) meu/minha filho(a) na <strong>1ª Corrida Kids Ilhas 2026</strong>, a ser realizada nas ruas da comunidade.<br><br>
+                    <strong>2.</strong> Estou ciente de que a criança deverá estar acompanhada por um responsável adulto no local do evento.<br><br>
+                    <strong>3.</strong> Confirmo que as informações preenchidas neste formulário são verdadeiras e que a criança está em condições físicas adequadas para participar.<br><br>
+                    <strong>4.</strong> Em caso de qualquer desconforto físico durante a corrida, autorizo a equipe organizadora a prestar os primeiros socorros e acionar serviços de emergência se necessário.<br><br>
+                    <strong>5.</strong> Estou ciente de que o evento é gratuito e que a organização poderá fazer registros fotográficos e em vídeo para divulgação do evento.
+                  </div>
+                  <div class="termo-footer">
+                    <label class="termo-check-row">
+                      <input type="checkbox" id="termoCheck" />
+                      Li e concordo com os termos acima e autorizo a participação da criança
+                    </label>
+                  </div>
+                </div>
+                <div class="step-nav">
+                  <button type="button" class="btn btn-ghost" onclick="showSection('home')">⬅️ Voltar</button>
+                  <button type="button" class="btn btn-next btn" onclick="cNextStep(1)">Concordo e continuo →</button>
+                </div>
               </div>
 
-              <label>
-                Endereço completo *
-                <input type="text" id="endereco" placeholder="Rua, nº, complemento" required />
-              </label>
-
-              <div class="divider">Responsável 🧑‍🧑‍🧒</div>
-
-              <div class="grid">
+              <!-- ETAPA 2: CRIANÇA -->
+              <div class="fstep" id="cFStep2">
+                <div class="divider" style="margin-top:0;">👦 Dados da Criança</div>
+                <div class="grid">
+                  <label>
+                    Nome completo da criança *
+                    <input type="text" id="nome" placeholder="Ex.: Maria Eduarda Souza" autocomplete="off" />
+                    <span class="hint">Como está no documento</span>
+                    <span class="field-msg" id="nomeMsg"></span>
+                  </label>
+                  <label>
+                    Data de nascimento *
+                    <input type="date" id="nascimento" min="2005-01-01" max="2020-12-31" oninput="calcCategoria('nascimento','categoriaBox')" onblur="validarNasc('nascimento','nascMsg','corrida')" />
+                    <span class="field-msg" id="nascMsg"></span>
+                  </label>
+                </div>
+                <div id="categoriaBox" class="categoria-box hidden" aria-live="polite"></div>
+                <div class="grid">
+                  <label>
+                    RG ou Certidão *
+                    <input type="text" id="documento" placeholder="Digite o número" />
+                  </label>
+                  <label>
+                    Bairro / Comunidade *
+                    <select id="bairroSel">
+                      <option value="">Selecione</option>
+                      <option>Ilha de Santa Maria</option>
+                      <option>Ilha de Monte Belo</option>
+                      <option value="OUTRO">Outro (digitar)</option>
+                    </select>
+                    <input class="hidden" type="text" id="bairroOutro" placeholder="Digite o bairro/comunidade" />
+                  </label>
+                </div>
                 <label>
-                  Nome do responsável *
-                  <input type="text" id="respNome" placeholder="Nome completo" required />
+                  Endereço completo *
+                  <input type="text" id="endereco" placeholder="Rua, nº, complemento" autocomplete="street-address" />
                 </label>
-
-                <label>
-                  CPF do responsável *
-                  <input type="text" id="respCpf" inputmode="numeric" placeholder="Somente números (ex.: 12345678900)" required />
-                  <span class="hint">Você pode digitar com ou sem pontuação</span>
-                </label>
+                <div class="step-nav">
+                  <button type="button" class="btn btn-ghost" onclick="cGoStep(1)">← Voltar</button>
+                  <button type="button" class="btn btn-next btn" onclick="cNextStep(2)">Próximo →</button>
+                </div>
               </div>
 
-              <div class="grid">
-                <label>
-                  Telefone/WhatsApp *
-                  <input type="tel" id="respTelefone" inputmode="tel" placeholder="DDD + número (ex.: 27999998888)" required />
-                </label>
+              <!-- ETAPA 3: RESPONSÁVEL -->
+              <div class="fstep" id="cFStep3">
+                <div class="divider" style="margin-top:0;" id="sRespDivider">🧑‍🧑‍🧒 Dados do Responsável</div>
+                <div id="sAdultoAviso" style="display:none;background:rgba(105,255,71,.08);border:1.5px solid rgba(105,255,71,.25);border-radius:14px;padding:14px 16px;font-size:13px;color:var(--text);line-height:1.6;">
+                  ✅ <strong>Participante adulto</strong> — nenhum responsável necessário. Clique em <strong>Enviar inscrição</strong> para concluir.
+                </div>
+                <div id="sRespFields">
 
+                <!-- Banner pré-preenchimento -->
+                <div class="prefill-banner" id="cPrefillBanner" style="display:none;">
+                  <span>💡 Já tem inscrição no Show de Talentos? Clique para pré-preencher os dados do responsável.</span>
+                  <button type="button" onclick="prefillResp('corrida')">Pré-preencher</button>
+                </div>
+
+                <div class="grid">
+                  <label>
+                    Nome do responsável *
+                    <input type="text" id="respNome" placeholder="Nome completo" autocomplete="name" />
+                    <span class="field-msg" id="respNomeMsg"></span>
+                  </label>
+                  <label>
+                    CPF do responsável *
+                    <input type="text" id="respCpf" inputmode="numeric" placeholder="000.000.000-00" autocomplete="off" oninput="maskCpf(this)" onblur="validarCpfField('respCpf','respCpfMsg')" />
+                    <span class="hint">Com ou sem pontuação</span>
+                    <span class="field-msg" id="respCpfMsg"></span>
+                  </label>
+                </div>
+                <div class="grid">
+                  <label>
+                    Vínculo com a criança *
+                    <select id="respVinculo">
+                      <option value="">Selecione...</option>
+                      <option value="Pai">Pai</option>
+                      <option value="Mãe">Mãe</option>
+                      <option value="Tutor(a) legal">Tutor(a) legal</option>
+                      <option value="Responsável legal">Responsável legal</option>
+                      <option value="Outro">Outro</option>
+                    </select>
+                  </label>
+                  <label>
+                    Telefone/WhatsApp *
+                    <input type="tel" id="respTelefone" inputmode="tel" placeholder="(27) 99999-8888" autocomplete="tel" onblur="validarTelField('respTelefone','respTelMsg')" />
+                    <span class="field-msg" id="respTelMsg"></span>
+                  </label>
+                </div>
                 <label>
-                  E-mail *
-                  <input type="email" id="respEmail" placeholder="ex.: seuemail@gmail.com" required />
+                  E-mail <span style="font-weight:500;font-size:11px;color:var(--muted);text-transform:none;">(opcional)</span>
+                  <input type="email" id="respEmail" placeholder="seuemail@gmail.com (opcional)" autocomplete="email" />
                 </label>
+                <div class="termo-assinatura">
+                  <label for="termoAssinatura">Confirme seu nome como assinatura digital *</label>
+                  <input type="text" id="termoAssinatura" placeholder="Digite seu nome completo" autocomplete="off" />
+                </div>
+                <div class="step-nav">
+                  <button type="button" class="btn btn-ghost" onclick="cGoStep(2)">← Voltar</button>
+                  <button type="submit" class="btn btn-primary" style="flex:1;">✅ Enviar inscrição</button>
+                </div>
               </div>
 
-              <div class="actions">
-                <button type="submit" class="btn btn-primary">✅ Enviar inscrição</button>
-                <button type="button" class="btn btn-ghost" onclick="showSection('home')">⬅️ Voltar</button>
-              </div>
-
-              <p class="note">
-                Ao enviar, você confirma que as informações são verdadeiras e que o responsável autoriza a participação.
-              </p>
             </form>
           </div>
         </section>
@@ -1339,106 +1667,229 @@
             <div class="form-head">
               <div>
                 <h2>Inscrição • Show de Talentos 🎭</h2>
-                <p>Para apresentações infantis (música, dança, poesia, teatro, capoeira…). Duração máxima: 5 minutos.</p>
+                <p>Preencha os dados em 3 etapas rápidas. Duração máxima da apresentação: 5 minutos.</p>
               </div>
-              <div class="steps" aria-label="Etapas do formulário">
-                <span class="step"><strong>1</strong> Participante</span>
-                <span class="step"><strong>2</strong> Apresentação</span>
-                <span class="step"><strong>3</strong> Responsável</span>
+            </div>
+
+            <!-- PROGRESS BAR -->
+            <div class="step-progress" id="sProgressBar">
+              <div class="step-item active" id="sStep1Item">
+                <div class="step-circle">1</div>
+                <span class="step-label">Participante</span>
+              </div>
+              <div class="step-line" id="sLine1"></div>
+              <div class="step-item" id="sStep2Item">
+                <div class="step-circle">2</div>
+                <span class="step-label">Autorização</span>
+              </div>
+              <div class="step-line" id="sLine2"></div>
+              <div class="step-item" id="sStep3Item">
+                <div class="step-circle">3</div>
+                <span class="step-label">Responsável</span>
               </div>
             </div>
 
             <form id="showForm" autocomplete="on">
-              <div class="grid">
-                <label>
-                  Nome do participante *
-                  <input type="text" id="showNome" placeholder="Nome completo" required />
-                </label>
-
-                <label>
-                  Data de nascimento *
-                  <input type="date" id="showNascimento" required oninput="calcCategoria('showNascimento','showCategoriaBox')" />
+              <!-- Honeypot anti-bot -->
+              <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;overflow:hidden;" aria-hidden="true" tabindex="-1">
+                <label>Não preencha este campo
+                  <input type="text" id="hp_show" name="website" tabindex="-1" autocomplete="off" />
                 </label>
               </div>
 
-              <!-- CATEGORIA AUTO -->
-              <div id="showCategoriaBox" class="categoria-box hidden" aria-live="polite"></div>
-
-              <div class="grid">
-                <label>
-                  Bairro / Comunidade *
-                  <select id="showBairroSel" required>
-                    <option value="">Selecione</option>
-                    <option>Ilha de Santa Maria</option>
-                    <option>Ilha de Monte Belo</option>
-                    <option value="OUTRO">Outro (digitar)</option>
-                  </select>
-                  <input class="hidden" type="text" id="showBairroOutro" placeholder="Digite o bairro/comunidade" />
-                  <span class="hint">Padronizado para melhorar relatórios</span>
-                </label>
-
-                <label>
-                  Tipo de apresentação *
-                  <select id="tipoApresentacao" required>
-                    <option value="">Selecione</option>
-                    <option>Música</option>
-                    <option>Dança</option>
-                    <option>Poesia</option>
-                    <option>Teatro</option>
-                    <option>Capoeira</option>
-                    <option>Outro</option>
-                  </select>
-                </label>
+              <!-- ETAPA 1: PARTICIPANTE + APRESENTAÇÃO -->
+              <div class="fstep active" id="sFStep1">
+                <div class="divider" style="margin-top:0;">🎤 Participante &amp; Apresentação</div>
+                <p style="font-size:13px;color:var(--muted);margin-bottom:4px;">O Show de Talentos é aberto a <strong>todas as idades</strong>. Autorização do responsável será solicitada apenas para menores de 18 anos.</p>
+                <div class="grid">
+                  <label>
+                    Nome do participante *
+                    <input type="text" id="showNome" placeholder="Nome completo" autocomplete="off" />
+                  </label>
+                  <label>
+                    Data de nascimento *
+                    <input type="date" id="showNascimento" min="1950-01-01" max="2020-12-31" oninput="calcCategoria('showNascimento','showCategoriaBox')" onblur="validarNasc('showNascimento','showNascMsg','show')" />
+                    <span class="field-msg" id="showNascMsg"></span>
+                  </label>
+                </div>
+                <div id="showCategoriaBox" class="categoria-box hidden" aria-live="polite"></div>
+                <div class="grid">
+                  <label>
+                    Bairro / Comunidade *
+                    <select id="showBairroSel">
+                      <option value="">Selecione</option>
+                      <option>Ilha de Santa Maria</option>
+                      <option>Ilha de Monte Belo</option>
+                      <option value="OUTRO">Outro (digitar)</option>
+                    </select>
+                    <input class="hidden" type="text" id="showBairroOutro" placeholder="Digite o bairro/comunidade" />
+                  </label>
+                  <label>
+                    Tipo de apresentação *
+                    <select id="tipoApresentacao">
+                      <option value="">Selecione</option>
+                      <option>Música</option>
+                      <option>Dança</option>
+                      <option>Poesia</option>
+                      <option>Teatro</option>
+                      <option>Capoeira</option>
+                      <option>Outro</option>
+                    </select>
+                  </label>
+                </div>
+                <div class="grid">
+                  <label>
+                    Nome da apresentação *
+                    <input type="text" id="nomeApresentacao" placeholder="Ex.: 'Aquarela'" />
+                  </label>
+                  <label>
+                    Duração estimada *
+                    <input type="text" id="duracao" placeholder="Máx. 5 min (ex.: 3 min)" />
+                  </label>
+                </div>
+                <div class="step-nav">
+                  <button type="button" class="btn btn-ghost" onclick="showSection('home')">⬅️ Voltar</button>
+                  <button type="button" class="btn btn-next btn" onclick="sNextStep(1)">Próximo →</button>
+                </div>
               </div>
 
-              <div class="grid">
-                <label>
-                  Nome da apresentação *
-                  <input type="text" id="nomeApresentacao" placeholder="Ex.: 'Aquarela'" required />
-                </label>
-
-                <label>
-                  Duração estimada *
-                  <input type="text" id="duracao" placeholder="Máx. 5 min (ex.: 3 min)" required />
-                </label>
+              <!-- ETAPA 2: AUTORIZAÇÃO (só para menores) -->
+              <div class="fstep" id="sFStep2">
+                <div class="divider" style="margin-top:0;">📋 Autorização do Responsável</div>
+                <div id="showTermoAviso" style="background:rgba(0,194,255,.08);border:1.5px solid rgba(0,194,255,.25);border-radius:14px;padding:12px 16px;font-size:13px;color:var(--text);line-height:1.6;margin-bottom:4px;">
+                  👤 O participante é <strong>menor de idade</strong>. É necessário o consentimento do responsável legal antes de continuar.
+                </div>
+                <div class="termo-box" style="margin-top:0;">
+                  <div class="termo-header">Leia antes de prosseguir</div>
+                  <div class="termo-body">
+                    Eu, responsável legal pelo(a) participante inscrito(a), declaro que:<br><br>
+                    <strong>1.</strong> Autorizo a participação no <strong>Show de Talentos da 1ª Corrida Kids Ilhas 2026</strong>, realizado na Rua Guido Prati após a corrida.<br><br>
+                    <strong>2.</strong> Confirmo que a apresentação tem duração máxima de 5 minutos e é adequada ao público infantil.<br><br>
+                    <strong>3.</strong> Estou ciente de que a organização pode ajustar a ordem de apresentações ou cancelar apresentações que não respeitem o público infantil.<br><br>
+                    <strong>4.</strong> Autorizo a organização a realizar registros fotográficos e em vídeo da apresentação para divulgação do evento.<br><br>
+                    <strong>5.</strong> Confirmo que as informações preenchidas neste formulário são verdadeiras.
+                  </div>
+                  <div class="termo-footer">
+                    <label class="termo-check-row">
+                      <input type="checkbox" id="showTermoCheck" />
+                      Li e concordo com os termos acima e autorizo a participação no Show de Talentos
+                    </label>
+                  </div>
+                </div>
+                <div class="step-nav">
+                  <button type="button" class="btn btn-ghost" onclick="sGoStep(1)">← Voltar</button>
+                  <button type="button" class="btn btn-next btn" onclick="sNextStep(2)">Concordo e continuo →</button>
+                </div>
               </div>
 
-              <div class="divider">Responsável 🧑‍🧑‍🧒</div>
+              <!-- ETAPA 3: RESPONSÁVEL -->
+              <div class="fstep" id="sFStep3">
+                <div class="divider" style="margin-top:0;" id="sRespDivider">🧑‍🧑‍🧒 Dados do Responsável</div>
+                <div id="sAdultoAviso" style="display:none;background:rgba(105,255,71,.08);border:1.5px solid rgba(105,255,71,.25);border-radius:14px;padding:14px 16px;font-size:13px;color:var(--text);line-height:1.6;">
+                  ✅ <strong>Participante adulto</strong> — nenhum responsável necessário. Clique em <strong>Enviar inscrição</strong> para concluir.
+                </div>
+                <div id="sRespFields">
 
-              <div class="grid">
-                <label>
-                  Nome do responsável *
-                  <input type="text" id="showRespNome" placeholder="Nome completo" required />
-                </label>
+                <!-- Banner pré-preenchimento -->
+                <div class="prefill-banner" id="sPrefillBanner" style="display:none;">
+                  <span>💡 Já tem inscrição na Corrida Kids? Clique para pré-preencher os dados do responsável.</span>
+                  <button type="button" onclick="prefillResp('show')">Pré-preencher</button>
+                </div>
 
+                <div class="grid">
+                  <label>
+                    Nome do responsável *
+                    <input type="text" id="showRespNome" placeholder="Nome completo" autocomplete="name" />
+                  </label>
+                  <label>
+                    CPF do responsável *
+                    <input type="text" id="showRespCpf" inputmode="numeric" placeholder="000.000.000-00" autocomplete="off" oninput="maskCpf(this)" onblur="validarCpfField('showRespCpf','showRespCpfMsg')" />
+                    <span class="hint">Com ou sem pontuação</span>
+                    <span class="field-msg" id="showRespCpfMsg"></span>
+                  </label>
+                </div>
+                <div class="grid">
+                  <label>
+                    Vínculo com o(a) participante *
+                    <select id="showRespVinculo">
+                      <option value="">Selecione...</option>
+                      <option value="Pai">Pai</option>
+                      <option value="Mãe">Mãe</option>
+                      <option value="Tutor(a) legal">Tutor(a) legal</option>
+                      <option value="Responsável legal">Responsável legal</option>
+                      <option value="Próprio participante (adulto)">Próprio participante (adulto)</option>
+                      <option value="Outro">Outro</option>
+                    </select>
+                  </label>
+                  <label>
+                    Telefone/WhatsApp *
+                    <input type="tel" id="showRespTelefone" inputmode="tel" placeholder="(27) 99999-8888" autocomplete="tel" onblur="validarTelField('showRespTelefone','showRespTelMsg')" />
+                    <span class="field-msg" id="showRespTelMsg"></span>
+                  </label>
+                </div>
                 <label>
-                  CPF do responsável *
-                  <input type="text" id="showRespCpf" inputmode="numeric" placeholder="Somente números (ex.: 12345678900)" required />
+                  E-mail <span style="font-weight:500;font-size:11px;color:var(--muted);text-transform:none;">(opcional)</span>
+                  <input type="email" id="showRespEmail" placeholder="seuemail@gmail.com (opcional)" autocomplete="email" />
                 </label>
+                <div class="termo-assinatura">
+                  <label for="showTermoAssinatura">Confirme seu nome como assinatura digital *</label>
+                  <input type="text" id="showTermoAssinatura" placeholder="Digite seu nome completo" autocomplete="off" />
+                </div>
+                </div><!-- /sRespFields -->
+                <div class="step-nav">
+                  <button type="button" class="btn btn-ghost" id="sStep3Back" onclick="sStep3GoBack()">← Voltar</button>
+                  <button type="submit" class="btn btn-primary" style="flex:1;">✅ Enviar inscrição</button>
+                </div>
               </div>
 
-              <div class="grid">
-                <label>
-                  Telefone/WhatsApp *
-                  <input type="tel" id="showRespTelefone" inputmode="tel" placeholder="DDD + número (ex.: 27999998888)" required />
-                </label>
-
-                <label>
-                  E-mail *
-                  <input type="email" id="showRespEmail" placeholder="ex.: seuemail@gmail.com" required />
-                </label>
-              </div>
-
-              <div class="actions">
-                <button type="submit" class="btn btn-primary">✅ Enviar inscrição</button>
-                <button type="button" class="btn btn-ghost" onclick="showSection('home')">⬅️ Voltar</button>
-                <button type="button" class="btn btn-purple" onclick="downloadRegulamento()">📄 Baixar regulamento</button>
-              </div>
-
-              <p class="note">
-                A organização pode ajustar a programação por segurança e adequação ao público infantil.
-              </p>
             </form>
+          </div>
+        </section>
+
+
+        <!-- CONFIRMAÇÃO CORRIDA -->
+        <section id="confirmaCorrida" class="section">
+          <div class="card form-card">
+            <div class="confirm-section active">
+              <div class="confirm-icon">🏃</div>
+              <div class="confirm-title">Inscrição confirmada!</div>
+              <p class="confirm-sub">Parabéns! A criança está inscrita na <strong>Corrida Kids Ilhas 2026</strong>. Guarde o número abaixo — ele será necessário no dia do evento.</p>
+              <div class="confirm-num-box">
+                <div class="confirm-num-label">Número da inscrição</div>
+                <div class="confirm-num" id="confirmaCorridaNum">—</div>
+                <div class="confirm-tipo">Corrida Kids 🏃</div>
+              </div>
+              <div class="confirm-actions">
+                <button class="btn btn-whatsapp" onclick="compartilharConfirma('corrida')">💬 Compartilhar no WhatsApp</button>
+                <button class="btn btn-print btn" onclick="window.print()">🖨️ Imprimir comprovante</button>
+                <button class="btn btn-primary" onclick="showSection('corrida')">➕ Inscrever outra criança</button>
+                <button class="btn btn-ghost" onclick="showSection('home')">🏠 Voltar ao início</button>
+              </div>
+              <div class="confirm-tip">⭐ <strong>Lembre-se:</strong> apresente este número no dia do evento. Recomendamos tirar um print desta tela ou anotar o número.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CONFIRMAÇÃO SHOW -->
+        <section id="confirmaShow" class="section">
+          <div class="card form-card">
+            <div class="confirm-section active">
+              <div class="confirm-icon">🎭</div>
+              <div class="confirm-title">Inscrição confirmada!</div>
+              <p class="confirm-sub">Boa sorte no palco! A participação no <strong>Show de Talentos</strong> está registrada. Guarde o número abaixo.</p>
+              <div class="confirm-num-box">
+                <div class="confirm-num-label">Número da inscrição</div>
+                <div class="confirm-num" id="confirmaShowNum">—</div>
+                <div class="confirm-tipo">Show de Talentos 🎭</div>
+              </div>
+              <div class="confirm-actions">
+                <button class="btn btn-whatsapp" onclick="compartilharConfirma('show')">💬 Compartilhar no WhatsApp</button>
+                <button class="btn btn-print btn" onclick="window.print()">🖨️ Imprimir comprovante</button>
+                <button class="btn btn-primary" onclick="showSection('show')">➕ Inscrever outro participante</button>
+                <button class="btn btn-ghost" onclick="showSection('home')">🏠 Voltar ao início</button>
+              </div>
+              <div class="confirm-tip">⭐ <strong>Lembre-se:</strong> apresente este número no dia do evento. Recomendamos tirar um print desta tela ou anotar o número.</div>
+            </div>
           </div>
         </section>
 
@@ -1504,6 +1955,18 @@
             <!-- TRAJETO -->
             <div class="divider" style="margin-top:20px;">📍 Informações do Percurso</div>
 
+            <!-- CAMISA DO EVENTO -->
+            <div class="camisa-card">
+              <div class="camisa-img-wrap">
+                <img src="camisa_evento.png" alt="Camisa oficial da 1ª Corrida Kids Ilhas 2026" loading="lazy" />
+              </div>
+              <div class="camisa-info">
+                <h4>👕 Camisa Oficial do Evento</h4>
+                <p>Todos os inscritos que comparecerem no dia da corrida receberão a <strong>camisa exclusiva</strong> da 1ª Corrida Kids Ilhas 2026 — confeccionada especialmente para este evento com o tema <em>Diversão · Esporte · Comunidade</em>.</p>
+                <span class="camisa-badge">🎽 Garantida para todos os presentes</span>
+              </div>
+            </div>
+
             <div class="traj-info-grid">
               <div class="traj-info-card">
                 <div class="traj-info-icon">🏁</div>
@@ -1543,7 +2006,7 @@
                 <div class="traj-info-icon">👕</div>
                 <div>
                   <div class="traj-info-title">Kit do Participante</div>
-                  <div class="traj-info-text">Todos os participantes receberão <strong>blusa do evento</strong>, <strong>água</strong> e <strong>medalha</strong>, <strong>gratuitamente</strong>. Use tênis adequado para corrida.</div>
+                  <div class="traj-info-text">Todos os inscritos que se apresentarem na corrida receberão <strong>camisa do evento</strong>. <strong>Medalha de participação</strong> para todos. Use tênis adequado para corrida.</div>
                 </div>
               </div>
 
@@ -1559,7 +2022,7 @@
                 <div class="traj-info-icon">🏆</div>
                 <div>
                   <div class="traj-info-title">Premiação</div>
-                  <div class="traj-info-text">Medalha de participação para todos. Troféus para 1º, 2º e 3º lugar por categoria.</div>
+                  <div class="traj-info-text">Camisa do evento para todos os inscritos presentes. Medalha de participação para todos. Troféu para o 1º lugar de cada categoria. Prêmios para 1º, 2º e 3º lugar de cada categoria.</div>
                 </div>
               </div>
             </div>
@@ -1567,8 +2030,8 @@
             <!-- REGRAS -->
             <div class="divider" style="margin-top:20px;">📋 Regras Gerais</div>
             <div class="traj-rules">
-              <div class="traj-rule">✅ Participação gratuita e aberta à comunidade</div>
-              <div class="traj-rule">✅ Obrigatório apresentar autorização assinada pelo responsável</div>
+              <div class="traj-rule">✅ Corrida Kids: aberta a crianças de 6 a 15 anos. Show de Talentos: aberto a todas as idades, sem critério etário</div>
+              <div class="traj-rule">✅ Autorização do responsável coletada digitalmente no momento da inscrição</div>
               <div class="traj-rule">✅ Crianças devem estar acompanhadas por um responsável no local</div>
               <div class="traj-rule">✅ Respeitar a largada conforme o grupo de idade</div>
               <div class="traj-rule">✅ Proibido uso de patins, skate ou bicicleta durante a corrida</div>
@@ -1968,7 +2431,7 @@
         return;
       }
       const ok = await isAdminUser(user);
-      if (as) as.innerHTML = ok ? `<strong>Admin:</strong> ${user.email}` : '<strong>Sem permissão</strong>';
+      if (as) as.innerHTML = ok ? `<strong>Admin:</strong> ${esc(user.email)}` : '<strong>Sem permissão</strong>';
     });
   }
 
@@ -2020,7 +2483,7 @@
       linha('✅', `Firestore escrita OK — doc criado: ${docRef.id}`, 'rgba(52,211,153,.12)');
     } catch(e) {
       log.lastChild.remove();
-      linha('❌', `Firestore escrita FALHOU: ${e.message}`, 'rgba(247,99,79,.12)');
+      linha('❌', `Firestore escrita FALHOU: ${esc(e.message)}`, 'rgba(247,99,79,.12)');
     }
 
     // 4. Teste de LEITURA no Firestore (lê o mesmo doc que acabou de criar)
@@ -2036,7 +2499,7 @@
       }
     } catch(e) {
       log.lastChild.remove();
-      linha('❌', `Firestore leitura FALHOU: ${e.message}`, 'rgba(247,99,79,.12)');
+      linha('❌', `Firestore leitura FALHOU: ${esc(e.message)}`, 'rgba(247,99,79,.12)');
     }
 
     // 5. Limpeza do doc de teste
@@ -2057,7 +2520,7 @@
       }
     } catch(e) {
       log.lastChild.remove();
-      linha('❌', `Auth FALHOU: ${e.message}`, 'rgba(247,99,79,.12)');
+      linha('❌', `Auth FALHOU: ${esc(e.message)}`, 'rgba(247,99,79,.12)');
     }
 
     linha('🏁', 'Diagnóstico concluído!', 'rgba(79,142,247,.10)');
@@ -2080,6 +2543,25 @@
     const el = document.getElementById(id);
     if (el) el.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Pausar emojis flutuantes em seções de formulário para não distrair
+    const formSections = ['corrida', 'show'];
+    const floatEmojis = document.getElementById('floatEmojis');
+    if (floatEmojis) {
+      if (formSections.includes(id)) {
+        floatEmojis.style.transition = 'opacity .5s ease';
+        floatEmojis.style.opacity = '0';
+        floatEmojis.style.pointerEvents = 'none';
+        window._emojisPaused = true;
+      } else {
+        floatEmojis.style.opacity = '1';
+        window._emojisPaused = false;
+      }
+    }
+
+    // Reset multi-step ao abrir formulários (integrado aqui, sem override)
+    if (id === 'corrida') { cGoStep(1); }
+    if (id === 'show')    { window._showAdulto = false; sGoStep(1); }
   }
 
   function loadYtEmbed(wrapId, videoId) {
@@ -2091,7 +2573,7 @@
     // Se estiver rodando em file://, o YouTube bloqueia o embed por falta de referrer
     // Nesse caso, abre direto no YouTube
     if (window.location.protocol === 'file:') {
-      window.open('https://youtu.be/' + videoId, '_blank');
+      window.open('https://youtu.be/' + videoId, '_blank', 'noopener,noreferrer');
       if (thumb) thumb.classList.remove('loading');
       return;
     }
@@ -2200,8 +2682,8 @@
       'Ruas: José de Carvalho → Hercília Dias Maciel → Hermes Cury Carneiro → Guido Prati',
       '',
       '== KIT DO PARTICIPANTE ==',
-      'Blusa do evento, água e medalha — fornecidos gratuitamente a todos.',
-      'Troféus para 1º, 2º e 3º lugar por categoria.',
+      'Camisa do evento para todos os inscritos presentes. Medalha de participação para todos.',
+      'Troféu para o 1º lugar de cada categoria. Prêmios para 1º, 2º e 3º lugar de cada categoria.',
       '',
       '== SHOW DE TALENTOS ==',
       'Após a corrida, na Rua Guido Prati.',
@@ -2213,8 +2695,8 @@
       'Será considerada a idade que o participante completar até 31/12/2026.',
       '',
       '== REGRAS GERAIS ==',
-      '1) Participação gratuita e aberta à comunidade.',
-      '2) Obrigatório autorização assinada pelo responsável.',
+      '1) Corrida Kids: gratuita para crianças de 6 a 15 anos. Show de Talentos: aberto a todas as idades.',
+      '2) Autorização do responsável coletada digitalmente no momento da inscrição.',
       '3) Inscrição exclusivamente online.',
       '4) Crianças devem estar acompanhadas de um responsável no local.',
       '5) Respeitar a largada conforme o grupo de idade.',
@@ -2258,15 +2740,21 @@
     return resto === parseInt(cpf[10]);
   }
 
-  // #2 — Calcular categoria a partir da data
+  // #2 — Calcular categoria a partir da data (usando idade real na data do evento 15/05/2026)
+  function calcIdadeNoEvento(nascimento) {
+    // Critério: idade que a criança completa até 31/12/2026
+    if (!nascimento) return -1;
+    const anoNasc = new Date(nascimento + 'T00:00:00').getFullYear();
+    return 2026 - anoNasc;
+  }
   function calcCategoriaValor(nascimento) {
     if (!nascimento) return '';
-    const idadeRef = 2026 - new Date(nascimento + 'T00:00:00').getFullYear();
-    if (idadeRef === 6 || idadeRef === 7)  return 'Grupo 1 — 6 e 7 anos';
-    if (idadeRef === 8 || idadeRef === 9)  return 'Grupo 2 — 8 e 9 anos';
-    if (idadeRef >= 10 && idadeRef <= 12)  return 'Grupo 3 — 10 a 12 anos';
-    if (idadeRef >= 13 && idadeRef <= 15)  return 'Grupo 4 — 13 a 15 anos';
-    if (idadeRef > 15)                     return 'Adulto';
+    const idade = calcIdadeNoEvento(nascimento);
+    if (idade === 6 || idade === 7)  return 'Grupo 1 — 6 e 7 anos';
+    if (idade === 8 || idade === 9)  return 'Grupo 2 — 8 e 9 anos';
+    if (idade >= 10 && idade <= 12)  return 'Grupo 3 — 10 a 12 anos';
+    if (idade >= 13 && idade <= 15)  return 'Grupo 4 — 13 a 15 anos';
+    if (idade > 15)                  return 'Adulto';
     return 'Fora da faixa';
   }
 
@@ -2305,9 +2793,19 @@
     const cpfVal = document.getElementById('respCpf').value;
     if (!validarCPF(cpfVal)) throw new Error('CPF do responsável inválido. Verifique os números digitados.');
 
+    // Verificar inscrição duplicada (mesmo CPF do responsável + nome da criança)
+    const nomeVal  = document.getElementById('nome').value.trim().toLowerCase();
+    const cpfDigits = onlyDigits(cpfVal);
+    const dupSnap = await db.collection(COL_CORRIDA)
+      .where('responsavel.cpf', '==', cpfDigits)
+      .where('nomeLower', '==', nomeVal)
+      .limit(1).get();
+    if (!dupSnap.empty) throw new Error('Esta criança já está inscrita na Corrida Kids com este CPF de responsável.');
+
     const nascimento = document.getElementById('nascimento').value;
     const dados = {
       tipo:       'corrida',
+      nomeLower:  nomeVal,
       categoria:  calcCategoriaValor(nascimento), // #2
       nome:       document.getElementById('nome').value.trim(),
       nascimento,
@@ -2317,8 +2815,14 @@
       responsavel: {
         nome:     document.getElementById('respNome').value.trim(),
         cpf:      onlyDigits(cpfVal),
+        vinculo:  document.getElementById('respVinculo').value,
         telefone: onlyDigits(document.getElementById('respTelefone').value),
         email:    document.getElementById('respEmail').value.trim().toLowerCase()
+      },
+      autorizacao: {
+        aceito:       true,
+        assinatura:   document.getElementById('termoAssinatura').value.trim(),
+        dataHora:     new Date().toISOString()
       },
       criadoEm: firebase.firestore.FieldValue.serverTimestamp()
     };
@@ -2332,13 +2836,23 @@
   async function salvarInscricaoShow() {
     if (!FIREBASE_OK) throw new Error('Firebase indisponível. Verifique sua conexão.');
 
-    // #8 — Validar CPF
-    const cpfVal = document.getElementById('showRespCpf').value;
-    if (!validarCPF(cpfVal)) throw new Error('CPF do responsável inválido. Verifique os números digitados.');
+    // CPF do responsável — apenas para menores
+    const cpfVal = window._showAdulto === true ? '' : document.getElementById('showRespCpf').value;
+    if (window._showAdulto !== true && !validarCPF(cpfVal)) throw new Error('CPF do responsável inválido. Verifique os números digitados.');
+
+    // Verificar inscrição duplicada (mesmo CPF do responsável + nome do participante)
+    const nomeValShow  = document.getElementById('showNome').value.trim().toLowerCase();
+    const cpfDigitsShow = onlyDigits(cpfVal);
+    const dupSnapShow = await db.collection(COL_SHOW)
+      .where('responsavel.cpf', '==', cpfDigitsShow)
+      .where('nomeLower', '==', nomeValShow)
+      .limit(1).get();
+    if (!dupSnapShow.empty) throw new Error('Este participante já está inscrito no Show de Talentos com este CPF de responsável.');
 
     const nascimento = document.getElementById('showNascimento').value;
     const dados = {
       tipo:       'show',
+      nomeLower:  nomeValShow,
       categoria:  calcCategoriaValor(nascimento), // #2
       nome:       document.getElementById('showNome').value.trim(),
       nascimento,
@@ -2348,9 +2862,10 @@
         nome:    document.getElementById('nomeApresentacao').value.trim(),
         duracao: document.getElementById('duracao').value.trim()
       },
-      responsavel: {
+      responsavel: window._showAdulto === true ? { tipo: 'adulto' } : {
         nome:     document.getElementById('showRespNome').value.trim(),
         cpf:      onlyDigits(cpfVal),
+        vinculo:  document.getElementById('showRespVinculo').value,
         telefone: onlyDigits(document.getElementById('showRespTelefone').value),
         email:    document.getElementById('showRespEmail').value.trim().toLowerCase()
       },
@@ -2363,69 +2878,363 @@
     return numero;
   }
 
-  document.getElementById('corridaForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const btn = e.target.querySelector('button[type="submit"]');
-
-    // #4 — Validação de idade no envio
-    const nascVal = document.getElementById('nascimento').value;
-    if (nascVal) {
-      const idadeRef = 2026 - new Date(nascVal + 'T00:00:00').getFullYear();
-      if (idadeRef < 6 || idadeRef > 15) {
-        showToast('❌ A Corrida Kids é exclusiva para crianças de 6 a 15 anos.', 'erro');
-        return;
+  // ================================================================
+  // MULTI-STEP — CORRIDA
+  // ================================================================
+  function cUpdateProgress(step) {
+    [1,2,3].forEach(function(i) {
+      const item = document.getElementById('cStep'+i+'Item');
+      if (!item) return;
+      item.classList.remove('active','done');
+      if (i < step) item.classList.add('done');
+      else if (i === step) item.classList.add('active');
+    });
+    [1,2].forEach(function(i) {
+      const line = document.getElementById('cLine'+i);
+      if (line) line.classList.toggle('done', i < step);
+    });
+  }
+  function cGoStep(step, isBack) {
+    [1,2,3].forEach(function(i) {
+      const el = document.getElementById('cFStep'+i);
+      if (!el) return;
+      el.classList.remove('active','back');
+      if (i === step) { el.classList.add('active'); if (isBack) el.classList.add('back'); }
+    });
+    cUpdateProgress(step);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Mostrar banner pré-preencher na etapa 3 se houver dados do show
+    if (step === 3) {
+      const banner = document.getElementById('cPrefillBanner');
+      if (banner) {
+        const temDados = (document.getElementById('showRespNome') && document.getElementById('showRespNome').value.trim());
+        banner.style.display = temDados ? 'flex' : 'none';
       }
     }
+  }
+  function cNextStep(from) {
+    if (from === 1) {
+      if (!document.getElementById('termoCheck').checked) {
+        showToast('❌ Você precisa concordar com o termo para continuar.', 'erro'); return;
+      }
+      cGoStep(2);
+    } else if (from === 2) {
+      const nome = document.getElementById('nome').value.trim();
+      const nasc = document.getElementById('nascimento').value;
+      const doc  = document.getElementById('documento').value.trim();
+      const bairro = document.getElementById('bairroSel').value;
+      const end  = document.getElementById('endereco').value.trim();
+      if (!nome || !nasc || !doc || !bairro || !end) {
+        showToast('❌ Preencha todos os campos obrigatórios.', 'erro'); return;
+      }
+      const idadeEvento = calcIdadeNoEvento(nasc);
+      if (idadeEvento < 6 || idadeEvento > 15) {
+        showToast('❌ A Corrida Kids é exclusiva para crianças de 6 a 15 anos.', 'erro'); return;
+      }
+      if (bairro === 'OUTRO' && !document.getElementById('bairroOutro').value.trim()) {
+        showToast('❌ Digite o bairro/comunidade.', 'erro'); return;
+      }
+      cGoStep(3);
+    }
+  }
 
-    // #7 — Desabilitar botão durante envio
+  // ================================================================
+  // MULTI-STEP — SHOW
+  // ================================================================
+  function sUpdateProgress(step) {
+    [1,2,3].forEach(function(i) {
+      const item = document.getElementById('sStep'+i+'Item');
+      if (!item) return;
+      item.classList.remove('active','done');
+      if (i < step) item.classList.add('done');
+      else if (i === step) item.classList.add('active');
+    });
+    [1,2].forEach(function(i) {
+      const line = document.getElementById('sLine'+i);
+      if (line) line.classList.toggle('done', i < step);
+    });
+  }
+  function sGoStep(step, isBack) {
+    [1,2,3].forEach(function(i) {
+      const el = document.getElementById('sFStep'+i);
+      if (!el) return;
+      el.classList.remove('active','back');
+      if (i === step) { el.classList.add('active'); if (isBack) el.classList.add('back'); }
+    });
+    sUpdateProgress(step);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (step === 3) {
+      const adulto = window._showAdulto === true;
+      // Mostrar/ocultar campos do responsável conforme idade
+      const aviso = document.getElementById('sAdultoAviso');
+      const fields = document.getElementById('sRespFields');
+      const divider = document.getElementById('sRespDivider');
+      if (aviso) aviso.style.display = adulto ? 'block' : 'none';
+      if (fields) fields.style.display = adulto ? 'none' : '';
+      if (divider) divider.style.display = adulto ? 'none' : '';
+      // Banner pré-preencher só para menores
+      if (!adulto) {
+        const banner = document.getElementById('sPrefillBanner');
+        if (banner) {
+          const temDados = (document.getElementById('respNome') && document.getElementById('respNome').value.trim());
+          banner.style.display = temDados ? 'flex' : 'none';
+        }
+      }
+    }
+  }
+
+  function sStep3GoBack() {
+    // Adulto volta para etapa 1; menor volta para etapa 2
+    if (window._showAdulto === true) {
+      // Restaurar progress bar
+      const step3Item = document.getElementById('sStep3Item');
+      const line2 = document.getElementById('sLine2');
+      if (step3Item) step3Item.style.display = '';
+      if (line2) line2.style.display = '';
+      sGoStep(1, true);
+    } else {
+      sGoStep(2, true);
+    }
+  }
+  function showIsAdulto() {
+    const nasc = document.getElementById('showNascimento').value;
+    if (!nasc) return false;
+    return calcIdadeNoEvento(nasc) >= 18;
+  }
+
+  function sNextStep(from) {
+    if (from === 1) {
+      // Etapa 1: validar dados do participante
+      const nome  = document.getElementById('showNome').value.trim();
+      const nasc  = document.getElementById('showNascimento').value;
+      const bairro= document.getElementById('showBairroSel').value;
+      const tipo  = document.getElementById('tipoApresentacao').value;
+      const nomeA = document.getElementById('nomeApresentacao').value.trim();
+      const dur   = document.getElementById('duracao').value.trim();
+      if (!nome || !nasc || !bairro || !tipo || !nomeA || !dur) {
+        showToast('❌ Preencha todos os campos obrigatórios.', 'erro'); return;
+      }
+      if (bairro === 'OUTRO' && !document.getElementById('showBairroOutro').value.trim()) {
+        showToast('❌ Digite o bairro/comunidade.', 'erro'); return;
+      }
+      // Adulto: pula termo e responsável, vai direto para etapa 3 (responsável ocultado)
+      if (showIsAdulto()) {
+        // Ocultar etapa "Responsável" da progress bar para adultos
+        const step3Item = document.getElementById('sStep3Item');
+        const line2 = document.getElementById('sLine2');
+        if (step3Item) step3Item.style.display = 'none';
+        if (line2) line2.style.display = 'none';
+        // Marcar termo como desnecessário e ir para confirmação direta
+        document.getElementById('showTermoCheck').checked = false;
+        window._showAdulto = true;
+        sGoStep(3); // pula etapa 2
+      } else {
+        window._showAdulto = false;
+        // Restaurar progress bar para menores
+        const step3Item = document.getElementById('sStep3Item');
+        const line2 = document.getElementById('sLine2');
+        if (step3Item) step3Item.style.display = '';
+        if (line2) line2.style.display = '';
+        sGoStep(2);
+      }
+    } else if (from === 2) {
+      // Etapa 2: validar termo (só chega aqui se menor)
+      if (!document.getElementById('showTermoCheck').checked) {
+        showToast('❌ Você precisa concordar com o termo para continuar.', 'erro'); return;
+      }
+      sGoStep(3);
+    }
+  }
+
+  // ================================================================
+  // PRÉ-PREENCHIMENTO CRUZADO
+  // ================================================================
+  function prefillResp(destino) {
+    if (destino === 'corrida') {
+      const src = { nome: document.getElementById('showRespNome'), cpf: document.getElementById('showRespCpf'),
+        tel: document.getElementById('showRespTelefone'), email: document.getElementById('showRespEmail'),
+        vinculo: document.getElementById('showRespVinculo') };
+      if (src.nome) document.getElementById('respNome').value = src.nome.value;
+      if (src.cpf)  document.getElementById('respCpf').value  = src.cpf.value;
+      if (src.tel)  document.getElementById('respTelefone').value = src.tel.value;
+      if (src.email) document.getElementById('respEmail').value = src.email.value;
+      if (src.vinculo) document.getElementById('respVinculo').value = src.vinculo.value;
+    } else {
+      const src = { nome: document.getElementById('respNome'), cpf: document.getElementById('respCpf'),
+        tel: document.getElementById('respTelefone'), email: document.getElementById('respEmail'),
+        vinculo: document.getElementById('respVinculo') };
+      if (src.nome) document.getElementById('showRespNome').value = src.nome.value;
+      if (src.cpf)  document.getElementById('showRespCpf').value  = src.cpf.value;
+      if (src.tel)  document.getElementById('showRespTelefone').value = src.tel.value;
+      if (src.email) document.getElementById('showRespEmail').value = src.email.value;
+      if (src.vinculo) document.getElementById('showRespVinculo').value = src.vinculo.value;
+    }
+    // Disparar validação visual nos campos pré-preenchidos
+    if (destino === 'corrida') {
+      validarCpfField('respCpf', 'respCpfMsg');
+      validarTelField('respTelefone', 'respTelMsg');
+    } else {
+      validarCpfField('showRespCpf', 'showRespCpfMsg');
+      validarTelField('showRespTelefone', 'showRespTelMsg');
+    }
+    showToast('✅ Dados do responsável pré-preenchidos!', 'sucesso');
+  }
+
+  // ================================================================
+  // VALIDAÇÃO EM TEMPO REAL
+  // ================================================================
+  function validarCpfField(inputId, msgId) {
+    const inp = document.getElementById(inputId);
+    const msg = document.getElementById(msgId);
+    if (!inp || !msg) return;
+    const val = inp.value.trim();
+    if (!val) { inp.classList.remove('valid','invalid'); msg.className='field-msg'; return; }
+    if (validarCPF(val)) {
+      inp.classList.add('valid'); inp.classList.remove('invalid');
+      msg.className = 'field-msg ok'; msg.textContent = '✓ CPF válido';
+    } else {
+      inp.classList.add('invalid'); inp.classList.remove('valid');
+      msg.className = 'field-msg erro'; msg.textContent = '✗ CPF inválido — verifique os números';
+    }
+  }
+  function validarTelField(inputId, msgId) {
+    const inp = document.getElementById(inputId);
+    const msg = document.getElementById(msgId);
+    if (!inp || !msg) return;
+    const digits = inp.value.replace(/\D/g,'');
+    if (!digits) { inp.classList.remove('valid','invalid'); msg.className='field-msg'; return; }
+    if (digits.length >= 10 && digits.length <= 11) {
+      inp.classList.add('valid'); inp.classList.remove('invalid');
+      msg.className = 'field-msg ok'; msg.textContent = '✓ Número válido';
+    } else {
+      inp.classList.add('invalid'); inp.classList.remove('valid');
+      msg.className = 'field-msg erro'; msg.textContent = '✗ Digite DDD + número (10 ou 11 dígitos)';
+    }
+  }
+  function validarNasc(inputId, msgId, tipo) {
+    const inp = document.getElementById(inputId);
+    const msg = document.getElementById(msgId);
+    if (!inp || !msg || !inp.value) return;
+    const idade = calcIdadeNoEvento(inp.value);
+    if (tipo === 'corrida') {
+      if (idade >= 6 && idade <= 15) {
+        inp.classList.add('valid'); inp.classList.remove('invalid');
+        msg.className = 'field-msg ok'; msg.textContent = '✓ Idade elegível para a Corrida Kids';
+      } else {
+        inp.classList.add('invalid'); inp.classList.remove('valid');
+        msg.className = 'field-msg erro'; msg.textContent = '✗ A Corrida Kids é para crianças de 6 a 15 anos';
+      }
+    }
+  }
+
+  // ================================================================
+  // COMPARTILHAR CONFIRMAÇÃO
+  // ================================================================
+  function compartilharConfirma(tipo) {
+    const num = tipo === 'corrida'
+      ? document.getElementById('confirmaCorridaNum').textContent
+      : document.getElementById('confirmaShowNum').textContent;
+    const evento = tipo === 'corrida' ? 'Corrida Kids Ilhas 2026 🏃' : 'Show de Talentos Ilhas 2026 🎭';
+    const texto = `✅ Inscrição confirmada na ${evento}!
+
+🎫 Número: ${num}
+
+Guarde este número para apresentar no dia do evento!`;
+    const url = 'https://wa.me/?text=' + encodeURIComponent(texto);
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  // Reset multi-step integrado diretamente em showSection (sem override)
+
+  // ================================================================
+  // SUBMIT HANDLERS
+  // ================================================================
+  document.getElementById('corridaForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    // Honeypot anti-bot: se preenchido, é bot
+    if (document.getElementById('hp_corrida')?.value) { showToast('❌ Erro no envio.', 'erro'); return; }
+    // BUG1 FIX — Validação da etapa 3 antes de chamar Firebase
+    const rNome    = document.getElementById('respNome')?.value.trim();
+    const rCpf     = document.getElementById('respCpf')?.value.trim();
+    const rVinculo = document.getElementById('respVinculo')?.value;
+    const rTel     = document.getElementById('respTelefone')?.value.trim();
+    const rAssina  = document.getElementById('termoAssinatura')?.value.trim();
+    if (!rNome || !rCpf || !rVinculo || !rTel || !rAssina) {
+      showToast('❌ Preencha todos os campos do responsável e a assinatura digital.', 'erro'); return;
+    }
+    if (!validarCPF(rCpf)) {
+      showToast('❌ CPF do responsável inválido. Verifique os números.', 'erro'); return;
+    }
+    if (onlyDigits(rTel).length < 10) {
+      showToast('❌ Telefone inválido. Digite DDD + número.', 'erro'); return;
+    }
+    const btn = e.target.querySelector('button[type="submit"]');
     const txtOriginal = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '⏳ Enviando...';
-
+    btn.disabled = true; btn.innerHTML = '⏳ Enviando...';
     try {
       const num = await salvarInscricaoCorrida();
-      // #3 — Limpar card de categoria
       const box = document.getElementById('categoriaBox');
       if (box) { box.className = 'categoria-box hidden'; box.innerHTML = ''; }
       e.target.reset();
       setupBairroSelect('bairroSel','bairroOutro');
-      // #9 — Toast em vez de alert
-      showToast('✅ Inscrição registrada! Nº: ' + num, 'sucesso');
-      showSection('home');
+      // Limpar estados de validação
+      ['nome','nascimento','documento','endereco','respNome','respCpf','respTelefone','termoAssinatura'].forEach(function(id) {
+        const el = document.getElementById(id);
+        if (el) { el.classList.remove('valid','invalid'); }
+      });
+      document.getElementById('confirmaCorridaNum').textContent = num;
+      showSection('confirmaCorrida');
+      window.launchConfetti && window.launchConfetti(120);
     } catch(err) {
       console.error(err);
       showToast('❌ ' + err.message, 'erro');
     } finally {
-      btn.disabled = false;
-      btn.innerHTML = txtOriginal;
+      btn.disabled = false; btn.innerHTML = txtOriginal;
     }
   });
 
   document.getElementById('showForm').addEventListener('submit', async function(e) {
     e.preventDefault();
+    // Honeypot anti-bot
+    if (document.getElementById('hp_show')?.value) { showToast('❌ Erro no envio.', 'erro'); return; }
+    // Validação da etapa 3 — apenas para menores de idade
+    if (window._showAdulto !== true) {
+      const sRNome    = document.getElementById('showRespNome')?.value.trim();
+      const sRCpf     = document.getElementById('showRespCpf')?.value.trim();
+      const sRVinculo = document.getElementById('showRespVinculo')?.value;
+      const sRTel     = document.getElementById('showRespTelefone')?.value.trim();
+      const sRAssina  = document.getElementById('showTermoAssinatura')?.value.trim();
+      if (!sRNome || !sRCpf || !sRVinculo || !sRTel || !sRAssina) {
+        showToast('❌ Preencha todos os campos do responsável e a assinatura digital.', 'erro'); return;
+      }
+      if (!validarCPF(sRCpf)) {
+        showToast('❌ CPF do responsável inválido. Verifique os números.', 'erro'); return;
+      }
+      if (onlyDigits(sRTel).length < 10) {
+        showToast('❌ Telefone inválido. Digite DDD + número.', 'erro'); return;
+      }
+    }
     const btn = e.target.querySelector('button[type="submit"]');
-
-    // #7 — Desabilitar botão durante envio
     const txtOriginal = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '⏳ Enviando...';
-
+    btn.disabled = true; btn.innerHTML = '⏳ Enviando...';
     try {
       const num = await salvarInscricaoShow();
-      // #3 — Limpar card de categoria
       const box = document.getElementById('showCategoriaBox');
       if (box) { box.className = 'categoria-box hidden'; box.innerHTML = ''; }
       e.target.reset();
       setupBairroSelect('showBairroSel','showBairroOutro');
-      // #9 — Toast em vez de alert
-      showToast('✅ Inscrição registrada! Nº: ' + num, 'sucesso');
-      showSection('home');
+      ['showNome','showNascimento','showRespNome','showRespCpf','showRespTelefone','showTermoAssinatura'].forEach(function(id) {
+        const el = document.getElementById(id);
+        if (el) { el.classList.remove('valid','invalid'); }
+      });
+      document.getElementById('confirmaShowNum').textContent = num;
+      showSection('confirmaShow');
+      window.launchConfetti && window.launchConfetti(120);
     } catch(err) {
       console.error(err);
       showToast('❌ ' + err.message, 'erro');
     } finally {
-      btn.disabled = false;
-      btn.innerHTML = txtOriginal;
+      btn.disabled = false; btn.innerHTML = txtOriginal;
     }
   });
 
@@ -2606,6 +3415,17 @@
     if (el('totalGeral'))   el('totalGeral').textContent   = corrida + show;
   }
 
+  // Sanitização contra XSS — escapa texto antes de inserir no DOM
+  function esc(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   function montarTabelaBairro(lista) {
     const map = {};
     lista.forEach(function(it) {
@@ -2620,7 +3440,7 @@
     tbody.innerHTML = '';
     linhas.forEach(function(r, i) {
       const tr = document.createElement('tr');
-      tr.innerHTML = `<td><span class="rank">#${i+1}</span></td><td>${r.bairro}</td><td>${r.corrida}</td><td>${r.show}</td><td><b>${r.total}</b></td>`;
+      tr.innerHTML = `<td><span class="rank">#${i+1}</span></td><td>${esc(r.bairro)}</td><td>${r.corrida}</td><td>${r.show}</td><td><b>${r.total}</b></td>`;
       tbody.appendChild(tr);
     });
     return linhas;
@@ -2636,9 +3456,9 @@
         ? '<span style="background:rgba(79,142,247,.12);color:#4f8ef7;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:700;">Corrida</span>'
         : '<span style="background:rgba(247,99,79,.12);color:#f7634f;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:700;">Show</span>';
       const cat = it.categoria
-        ? `<span style="background:rgba(0,194,255,.10);color:#0080aa;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:700;">${it.categoria}</span>`
+        ? `<span style="background:rgba(0,194,255,.10);color:#0080aa;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:700;">${esc(it.categoria)}</span>`
         : '<span style="color:#aaa;font-size:11px;">—</span>';
-      tr.innerHTML = `<td>${it.numero||'—'}</td><td>${tag}</td><td>${cat}</td><td>${it.nome||''}</td><td>${it.nascimento||''}</td><td>${it.bairro||''}</td><td>${it.responsavelNome||''}</td><td>${it.responsavelTelefone||''}</td><td>${it.responsavelEmail||''}</td><td>${fmtData(it.criadoEmMs)}</td>`;
+      tr.innerHTML = `<td>${esc(it.numero)||'—'}</td><td>${tag}</td><td>${cat}</td><td>${esc(it.nome)}</td><td>${esc(it.nascimento)}</td><td>${esc(it.bairro)}</td><td>${esc(it.responsavelNome)}</td><td>${esc(it.responsavelTelefone)}</td><td>${esc(it.responsavelEmail)}</td><td>${fmtData(it.criadoEmMs)}</td>`;
       tbody.appendChild(tr);
     });
   }
@@ -2677,8 +3497,8 @@
     if (!user) { showSection('login'); return; }
     const ok = await isAdminUser(user);
     const as = document.getElementById('adminStatus');
-    if (as) as.innerHTML = ok ? `<strong>Admin:</strong> ${user.email}` : '<strong>Sem permissão</strong>';
-    if (!ok) { alert('❌ Sem permissão de ADMIN.'); showSection('login'); return; }
+    if (as) as.innerHTML = ok ? `<strong>Admin:</strong> ${esc(user.email)}` : '<strong>Sem permissão</strong>';
+    if (!ok) { showToast('❌ Sem permissão de administrador.', 'erro'); showSection('login'); return; }
     try {
       const [cs, ss] = await Promise.all([
         db.collection(COL_CORRIDA).orderBy('criadoEm','desc').limit(2000).get(),
@@ -2689,6 +3509,8 @@
         const r = d.data()||{};
         lista.push({ numero:r.numero||'', tipo:'corrida', categoria:r.categoria||calcCategoriaValor(r.nascimento||''), nome:r.nome||'', nascimento:r.nascimento||'',
           bairro:r.bairro||'', responsavelNome:r?.responsavel?.nome||'',
+          responsavelVinculo:r?.responsavel?.vinculo||'',
+          responsavelCpf:r?.responsavel?.cpf||'',
           responsavelTelefone:r?.responsavel?.telefone||'', responsavelEmail:r?.responsavel?.email||'',
           criadoEmMs: toMillisFromFirestore(r.criadoEm) });
       });
@@ -2696,6 +3518,8 @@
         const r = d.data()||{};
         lista.push({ numero:r.numero||'', tipo:'show', categoria:r.categoria||calcCategoriaValor(r.nascimento||''), nome:r.nome||'', nascimento:r.nascimento||'',
           bairro:r.bairro||'', responsavelNome:r?.responsavel?.nome||'',
+          responsavelVinculo:r?.responsavel?.vinculo||'',
+          responsavelCpf:r?.responsavel?.cpf||'',
           responsavelTelefone:r?.responsavel?.telefone||'', responsavelEmail:r?.responsavel?.email||'',
           criadoEmMs: toMillisFromFirestore(r.criadoEm) });
       });
@@ -2712,11 +3536,11 @@
   // ================================================================
   function exportarCSV() {
     const lista = ultimoFiltrado.length ? ultimoFiltrado : aplicaFiltros(cacheRelatorios);
-    const header = ['numero','tipo','categoria','nome','nascimento','bairro','responsavel','telefone','email','criadoEm'];
+    const header = ['numero','tipo','categoria','nome','nascimento','bairro','responsavel','vinculo','cpf','telefone','email','criadoEm'];
     const rows = [header.join(';')];
     lista.forEach(function(it) {
       rows.push([it.numero||'',it.tipo||'',it.categoria||'',it.nome||'',it.nascimento||'',it.bairro||'',
-        it.responsavelNome||'',it.responsavelTelefone||'',it.responsavelEmail||'',fmtData(it.criadoEmMs)]
+        it.responsavelNome||'',it.responsavelVinculo||'',it.responsavelCpf||'',it.responsavelTelefone||'',it.responsavelEmail||'',fmtData(it.criadoEmMs)]
         .map(v=>`"${String(v).replace(/"/g,'""')}"`) .join(';'));
     });
     const a = document.createElement('a');
@@ -2728,10 +3552,10 @@
 
   function exportarXLSX() {
     const lista = ultimoFiltrado.length ? ultimoFiltrado : aplicaFiltros(cacheRelatorios);
-    const sheetData = [['Nº','Tipo','Categoria','Nome','Nascimento','Bairro','Responsável','Telefone','E-mail','Criado em']];
+    const sheetData = [['Nº','Tipo','Categoria','Nome','Nascimento','Bairro','Responsável','Vínculo','CPF','Telefone','E-mail','Criado em']];
     lista.forEach(function(it) {
       sheetData.push([it.numero||'',it.tipo||'',it.categoria||'',it.nome||'',it.nascimento||'',it.bairro||'',
-        it.responsavelNome||'',it.responsavelTelefone||'',it.responsavelEmail||'',fmtData(it.criadoEmMs)]);
+        it.responsavelNome||'',it.responsavelVinculo||'',it.responsavelCpf||'',it.responsavelTelefone||'',it.responsavelEmail||'',fmtData(it.criadoEmMs)]);
     });
     const bairros = montarTabelaBairro(lista)||[];
     const bairroData = [['Bairro','Corrida','Show','Total']];
@@ -2744,8 +3568,53 @@
     XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(resumoData), 'Resumo');
     XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(bairroData), 'Por Bairro');
     XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(sheetData),  'Inscritos');
-    XLSX.writeFile(wb, 'relatorio_inscritos.csv');
+    XLSX.writeFile(wb, 'relatorio_inscritos.xlsx');
   }
+
+
+  // ================================================================
+  // MÁSCARAS DE ENTRADA
+  // ================================================================
+  function _applyMask(input, formatted) {
+    // Preserva posição do cursor após reformatação
+    const start = input.selectionStart;
+    const oldVal = input.value;
+    input.value = formatted;
+    // Recalcula posição: conta quantos dígitos havia antes do cursor
+    const digitsBeforeCursor = oldVal.slice(0, start).replace(/\D/g, '').length;
+    let newPos = 0, digits = 0;
+    while (newPos < formatted.length && digits < digitsBeforeCursor) {
+      if (/\d/.test(formatted[newPos])) digits++;
+      newPos++;
+    }
+    input.setSelectionRange(newPos, newPos);
+  }
+
+  function maskCpf(input) {
+    let v = input.value.replace(/\D/g, '').slice(0, 11);
+    let f = v;
+    if (v.length > 9)      f = v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
+    else if (v.length > 6) f = v.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+    else if (v.length > 3) f = v.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+    _applyMask(input, f);
+  }
+
+  function maskTel(input) {
+    let v = input.value.replace(/\D/g, '').slice(0, 11);
+    let f = v;
+    if (v.length > 10)     f = v.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+    else if (v.length > 6) f = v.replace(/(\d{2})(\d{4,5})(\d{0,4})/, '($1) $2-$3');
+    else if (v.length > 2) f = v.replace(/(\d{2})(\d{0,5})/, '($1) $2');
+    _applyMask(input, f);
+  }
+
+  // Aplicar máscara de telefone nos campos de tel
+  document.addEventListener('DOMContentLoaded', function() {
+    ['respTelefone','showRespTelefone'].forEach(function(id) {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', function() { maskTel(this); });
+    });
+  });
 
   // Reatividade filtros
   ['filtroTipo','filtroGrafico','dataInicio','dataFim','filtroNome','filtroBairro'].forEach(function(id) {
@@ -2888,6 +3757,7 @@
     let idx = 0;
 
     function spawn(){
+      if (window._emojisPaused) return; // não cria emojis durante formulários
       const el = document.createElement('div');
       el.className = 'float-emoji';
       el.textContent = emojis[idx++ % emojis.length];
@@ -3045,9 +3915,9 @@
     const val = input.value;
     if (!val) { box.className = 'categoria-box hidden'; box.innerHTML = ''; return; }
 
-    // Critério: idade que o participante completa até 31/12/2026
+    // Critério: idade que a criança completa até 31/12/2026
     const nasc     = new Date(val + 'T00:00:00');
-    const idadeRef = 2026 - nasc.getFullYear();
+    let idadeRef   = 2026 - nasc.getFullYear();
     const isShow   = boxId === 'showCategoriaBox';
 
     let grupo, icon, dist, badge, cls, info;
