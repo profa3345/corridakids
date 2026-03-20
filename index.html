@@ -401,7 +401,7 @@
       width: 100%; padding: 13px 16px;
       border-radius: 14px; border: 1.5px solid rgba(7,23,46,.11);
       background: #fff; outline: none; /* ring via box-shadow no :focus */
-      font: inherit; font-size: 14px; color: var(--text);
+      font: inherit; font-size: 16px; color: var(--text);
       transition: border-color .18s, box-shadow .18s, transform .18s;
       box-shadow: 0 2px 8px rgba(0,0,0,.04);
     }
@@ -446,7 +446,7 @@
     .btn-primary {
       background: linear-gradient(135deg, #ff5722 0%, #ff8c00 55%, #ffd600 100%);
       color: #fff; box-shadow: 0 10px 30px rgba(255,87,34,.38);
-      font-size: 14px;
+      font-size: 16px;
     }
     .btn-primary:hover { transform:translateY(-3px) scale(1.04); box-shadow: 0 18px 44px rgba(255,87,34,.50); }
 
@@ -489,7 +489,15 @@
     .termo-body {
       padding: 14px 18px;
       font-size: 12.5px; color: var(--muted); line-height: 1.75;
-      max-height: 160px; overflow-y: auto;
+      max-height: 240px; overflow-y: auto;
+    }
+    .termo-box { position: relative; }
+    .termo-body::after {
+      content: ''; pointer-events: none;
+      position: sticky; bottom: 0; left: 0; right: 0;
+      display: block; height: 28px; margin-top: -28px;
+      background: linear-gradient(to bottom, transparent, rgba(255,255,255,.95));
+      border-radius: 0 0 10px 10px;
     }
     .termo-body::-webkit-scrollbar { width: 4px; }
     .termo-body::-webkit-scrollbar-thumb { background: rgba(0,194,255,.35); border-radius: 99px; }
@@ -809,6 +817,8 @@
     /* ── Responsive ── */
     @media (max-width: 900px){
       .hero { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px){
       .grid { grid-template-columns: 1fr; }
       .topbar-inner { padding: 12px 16px; }
       h1 { font-size: 28px; }
@@ -916,6 +926,8 @@
       gap: 14px;
       margin-top: 6px;
     }
+    .traj-grid > *:last-child:nth-child(odd) { grid-column: 1 / -1; max-width: 50%; margin: 0 auto; }
+    .traj-info-grid > *:last-child:nth-child(odd) { grid-column: 1 / -1; max-width: 50%; margin: 0 auto; }
     .traj-cat {
       display: flex; align-items: center; gap: 14px;
       padding: 16px 18px; border-radius: 20px;
@@ -1002,6 +1014,7 @@
     .categoria-box.grupo-2 { background: linear-gradient(135deg, rgba(105,255,71,.12), rgba(105,255,71,.04)); border-color: rgba(105,255,71,.35); }
     .categoria-box.grupo-3 { background: linear-gradient(135deg, rgba(255,214,0,.13), rgba(255,214,0,.04)); border-color: rgba(255,214,0,.40); }
     .categoria-box.grupo-4 { background: linear-gradient(135deg, rgba(255,87,34,.12), rgba(255,87,34,.04)); border-color: rgba(255,87,34,.35); }
+    .categoria-box.grupo-5 { background: linear-gradient(135deg, rgba(192,132,252,.12), rgba(192,132,252,.04)); border-color: rgba(192,132,252,.40); }
     .categoria-box.fora    { background: linear-gradient(135deg, rgba(255,60,172,.10), rgba(255,60,172,.04)); border-color: rgba(255,60,172,.35); }
     .cat-box-icon { font-size: 36px; flex-shrink: 0; animation: iconFloat 2s ease-in-out infinite alternate; }
     .cat-box-body { display: flex; flex-direction: column; gap: 3px; flex: 1; }
@@ -1075,6 +1088,12 @@
       flex: 1;
     }
     .btn-next:hover { transform:translateY(-2px) scale(1.02); filter:brightness(1.08); }
+    .btn-concordo {
+      background: linear-gradient(135deg, #2e7d32, #43a047);
+      color: #fff; box-shadow: 0 8px 24px rgba(46,125,50,.35);
+      flex: 1;
+    }
+    .btn-concordo:hover { transform:translateY(-2px) scale(1.02); filter:brightness(1.08); }
 
     /* ── Input validation states ── */
     input.valid   { border-color: #3a8a00 !important; background: rgba(105,255,71,.04) !important; }
@@ -1151,6 +1170,7 @@
       border: 1.5px solid rgba(7,23,46,.14);
     }
     .btn-print:hover { transform:translateY(-2px); box-shadow:var(--shadow-soft); background:rgba(7,23,46,.09); }
+    @media (max-width: 768px) { .btn-print { display: none !important; } }
 
     @media print {
       body > *:not(.app) { display: none !important; }
@@ -1166,42 +1186,85 @@
       body::before, body::after { display: none !important; }
     }
 
+
+
     /* ── Card camisa do evento ── */
     .camisa-card {
       display: flex; align-items: center; gap: 28px;
-      padding: 22px 24px; border-radius: 20px; margin-top: 6px;
+      padding: 22px 24px; border-radius: 20px; margin-bottom: 14px;
       background: linear-gradient(135deg, rgba(0,194,255,.10), rgba(105,255,71,.07));
       border: 1.5px solid rgba(0,194,255,.28);
       transition: transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s;
     }
     .camisa-card:hover { transform: translateY(-3px); box-shadow: 0 16px 48px rgba(0,194,255,.18); }
     .camisa-img-wrap {
-      flex-shrink: 0; width: 160px; height: 160px;
+      flex-shrink: 0; width: 150px; height: 150px;
       border-radius: 16px; overflow: hidden;
       box-shadow: 0 12px 36px rgba(0,0,0,.18);
       background: #fff;
-      display: flex; align-items: center; justify-content: center;
     }
-    .camisa-img-wrap img {
-      width: 100%; height: 100%; object-fit: cover;
-      transition: transform .35s cubic-bezier(.34,1.56,.64,1);
-    }
+    .camisa-img-wrap img { width: 100%; height: 100%; object-fit: cover;
+      transition: transform .35s cubic-bezier(.34,1.56,.64,1); }
     .camisa-card:hover .camisa-img-wrap img { transform: scale(1.06); }
     .camisa-info { flex: 1; }
-    .camisa-info h4 {
-      font-family: var(--font-display); font-size: 20px; font-weight: 700;
-      color: var(--text); margin-bottom: 8px;
-    }
-    .camisa-info p { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 12px; }
-    .camisa-badge {
-      display: inline-flex; align-items: center; gap: 6px;
+    .camisa-info h4 { font-family: var(--font-display); font-size: 19px; font-weight: 700;
+      color: var(--text); margin-bottom: 8px; }
+    .camisa-info p { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 10px; }
+    .camisa-badge { display: inline-flex; align-items: center; gap: 6px;
       padding: 5px 14px; border-radius: 999px; font-size: 12px; font-weight: 800;
-      background: rgba(0,194,255,.12); border: 1.5px solid rgba(0,194,255,.28); color: var(--text);
-    }
+      background: rgba(0,194,255,.12); border: 1.5px solid rgba(0,194,255,.28); color: var(--text); }
     @media (max-width: 600px) {
       .camisa-card { flex-direction: column; text-align: center; }
-      .camisa-img-wrap { width: 200px; height: 200px; }
+      .camisa-img-wrap { width: 180px; height: 180px; }
     }
+
+    /* ── Ícone de imagem nos info-cards ── */
+    .traj-info-icon-img {
+      width: 52px; height: 52px; flex-shrink: 0;
+      border-radius: 12px; object-fit: cover;
+      box-shadow: 0 4px 14px rgba(0,0,0,.14);
+    }
+
+
+    /* ── Lightbox ── */
+    .lightbox-overlay {
+      position: fixed; inset: 0; z-index: 9998;
+      background: rgba(2,8,24,.92);
+      backdrop-filter: blur(12px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    .lightbox-overlay.open {
+      opacity: 1; pointer-events: all;
+    }
+    .lightbox-inner {
+      position: relative; max-width: 90vw; max-height: 90vh;
+      display: flex; align-items: center; justify-content: center;
+      transform: scale(.88);
+      transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+    }
+    .lightbox-overlay.open .lightbox-inner {
+      transform: scale(1);
+    }
+    .lightbox-inner img {
+      max-width: 88vw; max-height: 85vh;
+      border-radius: 20px;
+      box-shadow: 0 32px 80px rgba(0,0,0,.60);
+      object-fit: contain;
+    }
+    .lightbox-close {
+      position: absolute; top: -16px; right: -16px;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: #fff; border: none; cursor: pointer;
+      font-size: 20px; font-weight: 700; color: #07172e;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,.28);
+      transition: transform .2s cubic-bezier(.34,1.56,.64,1), background .2s;
+      z-index: 1;
+    }
+    .lightbox-close:hover { transform: scale(1.15) rotate(90deg); background: #f0f0f0; }
+    .traj-info-icon-img { cursor: zoom-in; }
 
   </style>
 </head>
@@ -1221,7 +1284,7 @@
     <header class="topbar">
       <div class="topbar-inner">
         <div class="brand" aria-label="Corrida Kids Ilhas — Vem aí!">
-          <div class="logo"><img src="logo2.png" alt="Logo do evento" /></div>
+          <div class="logo"><img src="logo2.png" alt="Logo do evento" loading="lazy" /></div>
           <div class="title">
             <b>Corrida Kids Ilhas — Vem aí!</b>
             <span>Venha viver a emoção da corrida infantil nas Ilhas!</span>
@@ -1358,50 +1421,64 @@
                     <div class="crono-vline"></div>
                   </div>
                   <div class="crono-content">
-                    <div class="crono-label">Corrida — Grupo 1</div>
-                    <div class="crono-sub">Categoria 6 e 7 anos</div>
+                    <div class="crono-label">Corrida — Grupo 1 🐣</div>
+                    <div class="crono-sub">6 e 7 anos • 100 metros</div>
                     <span class="crono-badge corrida">🏃 Corrida Kids</span>
                   </div>
                 </div>
 
-                <!-- 8h50 -->
+                <!-- 8h40 -->
                 <div class="crono-item">
-                  <div class="crono-time-col"><span class="crono-time">8h50</span></div>
+                  <div class="crono-time-col"><span class="crono-time">8h40</span></div>
                   <div class="crono-connector">
                     <div class="crono-dot corrida"></div>
                     <div class="crono-vline"></div>
                   </div>
                   <div class="crono-content">
-                    <div class="crono-label">Corrida — Grupo 2</div>
-                    <div class="crono-sub">Categoria 8 e 9 anos</div>
+                    <div class="crono-label">Corrida — Grupo 2 🐦</div>
+                    <div class="crono-sub">8 e 9 anos • 200 metros</div>
                     <span class="crono-badge corrida">🏃 Corrida Kids</span>
                   </div>
                 </div>
 
-                <!-- 9h20 -->
+                <!-- 9h05 -->
                 <div class="crono-item">
-                  <div class="crono-time-col"><span class="crono-time">9h20</span></div>
+                  <div class="crono-time-col"><span class="crono-time">9h05</span></div>
                   <div class="crono-connector">
                     <div class="crono-dot corrida"></div>
                     <div class="crono-vline"></div>
                   </div>
                   <div class="crono-content">
-                    <div class="crono-label">Corrida — Grupo 3</div>
-                    <div class="crono-sub">Categoria 10 a 12 anos</div>
+                    <div class="crono-label">Corrida — Grupo 3 🦅</div>
+                    <div class="crono-sub">10 e 11 anos • 400 metros</div>
                     <span class="crono-badge corrida">🏃 Corrida Kids</span>
                   </div>
                 </div>
 
-                <!-- 9h50 -->
+                <!-- 9h35 -->
                 <div class="crono-item">
-                  <div class="crono-time-col"><span class="crono-time">9h50</span></div>
+                  <div class="crono-time-col"><span class="crono-time">9h35</span></div>
                   <div class="crono-connector">
                     <div class="crono-dot corrida"></div>
                     <div class="crono-vline"></div>
                   </div>
                   <div class="crono-content">
-                    <div class="crono-label">Corrida — Grupo 4</div>
-                    <div class="crono-sub">Categoria 13 a 15 anos</div>
+                    <div class="crono-label">Corrida — Grupo 4 🚀</div>
+                    <div class="crono-sub">12 e 13 anos • 600 metros</div>
+                    <span class="crono-badge corrida">🏃 Corrida Kids</span>
+                  </div>
+                </div>
+
+                <!-- 10h05 -->
+                <div class="crono-item">
+                  <div class="crono-time-col"><span class="crono-time">10h05</span></div>
+                  <div class="crono-connector">
+                    <div class="crono-dot corrida"></div>
+                    <div class="crono-vline"></div>
+                  </div>
+                  <div class="crono-content">
+                    <div class="crono-label">Corrida — Grupo 5 🦁</div>
+                    <div class="crono-sub">14 e 15 anos • 600 metros</div>
                     <span class="crono-badge corrida">🏃 Corrida Kids</span>
                   </div>
                 </div>
@@ -1551,7 +1628,7 @@
                 </div>
                 <div class="step-nav">
                   <button type="button" class="btn btn-ghost" onclick="showSection('home')">⬅️ Voltar</button>
-                  <button type="button" class="btn btn-next btn" onclick="cNextStep(1)">Concordo e continuo →</button>
+                  <button type="button" class="btn btn-concordo btn" onclick="cNextStep(1)">✅ Concordo e continuo →</button>
                 </div>
               </div>
 
@@ -1567,7 +1644,7 @@
                   </label>
                   <label>
                     Data de nascimento *
-                    <input type="date" id="nascimento" min="2005-01-01" max="2020-12-31" oninput="calcCategoria('nascimento','categoriaBox')" onblur="validarNasc('nascimento','nascMsg','corrida')" />
+                    <input type="date" id="nascimento" inputmode="numeric" min="2011-01-01" max="2020-12-31" oninput="calcCategoria('nascimento','categoriaBox')" onblur="validarNasc('nascimento','nascMsg','corrida')" />
                     <span class="field-msg" id="nascMsg"></span>
                   </label>
                 </div>
@@ -1600,11 +1677,11 @@
 
               <!-- ETAPA 3: RESPONSÁVEL -->
               <div class="fstep" id="cFStep3">
-                <div class="divider" style="margin-top:0;" id="sRespDivider">🧑‍🧑‍🧒 Dados do Responsável</div>
-                <div id="sAdultoAviso" style="display:none;background:rgba(105,255,71,.08);border:1.5px solid rgba(105,255,71,.25);border-radius:14px;padding:14px 16px;font-size:13px;color:var(--text);line-height:1.6;">
+                <div class="divider" style="margin-top:0;" id="cRespDivider">🧑‍🧑‍🧒 Dados do Responsável</div>
+                <div id="cAdultoAviso" style="display:none;background:rgba(105,255,71,.08);border:1.5px solid rgba(105,255,71,.25);border-radius:14px;padding:14px 16px;font-size:13px;color:var(--text);line-height:1.6;">
                   ✅ <strong>Participante adulto</strong> — nenhum responsável necessário. Clique em <strong>Enviar inscrição</strong> para concluir.
                 </div>
-                <div id="sRespFields">
+                <div id="cRespFields">
 
                 <!-- Banner pré-preenchimento -->
                 <div class="prefill-banner" id="cPrefillBanner" style="display:none;">
@@ -1620,7 +1697,7 @@
                   </label>
                   <label>
                     CPF do responsável *
-                    <input type="text" id="respCpf" inputmode="numeric" placeholder="000.000.000-00" autocomplete="off" oninput="maskCpf(this)" onblur="validarCpfField('respCpf','respCpfMsg')" />
+                    <input type="tel" id="respCpf" inputmode="numeric" placeholder="000.000.000-00" autocomplete="off" oninput="maskCpf(this)" onblur="validarCpfField('respCpf','respCpfMsg')" />
                     <span class="hint">Com ou sem pontuação</span>
                     <span class="field-msg" id="respCpfMsg"></span>
                   </label>
@@ -1708,7 +1785,7 @@
                   </label>
                   <label>
                     Data de nascimento *
-                    <input type="date" id="showNascimento" min="1950-01-01" max="2020-12-31" oninput="calcCategoria('showNascimento','showCategoriaBox')" onblur="validarNasc('showNascimento','showNascMsg','show')" />
+                    <input type="date" id="showNascimento" inputmode="numeric" min="1950-01-01" max="2020-12-31" oninput="calcCategoria('showNascimento','showCategoriaBox')" onblur="validarNasc('showNascimento','showNascMsg','show')" />
                     <span class="field-msg" id="showNascMsg"></span>
                   </label>
                 </div>
@@ -1778,7 +1855,7 @@
                 </div>
                 <div class="step-nav">
                   <button type="button" class="btn btn-ghost" onclick="sGoStep(1)">← Voltar</button>
-                  <button type="button" class="btn btn-next btn" onclick="sNextStep(2)">Concordo e continuo →</button>
+                  <button type="button" class="btn btn-concordo btn" onclick="sNextStep(2)">✅ Concordo e continuo →</button>
                 </div>
               </div>
 
@@ -1803,7 +1880,7 @@
                   </label>
                   <label>
                     CPF do responsável *
-                    <input type="text" id="showRespCpf" inputmode="numeric" placeholder="000.000.000-00" autocomplete="off" oninput="maskCpf(this)" onblur="validarCpfField('showRespCpf','showRespCpfMsg')" />
+                    <input type="tel" id="showRespCpf" inputmode="numeric" placeholder="000.000.000-00" autocomplete="off" oninput="maskCpf(this)" onblur="validarCpfField('showRespCpf','showRespCpfMsg')" />
                     <span class="hint">Com ou sem pontuação</span>
                     <span class="field-msg" id="showRespCpfMsg"></span>
                   </label>
@@ -1857,6 +1934,7 @@
               <div class="confirm-num-box">
                 <div class="confirm-num-label">Número da inscrição</div>
                 <div class="confirm-num" id="confirmaCorridaNum">—</div>
+                <div class="confirm-tipo" id="confirmaCorridaNome" style="font-size:14px;font-weight:700;color:var(--text);margin-top:6px;"></div>
                 <div class="confirm-tipo">Corrida Kids 🏃</div>
               </div>
               <div class="confirm-actions">
@@ -1865,7 +1943,7 @@
                 <button class="btn btn-primary" onclick="showSection('corrida')">➕ Inscrever outra criança</button>
                 <button class="btn btn-ghost" onclick="showSection('home')">🏠 Voltar ao início</button>
               </div>
-              <div class="confirm-tip">⭐ <strong>Lembre-se:</strong> apresente este número no dia do evento. Recomendamos tirar um print desta tela ou anotar o número.</div>
+              <div class="confirm-tip">⭐ <strong>Lembre-se:</strong> apresente este número no dia do evento. 📍 Apareça às 8h00 no local de concentração. Recomendamos tirar um print desta tela ou anotar o número.</div>
             </div>
           </div>
         </section>
@@ -1880,6 +1958,7 @@
               <div class="confirm-num-box">
                 <div class="confirm-num-label">Número da inscrição</div>
                 <div class="confirm-num" id="confirmaShowNum">—</div>
+                <div class="confirm-tipo" id="confirmaShowNome" style="font-size:14px;font-weight:700;color:var(--text);margin-top:6px;"></div>
                 <div class="confirm-tipo">Show de Talentos 🎭</div>
               </div>
               <div class="confirm-actions">
@@ -1888,7 +1967,7 @@
                 <button class="btn btn-primary" onclick="showSection('show')">➕ Inscrever outro participante</button>
                 <button class="btn btn-ghost" onclick="showSection('home')">🏠 Voltar ao início</button>
               </div>
-              <div class="confirm-tip">⭐ <strong>Lembre-se:</strong> apresente este número no dia do evento. Recomendamos tirar um print desta tela ou anotar o número.</div>
+              <div class="confirm-tip">⭐ <strong>Lembre-se:</strong> apresente este número no dia do evento. 📍 Apareça às 8h00 no local de concentração. Recomendamos tirar um print desta tela ou anotar o número.</div>
             </div>
           </div>
         </section>
@@ -1935,7 +2014,7 @@
                 <div class="traj-cat-icon">🦅</div>
                 <div class="traj-cat-info">
                   <span class="traj-cat-label">Grupo 3</span>
-                  <strong>10 a 12 anos</strong>
+                  <strong>10 e 11 anos</strong>
                   <span class="traj-cat-dist">📏 400 metros</span>
                 </div>
                 <div class="traj-cat-badge">Intermediário</div>
@@ -1945,27 +2024,25 @@
                 <div class="traj-cat-icon">🚀</div>
                 <div class="traj-cat-info">
                   <span class="traj-cat-label">Grupo 4</span>
-                  <strong>13 a 15 anos</strong>
+                  <strong>12 e 13 anos</strong>
                   <span class="traj-cat-dist">📏 600 metros</span>
                 </div>
                 <div class="traj-cat-badge">Avançado</div>
+              </div>
+
+              <div class="traj-cat" style="background:linear-gradient(135deg,rgba(192,132,252,.12),rgba(192,132,252,.04));border:1.5px solid rgba(192,132,252,.28);">
+                <div class="traj-cat-icon">🦁</div>
+                <div class="traj-cat-info">
+                  <span class="traj-cat-label">Grupo 5</span>
+                  <strong>14 e 15 anos</strong>
+                  <span class="traj-cat-dist">📏 600 metros</span>
+                </div>
+                <div class="traj-cat-badge">Elite</div>
               </div>
             </div>
 
             <!-- TRAJETO -->
             <div class="divider" style="margin-top:20px;">📍 Informações do Percurso</div>
-
-            <!-- CAMISA DO EVENTO -->
-            <div class="camisa-card">
-              <div class="camisa-img-wrap">
-                <img src="camisa_evento.png" alt="Camisa oficial da 1ª Corrida Kids Ilhas 2026" loading="lazy" />
-              </div>
-              <div class="camisa-info">
-                <h4>👕 Camisa Oficial do Evento</h4>
-                <p>Todos os inscritos que comparecerem no dia da corrida receberão a <strong>camisa exclusiva</strong> da 1ª Corrida Kids Ilhas 2026 — confeccionada especialmente para este evento com o tema <em>Diversão · Esporte · Comunidade</em>.</p>
-                <span class="camisa-badge">🎽 Garantida para todos os presentes</span>
-              </div>
-            </div>
 
             <div class="traj-info-grid">
               <div class="traj-info-card">
@@ -2003,10 +2080,14 @@
               </div>
 
               <div class="traj-info-card">
-                <div class="traj-info-icon">👕</div>
+                <img src="camisa_evento.png" alt="Camisa do evento" class="traj-info-icon-img" loading="lazy" onclick="openLightbox('camisa_evento.png','Camisa Oficial da 1ª Corrida Kids Ilhas 2026')" />
                 <div>
                   <div class="traj-info-title">Kit do Participante</div>
-                  <div class="traj-info-text">Todos os inscritos que se apresentarem na corrida receberão <strong>camisa do evento</strong>. <strong>Medalha de participação</strong> para todos. Use tênis adequado para corrida.</div>
+                  <div class="traj-info-text">
+                    🎽 <strong>Camisa do evento</strong> para todos os inscritos presentes.<br>
+                    🏅 <strong>Medalha de participação</strong> para todos os participantes.<br>
+                    💧 <strong>Água gratuita</strong> no percurso e na chegada.
+                  </div>
                 </div>
               </div>
 
@@ -2014,7 +2095,7 @@
                 <div class="traj-info-icon">⏰</div>
                 <div>
                   <div class="traj-info-title">Concentração</div>
-                  <div class="traj-info-text">Chegada às 8h00. As corridas iniciam às 8h15 conforme cronograma por grupo. Não se atrase!</div>
+                  <div class="traj-info-text">Chegada geral às <strong>8h00</strong>. Corridas de <strong>8h15</strong> a <strong>10h35</strong> conforme cronograma por grupo. Não se atrase!</div>
                 </div>
               </div>
 
@@ -2022,7 +2103,13 @@
                 <div class="traj-info-icon">🏆</div>
                 <div>
                   <div class="traj-info-title">Premiação</div>
-                  <div class="traj-info-text">Camisa do evento para todos os inscritos presentes. Medalha de participação para todos. Troféu para o 1º lugar de cada categoria. Prêmios para 1º, 2º e 3º lugar de cada categoria.</div>
+                  <div class="traj-info-text">
+                    🏅 <strong>Medalha</strong> para todos os participantes<br>
+                    🥇 <strong>1º lugar</strong> — Troféu + brinde especial<br>
+                    🥈 <strong>2º lugar</strong> — Brinde especial<br>
+                    🥉 <strong>3º lugar</strong> — Brinde especial<br>
+                    <span style="font-size:11.5px;color:var(--muted);">Premiação individual por categoria para os 3 primeiros colocados.</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2030,7 +2117,7 @@
             <!-- REGRAS -->
             <div class="divider" style="margin-top:20px;">📋 Regras Gerais</div>
             <div class="traj-rules">
-              <div class="traj-rule">✅ Corrida Kids: aberta a crianças de 6 a 15 anos. Show de Talentos: aberto a todas as idades, sem critério etário</div>
+              <div class="traj-rule">✅ Corrida Kids: aberta a crianças de 6 a 15 anos em 5 grupos por faixa etária. Show de Talentos: aberto a todas as idades</div>
               <div class="traj-rule">✅ Autorização do responsável coletada digitalmente no momento da inscrição</div>
               <div class="traj-rule">✅ Crianças devem estar acompanhadas por um responsável no local</div>
               <div class="traj-rule">✅ Respeitar a largada conforme o grupo de idade</div>
@@ -2361,9 +2448,9 @@
   </script>
 
   <!-- ✅ Firebase via compat scripts (carregamento síncrono garantido) -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js" defer></script>
 
   <script>
   // ================================================================
@@ -2542,6 +2629,7 @@
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     const el = document.getElementById(id);
     if (el) el.classList.add('active');
+    if (document.activeElement) document.activeElement.blur();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     // Pausar emojis flutuantes em seções de formulário para não distrair
@@ -2666,15 +2754,16 @@
       '1ª CORRIDA KIDS ILHAS 2026',
       'Ilha de Santa Maria e Ilha de Monte Belo — Vitória/ES',
       '',
-      'DATA: 12 de abril de 2026',
+      'DATA: Junho 2026 — Dia a Definir',
       'HORÁRIO: 8h00 às 12h30',
       'INSCRIÇÕES: corridakidsilhas.vercel.app',
       '',
       '== CATEGORIAS E PERCURSOS ==',
       'Grupo 1: 6 e 7 anos — 100 metros',
       'Grupo 2: 8 e 9 anos — 200 metros',
-      'Grupo 3: 10 a 12 anos — 400 metros',
-      'Grupo 4: 13 a 15 anos — 600 metros',
+      'Grupo 3: 10 e 11 anos — 400 metros',
+      'Grupo 4: 12 e 13 anos — 600 metros',
+      'Grupo 5: 14 e 15 anos — 600 metros',
       '',
       '== PERCURSO ==',
       'Largada: Rua José de Carvalho',
@@ -2682,7 +2771,7 @@
       'Ruas: José de Carvalho → Hercília Dias Maciel → Hermes Cury Carneiro → Guido Prati',
       '',
       '== KIT DO PARTICIPANTE ==',
-      'Camisa do evento para todos os inscritos presentes. Medalha de participação para todos.',
+      'Medalha de participação para todos os participantes.',
       'Troféu para o 1º lugar de cada categoria. Prêmios para 1º, 2º e 3º lugar de cada categoria.',
       '',
       '== SHOW DE TALENTOS ==',
@@ -2752,8 +2841,9 @@
     const idade = calcIdadeNoEvento(nascimento);
     if (idade === 6 || idade === 7)  return 'Grupo 1 — 6 e 7 anos';
     if (idade === 8 || idade === 9)  return 'Grupo 2 — 8 e 9 anos';
-    if (idade >= 10 && idade <= 12)  return 'Grupo 3 — 10 a 12 anos';
-    if (idade >= 13 && idade <= 15)  return 'Grupo 4 — 13 a 15 anos';
+    if (idade === 10 || idade === 11) return 'Grupo 3 — 10 e 11 anos';
+    if (idade === 12 || idade === 13) return 'Grupo 4 — 12 e 13 anos';
+    if (idade === 14 || idade === 15) return 'Grupo 5 — 14 e 15 anos';
     if (idade > 15)                  return 'Adulto';
     return 'Fora da faixa';
   }
@@ -2817,7 +2907,7 @@
         cpf:      onlyDigits(cpfVal),
         vinculo:  document.getElementById('respVinculo').value,
         telefone: onlyDigits(document.getElementById('respTelefone').value),
-        email:    document.getElementById('respEmail').value.trim().toLowerCase()
+        email:    document.getElementById('respEmail').value.trim().toLowerCase() || null
       },
       autorizacao: {
         aceito:       true,
@@ -2867,7 +2957,7 @@
         cpf:      onlyDigits(cpfVal),
         vinculo:  document.getElementById('showRespVinculo').value,
         telefone: onlyDigits(document.getElementById('showRespTelefone').value),
-        email:    document.getElementById('showRespEmail').value.trim().toLowerCase()
+        email:    document.getElementById('showRespEmail').value.trim().toLowerCase() || null
       },
       criadoEm: firebase.firestore.FieldValue.serverTimestamp()
     };
@@ -2894,6 +2984,18 @@
       if (line) line.classList.toggle('done', i < step);
     });
   }
+
+  function scrollToFirstEmpty(ids) {
+    for (const id of ids) {
+      const el = document.getElementById(id);
+      if (el && !el.value.trim()) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.focus();
+        return;
+      }
+    }
+  }
+
   function cGoStep(step, isBack) {
     [1,2,3].forEach(function(i) {
       const el = document.getElementById('cFStep'+i);
@@ -2903,13 +3005,19 @@
     });
     cUpdateProgress(step);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    // Mostrar banner pré-preencher na etapa 3 se houver dados do show
     if (step === 3) {
       const banner = document.getElementById('cPrefillBanner');
       if (banner) {
         const temDados = (document.getElementById('showRespNome') && document.getElementById('showRespNome').value.trim());
         banner.style.display = temDados ? 'flex' : 'none';
       }
+      // IDs exclusivos do form corrida
+      const aviso   = document.getElementById('cAdultoAviso');
+      const fields  = document.getElementById('cRespFields');
+      const divider = document.getElementById('cRespDivider');
+      if (aviso)   aviso.style.display   = 'none';
+      if (fields)  fields.style.display  = '';
+      if (divider) divider.style.display = '';
     }
   }
   function cNextStep(from) {
@@ -2917,6 +3025,7 @@
       if (!document.getElementById('termoCheck').checked) {
         showToast('❌ Você precisa concordar com o termo para continuar.', 'erro'); return;
       }
+      if (navigator.vibrate) navigator.vibrate(40);
       cGoStep(2);
     } else if (from === 2) {
       const nome = document.getElementById('nome').value.trim();
@@ -2925,7 +3034,8 @@
       const bairro = document.getElementById('bairroSel').value;
       const end  = document.getElementById('endereco').value.trim();
       if (!nome || !nasc || !doc || !bairro || !end) {
-        showToast('❌ Preencha todos os campos obrigatórios.', 'erro'); return;
+        showToast('❌ Preencha todos os campos obrigatórios.', 'erro');
+        scrollToFirstEmpty(['nome','nascimento','documento','bairroSel','endereco']); return;
       }
       const idadeEvento = calcIdadeNoEvento(nasc);
       if (idadeEvento < 6 || idadeEvento > 15) {
@@ -2934,6 +3044,7 @@
       if (bairro === 'OUTRO' && !document.getElementById('bairroOutro').value.trim()) {
         showToast('❌ Digite o bairro/comunidade.', 'erro'); return;
       }
+      if (navigator.vibrate) navigator.vibrate(40);
       cGoStep(3);
     }
   }
@@ -2962,6 +3073,7 @@
       if (i === step) { el.classList.add('active'); if (isBack) el.classList.add('back'); }
     });
     sUpdateProgress(step);
+    if (document.activeElement) document.activeElement.blur();
     window.scrollTo({ top: 0, behavior: 'smooth' });
     if (step === 3) {
       const adulto = window._showAdulto === true;
@@ -3012,7 +3124,8 @@
       const nomeA = document.getElementById('nomeApresentacao').value.trim();
       const dur   = document.getElementById('duracao').value.trim();
       if (!nome || !nasc || !bairro || !tipo || !nomeA || !dur) {
-        showToast('❌ Preencha todos os campos obrigatórios.', 'erro'); return;
+        showToast('❌ Preencha todos os campos obrigatórios.', 'erro');
+        scrollToFirstEmpty(['showNome','showNascimento','showBairroSel','tipoApresentacao','nomeApresentacao','duracao']); return;
       }
       if (bairro === 'OUTRO' && !document.getElementById('showBairroOutro').value.trim()) {
         showToast('❌ Digite o bairro/comunidade.', 'erro'); return;
@@ -3124,6 +3237,15 @@
         inp.classList.add('invalid'); inp.classList.remove('valid');
         msg.className = 'field-msg erro'; msg.textContent = '✗ A Corrida Kids é para crianças de 6 a 15 anos';
       }
+    } else if (tipo === 'show') {
+      inp.classList.add('valid'); inp.classList.remove('invalid');
+      if (idade >= 18) {
+        msg.className = 'field-msg ok'; msg.textContent = '✓ Participante adulto — sem necessidade de responsável';
+      } else if (idade >= 6) {
+        msg.className = 'field-msg ok'; msg.textContent = '✓ Menor de idade — autorização do responsável na próxima etapa';
+      } else {
+        msg.className = 'field-msg ok'; msg.textContent = '✓ Participante identificado';
+      }
     }
   }
 
@@ -3160,7 +3282,8 @@ Guarde este número para apresentar no dia do evento!`;
     const rTel     = document.getElementById('respTelefone')?.value.trim();
     const rAssina  = document.getElementById('termoAssinatura')?.value.trim();
     if (!rNome || !rCpf || !rVinculo || !rTel || !rAssina) {
-      showToast('❌ Preencha todos os campos do responsável e a assinatura digital.', 'erro'); return;
+      showToast('❌ Preencha todos os campos do responsável e a assinatura digital.', 'erro');
+      scrollToFirstEmpty(['respNome','respCpf','respVinculo','respTelefone','termoAssinatura']); return;
     }
     if (!validarCPF(rCpf)) {
       showToast('❌ CPF do responsável inválido. Verifique os números.', 'erro'); return;
@@ -3183,6 +3306,8 @@ Guarde este número para apresentar no dia do evento!`;
         if (el) { el.classList.remove('valid','invalid'); }
       });
       document.getElementById('confirmaCorridaNum').textContent = num;
+      const nomeC = document.getElementById('nome')?.value.trim();
+      if (nomeC) document.getElementById('confirmaCorridaNome').textContent = nomeC;
       showSection('confirmaCorrida');
       window.launchConfetti && window.launchConfetti(120);
     } catch(err) {
@@ -3197,6 +3322,9 @@ Guarde este número para apresentar no dia do evento!`;
     e.preventDefault();
     // Honeypot anti-bot
     if (document.getElementById('hp_show')?.value) { showToast('❌ Erro no envio.', 'erro'); return; }
+    // Revalidar se adulto com base na data atual (evita estado obsoleto)
+    const nascShowVal = document.getElementById('showNascimento')?.value;
+    if (nascShowVal) window._showAdulto = calcIdadeNoEvento(nascShowVal) >= 18;
     // Validação da etapa 3 — apenas para menores de idade
     if (window._showAdulto !== true) {
       const sRNome    = document.getElementById('showRespNome')?.value.trim();
@@ -3228,6 +3356,8 @@ Guarde este número para apresentar no dia do evento!`;
         if (el) { el.classList.remove('valid','invalid'); }
       });
       document.getElementById('confirmaShowNum').textContent = num;
+      const nomeS = document.getElementById('showNome')?.value.trim();
+      if (nomeS) document.getElementById('confirmaShowNome').textContent = nomeS;
       showSection('confirmaShow');
       window.launchConfetti && window.launchConfetti(120);
     } catch(err) {
@@ -3827,10 +3957,11 @@ Guarde este número para apresentar no dia do evento!`;
     });
   })();
 
-  /* ── Mini confetti burst on form submit ── */
+  /* ── Mini confetti burst on form submit (apenas inscrições) ── */
   (function(){
-    document.querySelectorAll('form').forEach(form => {
-      form.addEventListener('submit', function(){
+    ['corridaForm','showForm'].forEach(function(id) {
+      const form = document.getElementById(id);
+      if (form) form.addEventListener('submit', function(){
         setTimeout(() => window.launchConfetti && window.launchConfetti(80), 100);
       });
     });
@@ -3928,11 +4059,14 @@ Guarde este número para apresentar no dia do evento!`;
     } else if (idadeRef === 8 || idadeRef === 9) {
       grupo = 'Grupo 2 — 8 e 9 anos'; icon = '🐦'; dist = '200 metros'; badge = 'Juvenil'; cls = 'grupo-2';
       info  = isShow ? '📏 Apresentação de até 5 minutos' : '📏 Percurso: 200 metros';
-    } else if (idadeRef >= 10 && idadeRef <= 12) {
-      grupo = 'Grupo 3 — 10 a 12 anos'; icon = '🦅'; dist = '400 metros'; badge = 'Intermediário'; cls = 'grupo-3';
+    } else if (idadeRef === 10 || idadeRef === 11) {
+      grupo = 'Grupo 3 — 10 e 11 anos'; icon = '🦅'; dist = '400 metros'; badge = 'Intermediário'; cls = 'grupo-3';
       info  = isShow ? '📏 Apresentação de até 5 minutos' : '📏 Percurso: 400 metros';
-    } else if (idadeRef >= 13 && idadeRef <= 15) {
-      grupo = 'Grupo 4 — 13 a 15 anos'; icon = '🚀'; dist = '600 metros'; badge = 'Avançado'; cls = 'grupo-4';
+    } else if (idadeRef === 12 || idadeRef === 13) {
+      grupo = 'Grupo 4 — 12 e 13 anos'; icon = '🚀'; dist = '600 metros'; badge = 'Avançado'; cls = 'grupo-4';
+      info  = isShow ? '📏 Apresentação de até 5 minutos' : '📏 Percurso: 600 metros';
+    } else if (idadeRef === 14 || idadeRef === 15) {
+      grupo = 'Grupo 5 — 14 e 15 anos'; icon = '🦁'; dist = '600 metros'; badge = 'Elite'; cls = 'grupo-5';
       info  = isShow ? '📏 Apresentação de até 5 minutos' : '📏 Percurso: 600 metros';
     } else if (isShow && idadeRef > 15) {
       // Adulto no show — permitido!
@@ -3956,6 +4090,73 @@ Guarde este número para apresentar no dia do evento!`;
     `;
   };
   </script>
+
+
+
+
+  <script>
+  /* ── Swipe para navegar entre etapas ── */
+  (function() {
+    function addSwipe(formId, nextFn, prevFn) {
+      const form = document.getElementById(formId);
+      if (!form) return;
+      let startX = 0, startY = 0;
+      form.addEventListener('touchstart', function(e) {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+      }, { passive: true });
+      form.addEventListener('touchend', function(e) {
+        const dx = e.changedTouches[0].clientX - startX;
+        const dy = e.changedTouches[0].clientY - startY;
+        if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+        const tag = e.target.tagName;
+        if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
+        if (dx < 0) nextFn(); else prevFn();
+      }, { passive: true });
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      addSwipe('corridaForm',
+        function() { var s = document.querySelector('#corridaForm .fstep.active'); if (!s) return; if (s.id==='cFStep1') cNextStep(1); else if (s.id==='cFStep2') cNextStep(2); },
+        function() { var s = document.querySelector('#corridaForm .fstep.active'); if (!s) return; if (s.id==='cFStep2') cGoStep(1,true); else if (s.id==='cFStep3') cStep3GoBack(); }
+      );
+      addSwipe('showForm',
+        function() { var s = document.querySelector('#showForm .fstep.active'); if (!s) return; if (s.id==='sFStep1') sNextStep(1); else if (s.id==='sFStep2') sNextStep(2); },
+        function() { var s = document.querySelector('#showForm .fstep.active'); if (!s) return; if (s.id==='sFStep2') sGoStep(1,true); else if (s.id==='sFStep3') sStep3GoBack(); }
+      );
+    });
+  })();
+  </script>
+
+  <script>
+  /* ── Lightbox ── */
+  function openLightbox(src, alt) {
+    const overlay = document.getElementById('lightboxOverlay');
+    const img     = document.getElementById('lightboxImg');
+    if (!overlay || !img) return;
+    img.src = src; img.alt = alt || '';
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox(e) {
+    // Só fecha se clicar direto no overlay (fundo escuro), não na imagem ou botão interno
+    if (e && e.target !== document.getElementById('lightboxOverlay')) return;
+    const overlay = document.getElementById('lightboxOverlay');
+    if (!overlay) return;
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLightbox();
+  });
+  </script>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox-overlay" id="lightboxOverlay" role="dialog" aria-modal="true" aria-label="Imagem da camisa do evento" onclick="closeLightbox(event)">
+    <div class="lightbox-inner" id="lightboxInner">
+      <button class="lightbox-close" onclick="closeLightbox()" aria-label="Fechar">✕</button>
+      <img id="lightboxImg" src="" alt="" />
+    </div>
+  </div>
 
 </body>
 </html>
