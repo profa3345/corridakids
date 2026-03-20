@@ -258,7 +258,7 @@
     }
     .hero-logos-wrap::before {
       content: '';
-      position: absolute; width: 360px; height: 200px; border-radius: 50%;
+      position: absolute; width: 480px; height: 260px; border-radius: 50%;
       background: radial-gradient(ellipse, rgba(0,194,255,.12) 0%, transparent 70%);
       animation: haloGlow 4s ease-in-out infinite alternate;
       pointer-events: none;
@@ -268,7 +268,7 @@
       to   { opacity:1; transform:scale(1.10); filter:hue-rotate(50deg); }
     }
     .hero-logo-item {
-      width: min(255px, 46%); height: auto; display: block;
+      width: min(340px, 48%); height: auto; display: block;
       filter: drop-shadow(0 20px 44px rgba(0,0,0,.32));
       transition: transform .35s cubic-bezier(.34,1.56,.64,1), filter .35s;
     }
@@ -510,6 +510,7 @@
       display: flex; align-items: center; gap: 10px;
       font-size: 13px; font-weight: 700; color: var(--text); cursor: pointer;
     }
+    .termo-check-row { padding: 4px 0; cursor: pointer; }
     .termo-check-row input[type="checkbox"] {
       width: 18px; height: 18px; accent-color: var(--accent1); cursor: pointer; flex-shrink: 0;
     }
@@ -822,11 +823,11 @@
       .grid { grid-template-columns: 1fr; }
       .topbar-inner { padding: 12px 16px; }
       h1 { font-size: 28px; }
-      .hero-logo-item { width: min(200px, 45%); }
+      .hero-logo-item { width: min(260px, 47%); }
     }
     @media (max-width: 640px){
       .videos-grid { grid-template-columns: 1fr; }
-      .hero-logo-item { width: min(170px, 46%); }
+      .hero-logo-item { width: min(220px, 48%); }
       .stat-grid { grid-template-columns: 1fr; }
       .chart-wrap { grid-template-columns: 1fr; }
       table.rel { min-width: 880px; }
@@ -1939,6 +1940,7 @@
               </div>
               <div class="confirm-actions">
                 <button class="btn btn-whatsapp" onclick="compartilharConfirma('corrida')">💬 Compartilhar no WhatsApp</button>
+                <button class="btn btn-ghost" onclick="copiarNumero('corrida')">📋 Copiar número</button>
                 <button class="btn btn-print btn" onclick="window.print()">🖨️ Imprimir comprovante</button>
                 <button class="btn btn-primary" onclick="showSection('corrida')">➕ Inscrever outra criança</button>
                 <button class="btn btn-ghost" onclick="showSection('home')">🏠 Voltar ao início</button>
@@ -1963,11 +1965,12 @@
               </div>
               <div class="confirm-actions">
                 <button class="btn btn-whatsapp" onclick="compartilharConfirma('show')">💬 Compartilhar no WhatsApp</button>
+                <button class="btn btn-ghost" onclick="copiarNumero('show')">📋 Copiar número</button>
                 <button class="btn btn-print btn" onclick="window.print()">🖨️ Imprimir comprovante</button>
                 <button class="btn btn-primary" onclick="showSection('show')">➕ Inscrever outro participante</button>
                 <button class="btn btn-ghost" onclick="showSection('home')">🏠 Voltar ao início</button>
               </div>
-              <div class="confirm-tip">⭐ <strong>Lembre-se:</strong> apresente este número no dia do evento. 📍 Apareça às 8h00 no local de concentração. Recomendamos tirar um print desta tela ou anotar o número.</div>
+              <div class="confirm-tip">⭐ <strong>Lembre-se:</strong> apresente este número no dia do evento. 📍 O Show de Talentos começa às 11h00 na Rua Guido Prati. Recomendamos tirar um print desta tela ou anotar o número.</div>
             </div>
           </div>
         </section>
@@ -2080,7 +2083,10 @@
               </div>
 
               <div class="traj-info-card">
-                <img src="camisa_evento.png" alt="Camisa do evento" class="traj-info-icon-img" loading="lazy" onclick="openLightbox('camisa_evento.png','Camisa Oficial da 1ª Corrida Kids Ilhas 2026')" />
+                <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;">
+                  <img src="camisa_evento.png" alt="Camisa do evento" class="traj-info-icon-img" loading="lazy" onclick="openLightbox('camisa_evento.png','Camisa Oficial da 1ª Corrida Kids Ilhas 2026')" />
+                  <span style="font-size:10px;color:var(--muted);font-weight:600;white-space:nowrap;">👆 ampliar</span>
+                </div>
                 <div>
                   <div class="traj-info-title">Kit do Participante</div>
                   <div class="traj-info-text">
@@ -3026,6 +3032,7 @@
         showToast('❌ Você precisa concordar com o termo para continuar.', 'erro'); return;
       }
       if (navigator.vibrate) navigator.vibrate(40);
+      if (window.history?.pushState) history.pushState({formStep:true},'');
       cGoStep(2);
     } else if (from === 2) {
       const nome = document.getElementById('nome').value.trim();
@@ -3045,6 +3052,7 @@
         showToast('❌ Digite o bairro/comunidade.', 'erro'); return;
       }
       if (navigator.vibrate) navigator.vibrate(40);
+      if (window.history?.pushState) history.pushState({formStep:true},'');
       cGoStep(3);
     }
   }
@@ -3140,14 +3148,15 @@
         // Marcar termo como desnecessário e ir para confirmação direta
         document.getElementById('showTermoCheck').checked = false;
         window._showAdulto = true;
+        if (navigator.vibrate) navigator.vibrate(40);
         sGoStep(3); // pula etapa 2
       } else {
         window._showAdulto = false;
-        // Restaurar progress bar para menores
         const step3Item = document.getElementById('sStep3Item');
         const line2 = document.getElementById('sLine2');
         if (step3Item) step3Item.style.display = '';
         if (line2) line2.style.display = '';
+        if (navigator.vibrate) navigator.vibrate(40);
         sGoStep(2);
       }
     } else if (from === 2) {
@@ -3155,6 +3164,7 @@
       if (!document.getElementById('showTermoCheck').checked) {
         showToast('❌ Você precisa concordar com o termo para continuar.', 'erro'); return;
       }
+      if (navigator.vibrate) navigator.vibrate(40);
       sGoStep(3);
     }
   }
@@ -3252,6 +3262,23 @@
   // ================================================================
   // COMPARTILHAR CONFIRMAÇÃO
   // ================================================================
+
+  function copiarNumero(tipo) {
+    const id = tipo === 'corrida' ? 'confirmaCorridaNum' : 'confirmaShowNum';
+    const num = document.getElementById(id)?.textContent || '';
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(num).then(function() {
+        showToast('✅ Número copiado: ' + num, 'sucesso');
+      });
+    } else {
+      const el = document.createElement('textarea');
+      el.value = num; document.body.appendChild(el);
+      el.select(); document.execCommand('copy');
+      document.body.removeChild(el);
+      showToast('✅ Número copiado: ' + num, 'sucesso');
+    }
+  }
+
   function compartilharConfirma(tipo) {
     const num = tipo === 'corrida'
       ? document.getElementById('confirmaCorridaNum').textContent
@@ -3296,17 +3323,17 @@ Guarde este número para apresentar no dia do evento!`;
     btn.disabled = true; btn.innerHTML = '⏳ Enviando...';
     try {
       const num = await salvarInscricaoCorrida();
+      // Capturar nome ANTES do reset
+      const nomeC = document.getElementById('nome')?.value.trim();
       const box = document.getElementById('categoriaBox');
       if (box) { box.className = 'categoria-box hidden'; box.innerHTML = ''; }
       e.target.reset();
       setupBairroSelect('bairroSel','bairroOutro');
-      // Limpar estados de validação
       ['nome','nascimento','documento','endereco','respNome','respCpf','respTelefone','termoAssinatura'].forEach(function(id) {
         const el = document.getElementById(id);
         if (el) { el.classList.remove('valid','invalid'); }
       });
       document.getElementById('confirmaCorridaNum').textContent = num;
-      const nomeC = document.getElementById('nome')?.value.trim();
       if (nomeC) document.getElementById('confirmaCorridaNome').textContent = nomeC;
       showSection('confirmaCorrida');
       window.launchConfetti && window.launchConfetti(120);
@@ -3347,6 +3374,8 @@ Guarde este número para apresentar no dia do evento!`;
     btn.disabled = true; btn.innerHTML = '⏳ Enviando...';
     try {
       const num = await salvarInscricaoShow();
+      // Capturar nome ANTES do reset
+      const nomeS = document.getElementById('showNome')?.value.trim();
       const box = document.getElementById('showCategoriaBox');
       if (box) { box.className = 'categoria-box hidden'; box.innerHTML = ''; }
       e.target.reset();
@@ -3356,7 +3385,6 @@ Guarde este número para apresentar no dia do evento!`;
         if (el) { el.classList.remove('valid','invalid'); }
       });
       document.getElementById('confirmaShowNum').textContent = num;
-      const nomeS = document.getElementById('showNome')?.value.trim();
       if (nomeS) document.getElementById('confirmaShowNome').textContent = nomeS;
       showSection('confirmaShow');
       window.launchConfetti && window.launchConfetti(120);
@@ -4123,6 +4151,29 @@ Guarde este número para apresentar no dia do evento!`;
         function() { var s = document.querySelector('#showForm .fstep.active'); if (!s) return; if (s.id==='sFStep1') sNextStep(1); else if (s.id==='sFStep2') sNextStep(2); },
         function() { var s = document.querySelector('#showForm .fstep.active'); if (!s) return; if (s.id==='sFStep2') sGoStep(1,true); else if (s.id==='sFStep3') sStep3GoBack(); }
       );
+    });
+  })();
+  </script>
+
+  <script>
+  /* ── Android back button — navega entre etapas ── */
+  (function() {
+    function pushFormState() {
+      if (window.history && window.history.pushState) {
+        window.history.pushState({ formStep: true }, '');
+      }
+    }
+    window.addEventListener('popstate', function() {
+      const cActive = document.querySelector('#corridaForm .fstep.active');
+      const sActive = document.querySelector('#showForm .fstep.active');
+      if (cActive) {
+        if (cActive.id === 'cFStep2') { cGoStep(1, true); pushFormState(); return; }
+        if (cActive.id === 'cFStep3') { cStep3GoBack(); pushFormState(); return; }
+      }
+      if (sActive) {
+        if (sActive.id === 'sFStep2') { sGoStep(1, true); pushFormState(); return; }
+        if (sActive.id === 'sFStep3') { sStep3GoBack(); pushFormState(); return; }
+      }
     });
   })();
   </script>
