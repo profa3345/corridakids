@@ -590,6 +590,74 @@
     .play-overlay:hover .play-btn { transform:scale(1.14); }
     .play-label { color:#fff; font-weight:700; font-size:14px; text-shadow:0 2px 8px rgba(0,0,0,.6); background:rgba(0,0,0,.45); padding:6px 15px; border-radius:999px; }
 
+    /* ── Modal de deep-link de vídeo ── */
+    #videoDeepModal {
+      position: fixed; inset: 0; z-index: 9990;
+      background: rgba(2,8,24,.92);
+      backdrop-filter: blur(16px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity .35s ease;
+    }
+    #videoDeepModal.open { opacity: 1; pointer-events: all; }
+    .vdm-inner {
+      position: relative; width: min(680px, 94vw);
+      border-radius: 24px; overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0,0,0,.70);
+      background: #000;
+      transform: scale(.92);
+      transition: transform .38s cubic-bezier(.34,1.56,.64,1);
+    }
+    #videoDeepModal.open .vdm-inner { transform: scale(1); }
+    .vdm-thumb {
+      position: relative; width: 100%; padding-top: 56.25%;
+      background: #000; cursor: pointer;
+    }
+    .vdm-thumb img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; opacity: .75;
+      transition: opacity .22s;
+    }
+    .vdm-thumb:hover img { opacity: .55; }
+    .vdm-overlay {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 16px;
+    }
+    .vdm-play-ring {
+      width: 90px; height: 90px; border-radius: 50%;
+      background: #ff0000;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 38px; color: #fff; padding-left: 6px;
+      box-shadow: 0 0 0 10px rgba(255,0,0,.25), 0 12px 40px rgba(0,0,0,.55);
+      animation: vdmPulse 1.8s ease-in-out infinite;
+      transition: transform .22s cubic-bezier(.34,1.56,.64,1), background .2s;
+    }
+    .vdm-thumb:hover .vdm-play-ring { transform: scale(1.12); background: #cc0000; }
+    @keyframes vdmPulse {
+      0%,100% { box-shadow: 0 0 0 10px rgba(255,0,0,.25), 0 12px 40px rgba(0,0,0,.55); }
+      50%      { box-shadow: 0 0 0 20px rgba(255,0,0,.08), 0 12px 40px rgba(0,0,0,.55); }
+    }
+    .vdm-label {
+      color: #fff; font-weight: 800; font-size: 15px;
+      background: rgba(0,0,0,.55); padding: 8px 22px; border-radius: 999px;
+      letter-spacing: .3px;
+    }
+    .vdm-title {
+      padding: 14px 20px 16px;
+      background: #111; color: #fff;
+      font-family: var(--font-display); font-size: 16px; font-weight: 700;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .vdm-close {
+      width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+      background: rgba(255,255,255,.12); border: none; cursor: pointer;
+      color: #fff; font-size: 18px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s, transform .2s;
+    }
+    .vdm-close:hover { background: rgba(255,255,255,.22); transform: scale(1.12) rotate(90deg); }
+
     /* Copy toast */
     .copy-toast {
       position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(24px);
@@ -3042,8 +3110,8 @@
   });
 
   function compartilharVideo(vidId, titulo) {
-    const base = window.location.href.split('#')[0].split('?')[0];
-    const link = base + '#' + vidId;
+    const base = window.location.href.split('#')[0].split('?')[0].replace(/\/$/, '');
+    const link = base + '/' + vidId;
     const texto = titulo + ' 🎬 Assista direto no site: ' + link;
     if (navigator.share) {
       navigator.share({ title: titulo, text: texto, url: link }).catch(function() {
@@ -3059,8 +3127,8 @@
   }
 
   function compartilharVideoWhatsApp(vidId, titulo) {
-    const base = window.location.href.split('#')[0].split('?')[0];
-    const link = base + '#' + vidId;
+    const base = window.location.href.split('#')[0].split('?')[0].replace(/\/$/, '');
+    const link = base + '/' + vidId;
     const texto = titulo + ' 🎬 Assista direto no site: ' + link;
     const waUrl = 'https://wa.me/?text=' + encodeURIComponent(texto);
     try { window.open(waUrl, '_blank', 'noopener,noreferrer'); } catch(e) { window.location.href = waUrl; }
@@ -4748,6 +4816,23 @@ Guarde este número para apresentar no dia do evento!`;
   });
   </script>
 
+  <!-- MODAL DEEP-LINK VÍDEO -->
+  <div id="videoDeepModal" role="dialog" aria-modal="true" aria-label="Assistir vídeo">
+    <div class="vdm-inner">
+      <div class="vdm-thumb" id="vdmThumb" onclick="vdmPlay()">
+        <img id="vdmThumbImg" src="" alt="Thumbnail do vídeo" />
+        <div class="vdm-overlay">
+          <div class="vdm-play-ring">▶</div>
+          <div class="vdm-label">Toque para assistir</div>
+        </div>
+      </div>
+      <div class="vdm-title">
+        <span id="vdmTitle">Vídeo do Evento</span>
+        <button class="vdm-close" onclick="vdmFechar()" aria-label="Fechar">✕</button>
+      </div>
+    </div>
+  </div>
+
   <!-- LIGHTBOX -->
   <div class="lightbox-overlay" id="lightboxOverlay" role="dialog" aria-modal="true" aria-label="Imagem da camisa do evento" onclick="closeLightbox(event)">
     <div class="lightbox-inner" id="lightboxInner">
@@ -4762,64 +4847,96 @@ Guarde este número para apresentar no dia do evento!`;
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
   <script>
-  /* ── Deep link de vídeo — DEVE ser o último script do body ── */
+  /* ── Deep link de vídeo — modal com um toque para assistir ── */
   (function() {
-    function executarDeepLinkVideo() {
-      var hash = window.location.hash.replace('#', '');
-      if (!hash || !hash.startsWith('vid')) return;
 
-      // Garantir que a seção home está ativa (sem chamar showSection que faz scrollTo(top))
-      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+    var _vdmWrapId  = null;
+    var _vdmVideoId = null;
+
+    var VIDEOS = {
+      'vid1': { wrapId:'vid1', videoId:'Z0gcIo0Bfo0', title:'🏃 Corrida Kids Ilhas — Vem aí!' },
+      'vid2': { wrapId:'vid2', videoId:'Umr56L32nkw', title:'🎭 Show de Talentos — Mostre seu Talento!' }
+    };
+
+    function abrirModalVideo(hash) {
+      var info = VIDEOS[hash];
+      if (!info) return;
+
+      _vdmWrapId  = info.wrapId;
+      _vdmVideoId = info.videoId;
+
+      document.getElementById('vdmThumbImg').src =
+        'https://img.youtube.com/vi/' + info.videoId + '/hqdefault.jpg';
+      document.getElementById('vdmTitle').textContent = info.title;
+
+      var modal = document.getElementById('videoDeepModal');
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    window.vdmPlay = function() {
+      if (!_vdmWrapId || !_vdmVideoId) return;
+      // Fechar modal
+      var modal = document.getElementById('videoDeepModal');
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+
+      // Garantir home ativa sem chamar showSection (evita scrollTo(top))
+      document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
       var home = document.getElementById('home');
       if (home) home.classList.add('active');
 
-      var wrap = document.getElementById(hash);
-      if (!wrap) return;
+      // Scroll até o card e depois carrega o embed
+      var wrap = document.getElementById(_vdmWrapId);
+      if (wrap) {
+        var card = wrap.closest('.video-card');
+        if (card) card.scrollIntoView({ behavior:'smooth', block:'center' });
+      }
+      setTimeout(function() {
+        if (typeof loadYtEmbed === 'function') loadYtEmbed(_vdmWrapId, _vdmVideoId);
+      }, 300);
+    };
 
-      var thumb = wrap.querySelector('.yt-thumb');
-      if (!thumb) return;
-
-      var onclick = thumb.getAttribute('onclick') || '';
-      var match = onclick.match(/loadYtEmbed\('([^']+)','([^']+)'\)/);
-      if (!match) return;
-
-      var videoId  = match[2];
-      var wrapId   = match[1];
-
-      // Limpar hash da URL imediatamente para não re-disparar no hashchange
+    window.vdmFechar = function() {
+      var modal = document.getElementById('videoDeepModal');
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+      // Limpa hash sem recarregar
       if (window.history && window.history.replaceState) {
         window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
       }
+    };
 
-      // Scroll suave até o card de vídeo
-      var card = wrap.closest('.video-card');
-      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Fechar com ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') window.vdmFechar();
+    });
 
-      // Carregar o embed após o scroll ter tempo de acontecer
-      setTimeout(function() {
-        if (typeof loadYtEmbed === 'function') {
-          loadYtEmbed(wrapId, videoId);
-        }
-      }, 400);
+    // Fechar clicando fora do card
+    document.getElementById('videoDeepModal').addEventListener('click', function(e) {
+      if (e.target === this) window.vdmFechar();
+    });
+
+    function checarHash() {
+      var hash = window.location.hash.replace('#', '');
+      if (!hash || !VIDEOS[hash]) return;
+      // Limpar hash imediatamente para evitar reprocessamento
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
+      }
+      abrirModalVideo(hash);
     }
 
-    // Aguarda todos os DOMContentLoaded e scripts inline rodarem antes de agir
-    // Usa window 'load' como fallback máximo, mas tenta logo após DOMContentLoaded
+    // Dispara após todos os DOMContentLoaded já terem rodado
     if (document.readyState === 'complete') {
-      // Página já totalmente carregada (ex: navegação com cache)
-      executarDeepLinkVideo();
+      checarHash();
     } else {
-      // Aguarda o DOMContentLoaded mas deixa os outros listeners rodarem primeiro
-      // usando setTimeout(0) para ir para o fim da fila de microtasks
       document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(executarDeepLinkVideo, 0);
+        setTimeout(checarHash, 0);
       }, { once: true });
     }
 
-    // Suporte a hashchange (clicar num link #vid1 dentro da própria página)
-    window.addEventListener('hashchange', function() {
-      executarDeepLinkVideo();
-    });
+    window.addEventListener('hashchange', checarHash);
   })();
   </script>
 

@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/vid1", "destination": "/vid1.html" },
+    { "source": "/vid2", "destination": "/vid2.html" }
+  ]
+}
