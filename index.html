@@ -2984,20 +2984,41 @@
   // ================================================================
   // HELPERS UI
   // ================================================================
-  function showSection(id) {
+  var _HOME_SECTION = 'home';
+
+  // Helpers seguros para History API — evitam SecurityError em ambientes
+  // restritivos como iframes (about:srcdoc) onde a URL não pode ser manipulada.
+  function _historyPush(state) {
+    try { if (window.history && window.history.pushState) window.history.pushState(state, document.title); } catch(e) {}
+  }
+  function _historyReplace(state) {
+    try { if (window.history && window.history.replaceState) window.history.replaceState(state, document.title); } catch(e) {}
+  }
+
+  function showSection(id, _fromPopstate) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     const el = document.getElementById(id);
     if (el) el.classList.add('active');
     if (document.activeElement) document.activeElement.blur();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Limpar hash da URL ao voltar para home
-    if (id === 'home' && window.location.hash && window.history?.replaceState) {
-      window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
+    // Gerenciar histórico: ao navegar para uma seção diferente de home,
+    // empurra um estado para que o botão voltar retorne à seção anterior (ou home).
+    if (!_fromPopstate) {
+      if (id === _HOME_SECTION) {
+        _historyReplace({ section: _HOME_SECTION });
+      } else {
+        _historyPush({ section: id });
+      }
+    }
+
+    // Limpar hash da URL ao voltar para home (só se não for about:srcdoc)
+    if (id === _HOME_SECTION && window.location.hash) {
+      _historyReplace(null);
     }
 
     // Verificar status de inscrições ao voltar para home
-    if (id === 'home') { verificarStatusInscricoes(); carregarContadorPublico(); const sh = document.querySelector('.scroll-hint'); if (sh) sh.classList.remove('hidden'); }
+    if (id === _HOME_SECTION) { verificarStatusInscricoes(); carregarContadorPublico(); const sh = document.querySelector('.scroll-hint'); if (sh) sh.classList.remove('hidden'); }
 
     // Pausar emojis flutuantes em seções de formulário para não distrair
     const formSections = ['corrida', 'show'];
@@ -3414,7 +3435,7 @@
         showToast('❌ Você precisa concordar com o termo para continuar.', 'erro'); return;
       }
       if (navigator.vibrate) navigator.vibrate(40);
-      if (window.history?.pushState) history.pushState({formStep:true}, document.title);
+      _historyPush({ formStep: true });
       cGoStep(2);
     } else if (from === 2) {
       const nome = document.getElementById('nome').value.trim();
@@ -3434,7 +3455,7 @@
         showToast('❌ Digite o bairro/comunidade.', 'erro'); return;
       }
       if (navigator.vibrate) navigator.vibrate(40);
-      if (window.history?.pushState) history.pushState({formStep:true}, document.title);
+      _historyPush({ formStep: true });
       cGoStep(3);
     }
   }
@@ -4771,14 +4792,15 @@ Guarde este número para apresentar no dia do evento!`;
     window.addEventListener('scroll', hideHint, { passive: true });
   })();
 
-  /* ── Android back button — navega entre etapas ── */
+  /* ── Android back button — navega entre etapas e seções ── */
   (function() {
-    function pushFormState() {
-      if (window.history && window.history.pushState) {
-        window.history.pushState({ formStep: true }, document.title);
-      }
-    }
-    window.addEventListener('popstate', function() {
+    // Inicializa o estado da home no histórico para que o primeiro "voltar"
+    // retorne a home em vez de sair do site (quando vindo de outra seção).
+    _historyReplace({ section: 'home' });
+
+    function pushFormState() { _historyPush({ formStep: true }); }
+    window.addEventListener('popstate', function(e) {
+      // 1. Verifica se está em um step intermediário de formulário (prioridade)
       const cActive = document.querySelector('#corridaForm .fstep.active');
       const sActive = document.querySelector('#showForm .fstep.active');
       if (cActive) {
@@ -4788,6 +4810,28 @@ Guarde este número para apresentar no dia do evento!`;
       if (sActive) {
         if (sActive.id === 'sFStep2') { sGoStep(1, true); pushFormState(); return; }
         if (sActive.id === 'sFStep3') { sStep3GoBack(); pushFormState(); return; }
+      }
+
+      // 2. Se o modal de vídeo estava aberto, fecha ele
+      var videoModal = document.getElementById('videoDeepModal');
+      if (videoModal && videoModal.classList.contains('open')) {
+        window.vdmFechar(true);
+        return;
+      }
+
+      // 3. Se o estado indica uma seção anterior, navega para ela
+      if (e.state && e.state.section) {
+        showSection(e.state.section, true);
+        return;
+      }
+
+      // 4. Fallback: se alguma seção não-home estiver ativa, volta para home
+      const activeSection = document.querySelector('.section.active');
+      if (activeSection && activeSection.id !== 'home') {
+        showSection('home', true);
+        // Empurra de volta para não perder o estado home no histórico
+        _historyPush({ section: 'home' });
+        return;
       }
     });
   })();
@@ -4804,8 +4848,9 @@ Guarde este número para apresentar no dia do evento!`;
     document.body.style.overflow = 'hidden';
   }
   function closeLightbox(e) {
-    // Só fecha se clicar direto no overlay (fundo escuro), não na imagem ou botão interno
-    if (e && e.target !== document.getElementById('lightboxOverlay')) return;
+    // Se chamado por evento de click: só fecha se o clique foi no fundo escuro (overlay),
+    // não na imagem ou no botão interno. Se chamado sem argumento (botão ✕ ou ESC): fecha sempre.
+    if (e && e.target && e.target !== document.getElementById('lightboxOverlay')) return;
     const overlay = document.getElementById('lightboxOverlay');
     if (!overlay) return;
     overlay.classList.remove('open');
@@ -4872,6 +4917,9 @@ Guarde este número para apresentar no dia do evento!`;
       var modal = document.getElementById('videoDeepModal');
       modal.classList.add('open');
       document.body.style.overflow = 'hidden';
+
+      // Empurra estado para que o back button feche o modal em vez de sair da página
+      _historyPush({ videoModal: hash });
     }
 
     window.vdmPlay = function() {
@@ -4897,14 +4945,14 @@ Guarde este número para apresentar no dia do evento!`;
       }, 300);
     };
 
-    window.vdmFechar = function() {
+    window.vdmFechar = function(_fromPopstate) {
       var modal = document.getElementById('videoDeepModal');
+      if (!modal.classList.contains('open')) return;
       modal.classList.remove('open');
       document.body.style.overflow = '';
-      // Limpa hash sem recarregar
-      if (window.history && window.history.replaceState) {
-        window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
-      }
+      // Limpa hash sem recarregar apenas se não vier de um popstate
+      // (se vier de popstate, o navegador já tratou o histórico)
+      if (!_fromPopstate) _historyReplace(null);
     };
 
     // Fechar com ESC
@@ -4921,9 +4969,7 @@ Guarde este número para apresentar no dia do evento!`;
       var hash = window.location.hash.replace('#', '');
       if (!hash || !VIDEOS[hash]) return;
       // Limpar hash imediatamente para evitar reprocessamento
-      if (window.history && window.history.replaceState) {
-        window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
-      }
+      _historyReplace(null);
       abrirModalVideo(hash);
     }
 
