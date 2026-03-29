@@ -4672,66 +4672,7 @@ Guarde este número para apresentar no dia do evento!`;
   })();
   </script>
 
-  <script>
-  /* ── Deep link de vídeo — abre vídeo pelo hash da URL ── */
-  (function() {
-    function abrirVideoPorHash() {
-      const hash = window.location.hash.replace('#', '');
-      if (!hash || !hash.startsWith('vid')) return;
 
-      function disparar() {
-        // Garantir que a seção home está visível sem resetar scroll
-        const home = document.getElementById('home');
-        if (home && !home.classList.contains('active')) {
-          document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
-          home.classList.add('active');
-        }
-
-        const wrap = document.getElementById(hash);
-        if (!wrap) return;
-
-        const thumb = wrap.querySelector('.yt-thumb');
-        if (!thumb) return;
-
-        const onclick = thumb.getAttribute('onclick') || '';
-        const match = onclick.match(/loadYtEmbed\('([^']+)','([^']+)'\)/);
-        if (!match) return;
-
-        // Scroll para o card ANTES de carregar o embed (evita conflito com scrollTo do topo)
-        const card = wrap.closest('.video-card');
-        if (card) {
-          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-
-        // Pequeno delay para o scroll terminar antes de inserir o iframe
-        setTimeout(function() {
-          loadYtEmbed(match[1], match[2]);
-        }, 350);
-
-        // Limpar hash da URL sem recarregar a página
-        if (window.history && window.history.replaceState) {
-          window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
-        }
-      }
-
-      // Se o DOM já carregou, disparar direto; senão aguardar
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', disparar, { once: true });
-      } else {
-        // Aguarda um tick para garantir que showSection inicial já rodou
-        setTimeout(disparar, 80);
-      }
-    }
-
-    // Ao carregar a página com hash na URL
-    abrirVideoPorHash();
-
-    // Ao navegar via hashchange (links internos)
-    window.addEventListener('hashchange', function() {
-      setTimeout(abrirVideoPorHash, 80);
-    });
-  })();
-  </script>
 
   <script>
 
@@ -4819,6 +4760,68 @@ Guarde este número para apresentar no dia do evento!`;
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+  <script>
+  /* ── Deep link de vídeo — DEVE ser o último script do body ── */
+  (function() {
+    function executarDeepLinkVideo() {
+      var hash = window.location.hash.replace('#', '');
+      if (!hash || !hash.startsWith('vid')) return;
+
+      // Garantir que a seção home está ativa (sem chamar showSection que faz scrollTo(top))
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      var home = document.getElementById('home');
+      if (home) home.classList.add('active');
+
+      var wrap = document.getElementById(hash);
+      if (!wrap) return;
+
+      var thumb = wrap.querySelector('.yt-thumb');
+      if (!thumb) return;
+
+      var onclick = thumb.getAttribute('onclick') || '';
+      var match = onclick.match(/loadYtEmbed\('([^']+)','([^']+)'\)/);
+      if (!match) return;
+
+      var videoId  = match[2];
+      var wrapId   = match[1];
+
+      // Limpar hash da URL imediatamente para não re-disparar no hashchange
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
+      }
+
+      // Scroll suave até o card de vídeo
+      var card = wrap.closest('.video-card');
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      // Carregar o embed após o scroll ter tempo de acontecer
+      setTimeout(function() {
+        if (typeof loadYtEmbed === 'function') {
+          loadYtEmbed(wrapId, videoId);
+        }
+      }, 400);
+    }
+
+    // Aguarda todos os DOMContentLoaded e scripts inline rodarem antes de agir
+    // Usa window 'load' como fallback máximo, mas tenta logo após DOMContentLoaded
+    if (document.readyState === 'complete') {
+      // Página já totalmente carregada (ex: navegação com cache)
+      executarDeepLinkVideo();
+    } else {
+      // Aguarda o DOMContentLoaded mas deixa os outros listeners rodarem primeiro
+      // usando setTimeout(0) para ir para o fim da fila de microtasks
+      document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(executarDeepLinkVideo, 0);
+      }, { once: true });
+    }
+
+    // Suporte a hashchange (clicar num link #vid1 dentro da própria página)
+    window.addEventListener('hashchange', function() {
+      executarDeepLinkVideo();
+    });
+  })();
+  </script>
 
 </body>
 </html>
