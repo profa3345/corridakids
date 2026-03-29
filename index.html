@@ -3337,14 +3337,26 @@
     const cpfVal = window._showAdulto === true ? '' : document.getElementById('showRespCpf').value;
     if (window._showAdulto !== true && !validarCPF(cpfVal)) throw new Error('CPF do responsável inválido. Verifique os números digitados.');
 
-    // Verificar inscrição duplicada (mesmo CPF do responsável + nome do participante)
-    const nomeValShow  = document.getElementById('showNome').value.trim().toLowerCase();
+    // Verificar inscrição duplicada:
+    // — Menor: mesmo CPF do responsável + nome do participante
+    // — Adulto: mesmo nome + nascimento (não tem CPF)
+    const nomeValShow   = document.getElementById('showNome').value.trim().toLowerCase();
+    const nascValShow   = document.getElementById('showNascimento').value;
     const cpfDigitsShow = onlyDigits(cpfVal);
-    const dupSnapShow = await db.collection(COL_SHOW)
-      .where('responsavel.cpf', '==', cpfDigitsShow)
-      .where('nomeLower', '==', nomeValShow)
-      .limit(1).get();
-    if (!dupSnapShow.empty) throw new Error('Este participante já está inscrito no Show de Talentos com este CPF de responsável.');
+    let dupSnapShow;
+    if (window._showAdulto === true) {
+      dupSnapShow = await db.collection(COL_SHOW)
+        .where('nomeLower',          '==', nomeValShow)
+        .where('nascimento',         '==', nascValShow)
+        .where('responsavel.tipo',   '==', 'adulto')
+        .limit(1).get();
+    } else {
+      dupSnapShow = await db.collection(COL_SHOW)
+        .where('responsavel.cpf', '==', cpfDigitsShow)
+        .where('nomeLower',       '==', nomeValShow)
+        .limit(1).get();
+    }
+    if (!dupSnapShow.empty) throw new Error('Este participante já está inscrito no Show de Talentos.');
 
     const nascimento = document.getElementById('showNascimento').value;
     const dados = {
