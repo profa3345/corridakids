@@ -5335,14 +5335,13 @@ Guarde este número para apresentar no dia do evento!`;
   })();
   </script>
 
-
+  <script>
   /* ── Botão CTA Fixo — aparece após scroll, some nos formulários ── */
   (function() {
     var ctaFixo = document.getElementById('ctaFixo');
     if (!ctaFixo) return;
 
     var ctaGrid = document.getElementById('ctaGrid');
-    var homeSection = document.getElementById('home');
 
     function updateCtaFixo() {
       // Esconder se inscrições encerradas
@@ -5359,7 +5358,6 @@ Guarde este número para apresentar no dia do evento!`;
       // Mostrar quando usuário passou dos botões de ação (CTA grid)
       if (ctaGrid) {
         var rect = ctaGrid.getBoundingClientRect();
-        // CTA grid saiu da tela (usuário rolou pra baixo)
         if (rect.bottom < 0) {
           ctaFixo.classList.add('visivel');
         } else {
@@ -5382,6 +5380,7 @@ Guarde este número para apresentar no dia do evento!`;
     // Checar no load
     setTimeout(updateCtaFixo, 300);
   })();
+  </script>
 
 </body>
 </html>
