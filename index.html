@@ -599,7 +599,7 @@
       opacity: 0; pointer-events: none;
       transition: opacity .35s ease;
     }
-    #videoDeepModal.open { opacity: 1; pointer-events: all; }
+    #videoDeepModal.open { opacity: 1; pointer-events: auto; }
     .vdm-inner {
       position: relative; width: min(680px, 94vw);
       border-radius: 24px; overflow: hidden;
@@ -1309,7 +1309,7 @@
       transition: opacity .3s ease;
     }
     .lightbox-overlay.open {
-      opacity: 1; pointer-events: all;
+      opacity: 1; pointer-events: auto;
     }
     .lightbox-inner {
       position: relative; max-width: 90vw; max-height: 90vh;
@@ -2000,10 +2000,10 @@
                   <h3>🏃 Corrida Kids Ilhas — Vem aí!</h3>
                   <p>Venha viver a emoção da nossa corrida infantil! Crianças cheias de energia e muita alegria nas Ilhas.</p>
                   <div class="share-actions">
-                    <button class="share-btn" onclick="compartilharVideo('vid1','🏃 Corrida Kids Ilhas — Vem aí!')">
+                    <button type="button" class="share-btn" onclick="compartilharVideo('vid1','🏃 Corrida Kids Ilhas — Vem aí!')">
                       📤 Compartilhar link
                     </button>
-                    <button class="share-btn" onclick="compartilharVideoWhatsApp('vid1','🏃 Corrida Kids Ilhas — Vem aí!')">
+                    <button type="button" class="share-btn" onclick="compartilharVideoWhatsApp('vid1','🏃 Corrida Kids Ilhas — Vem aí!')">
                       💬 Enviar no WhatsApp
                     </button>
                   </div>
@@ -2029,10 +2029,10 @@
                   <h3>🎭 Show de Talentos — Mostre seu Talento!</h3>
                   <p>Música, dança, teatro e muito mais! Mostre seu talento no palco das Ilhas — inscreva-se no Show de Talentos!</p>
                   <div class="share-actions">
-                    <button class="share-btn" onclick="compartilharVideo('vid2','🎭 Show de Talentos — Mostre seu Talento!')">
+                    <button type="button" class="share-btn" onclick="compartilharVideo('vid2','🎭 Show de Talentos — Mostre seu Talento!')">
                       📤 Compartilhar link
                     </button>
-                    <button class="share-btn" onclick="compartilharVideoWhatsApp('vid2','🎭 Show de Talentos — Mostre seu Talento!')">
+                    <button type="button" class="share-btn" onclick="compartilharVideoWhatsApp('vid2','🎭 Show de Talentos — Mostre seu Talento!')">
                       💬 Enviar no WhatsApp
                     </button>
                   </div>
@@ -2044,7 +2044,7 @@
 
           <!-- PROVA SOCIAL & DEPOIMENTOS -->
           <div class="social-proof-section">
-            <h2 class="section-title">💬 Quem já participou, aprovou!</h2>
+            <h2 class="section-title">🏅 Por que participar?</h2>
             <div class="sp-headline-card">
 
               <!-- Header -->
@@ -2205,7 +2205,7 @@
               <!-- Honeypot anti-bot: visualmente oculto, humanos não preenchem -->
               <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;overflow:hidden;" aria-hidden="true" tabindex="-1">
                 <label>Não preencha este campo
-                  <input type="text" id="hp_corrida" name="website" tabindex="-1" autocomplete="off" />
+                  <input type="text" id="hp_corrida" name="phone_alt" tabindex="-1" autocomplete="off" />
                 </label>
               </div>
 
@@ -2374,7 +2374,7 @@
               <!-- Honeypot anti-bot -->
               <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;overflow:hidden;" aria-hidden="true" tabindex="-1">
                 <label>Não preencha este campo
-                  <input type="text" id="hp_show" name="website" tabindex="-1" autocomplete="off" />
+                  <input type="text" id="hp_show" name="phone_alt" tabindex="-1" autocomplete="off" />
                 </label>
               </div>
 
@@ -2542,11 +2542,11 @@
                 <div class="confirm-tipo">Corrida Kids 🏃</div>
               </div>
               <div class="confirm-actions">
-                <button class="btn btn-whatsapp" onclick="compartilharConfirma('corrida')" style="flex:2;min-width:200px;">💬 Compartilhar no WhatsApp</button>
-                <button class="btn btn-ghost" onclick="copiarNumero('corrida')" style="flex:1;min-width:80px;">📋 Copiar</button>
-                <button class="btn btn-ghost" onclick="showSection('home')" style="flex:1;min-width:80px;">🏠 Início</button>
-                <button class="btn btn-print btn" onclick="window.print()" style="flex:1;min-width:80px;">🖨️ Imprimir</button>
-                <button class="btn btn-primary" onclick="showSection('corrida')" style="flex:2;min-width:200px;">➕ Inscrever outra criança</button>
+                <button type="button" class="btn btn-whatsapp" onclick="compartilharConfirma('corrida')" style="flex:2;min-width:200px;">💬 Compartilhar no WhatsApp</button>
+                <button type="button" class="btn btn-ghost" onclick="copiarNumero('corrida')" style="flex:1;min-width:80px;">📋 Copiar</button>
+                <button type="button" class="btn btn-ghost" onclick="showSection('home')" style="flex:1;min-width:80px;">🏠 Início</button>
+                <button type="button" class="btn btn-print btn" onclick="window.print()" style="flex:1;min-width:80px;">🖨️ Imprimir</button>
+                <button type="button" class="btn btn-primary" onclick="showSection('corrida')" style="flex:2;min-width:200px;">➕ Inscrever outra criança</button>
               </div>
               <div class="confirm-tip">⭐ <strong>Lembre-se:</strong> apresente este número no dia do evento. 📍 Apareça às 8h00 no local de concentração. Recomendamos tirar um print desta tela ou anotar o número.</div>
             </div>
@@ -2567,11 +2567,11 @@
                 <div class="confirm-tipo">Show de Talentos 🎭</div>
               </div>
               <div class="confirm-actions">
-                <button class="btn btn-whatsapp" onclick="compartilharConfirma('show')" style="flex:2;min-width:200px;">💬 Compartilhar no WhatsApp</button>
-                <button class="btn btn-ghost" onclick="copiarNumero('show')" style="flex:1;min-width:80px;">📋 Copiar</button>
-                <button class="btn btn-ghost" onclick="showSection('home')" style="flex:1;min-width:80px;">🏠 Início</button>
-                <button class="btn btn-print btn" onclick="window.print()" style="flex:1;min-width:80px;">🖨️ Imprimir</button>
-                <button class="btn btn-primary" onclick="showSection('show')" style="flex:2;min-width:200px;">➕ Inscrever outro participante</button>
+                <button type="button" class="btn btn-whatsapp" onclick="compartilharConfirma('show')" style="flex:2;min-width:200px;">💬 Compartilhar no WhatsApp</button>
+                <button type="button" class="btn btn-ghost" onclick="copiarNumero('show')" style="flex:1;min-width:80px;">📋 Copiar</button>
+                <button type="button" class="btn btn-ghost" onclick="showSection('home')" style="flex:1;min-width:80px;">🏠 Início</button>
+                <button type="button" class="btn btn-print btn" onclick="window.print()" style="flex:1;min-width:80px;">🖨️ Imprimir</button>
+                <button type="button" class="btn btn-primary" onclick="showSection('show')" style="flex:2;min-width:200px;">➕ Inscrever outro participante</button>
               </div>
               <div class="confirm-tip">⭐ <strong>Lembre-se:</strong> apresente este número no dia do evento. 📍 O Show de Talentos começa às 11h00 na Rua Guido Prati. Recomendamos tirar um print desta tela ou anotar o número.</div>
             </div>
@@ -3117,7 +3117,7 @@
       'display:flex;align-items:center;justify-content:center;gap:10px;';
     b.innerHTML = '<span>⚠️ <strong>Banco de dados indisponível.</strong> ' +
       'Inscrições e painel admin precisam de internet.</span>' +
-      '<button onclick="this.parentElement.remove()" style="background:rgba(255,255,255,.15);' +
+      '<button type="button" onclick="this.parentElement.remove()" style="background:rgba(255,255,255,.15);' +
       'border:none;color:#fff;padding:5px 12px;border-radius:8px;cursor:pointer;">Fechar</button>';
     document.body.appendChild(b);
   }
@@ -4279,8 +4279,8 @@ Guarde este número para apresentar no dia do evento!`;
       <h3 style="font-size:16px;font-weight:800;color:#07172e;margin:0 0 10px;">${encerrado ? 'Reabrir inscrições?' : 'Encerrar inscrições?'}</h3>
       <p style="font-size:13px;color:#3d5068;line-height:1.6;margin:0 0 22px;">${msg}</p>
       <div style="display:flex;gap:10px;justify-content:center;">
-        <button onclick="document.getElementById('modalConfirmEncerrar').remove()" style="flex:1;padding:11px 0;border-radius:12px;border:1.5px solid rgba(7,23,46,.15);background:#f5f5f5;font-weight:700;font-size:13px;cursor:pointer;">Cancelar</button>
-        <button id="btnConfirmOk" style="flex:1;padding:11px 0;border-radius:12px;border:0;background:${encerrado ? '#2e7d32' : '#c62828'};color:#fff;font-weight:800;font-size:13px;cursor:pointer;">${labelOk}</button>
+        <button type="button" onclick="document.getElementById('modalConfirmEncerrar').remove()" style="flex:1;padding:11px 0;border-radius:12px;border:1.5px solid rgba(7,23,46,.15);background:#f5f5f5;font-weight:700;font-size:13px;cursor:pointer;">Cancelar</button>
+        <button type="button" id="btnConfirmOk" style="flex:1;padding:11px 0;border-radius:12px;border:0;background:${encerrado ? '#2e7d32' : '#c62828'};color:#fff;font-weight:800;font-size:13px;cursor:pointer;">${labelOk}</button>
       </div>
     </div>`;
     document.body.appendChild(modal);
@@ -4716,7 +4716,7 @@ Guarde este número para apresentar no dia do evento!`;
               </label>
               <label>
                 Senha
-                <input type="password" id="loginSenha" placeholder="Digite sua senha" required />
+                <input type="password" id="loginSenha" placeholder="Digite sua senha" required autocomplete="current-password" />
               </label>
             </div>
             <div class="actions" style="margin-top:18px;">
@@ -5175,7 +5175,7 @@ Guarde este número para apresentar no dia do evento!`;
       </div>
       <div class="vdm-title">
         <span id="vdmTitle">Vídeo do Evento</span>
-        <button class="vdm-close" onclick="vdmFechar()" aria-label="Fechar">✕</button>
+        <button type="button" class="vdm-close" onclick="vdmFechar()" aria-label="Fechar">✕</button>
       </div>
     </div>
   </div>
@@ -5183,7 +5183,7 @@ Guarde este número para apresentar no dia do evento!`;
   <!-- LIGHTBOX -->
   <div class="lightbox-overlay" id="lightboxOverlay" role="dialog" aria-modal="true" aria-label="Imagem da camisa do evento" onclick="closeLightbox(event)">
     <div class="lightbox-inner" id="lightboxInner">
-      <button class="lightbox-close" onclick="closeLightbox()" aria-label="Fechar">✕</button>
+      <button type="button" class="lightbox-close" onclick="closeLightbox()" aria-label="Fechar">✕</button>
       <img id="lightboxImg" src="" alt="" />
     </div>
   </div>
