@@ -2804,7 +2804,7 @@
             <div class="toolbar">
               <div class="actions" style="margin:0;">
                 <button type="button" class="btn btn-primary" onclick="carregarRelatorios()">🔄 Atualizar</button>
-                <button type="button" class="btn btn-ghost" onclick="exportarXLSX()">📥 Exportar Excel (.xlsx)</button>
+                <button type="button" class="btn btn-ghost" onclick="exportarXLSX()">📥 Exportar Excel (.csv)</button>
                 <button type="button" class="btn btn-ghost" onclick="exportarCSV()">📄 Exportar CSV</button>
               </div>
 
@@ -2843,6 +2843,15 @@
                 </div>
                 <div class="v" id="countTotal">—</div>
                 <div class="sub">Total geral (Corrida + Show)</div>
+              </div>
+
+              <div class="stat s1" style="grid-column: 1 / -1;">
+                <div class="stat-top">
+                  <div class="k">Visitas ao site</div>
+                  <div class="stat-ic" aria-hidden="true">👁️</div>
+                </div>
+                <div class="v" id="adminCountVisitas">—</div>
+                <div class="sub">Acessos únicos por sessão registrados no site</div>
               </div>
             </div>
 
@@ -3102,7 +3111,7 @@
   } else {
     // já carregou — inicia observer quando DOM estiver pronto
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', function() { _startAuthObserver(); carregarContadorPublico(); });
+      document.addEventListener('DOMContentLoaded', function() { _startAuthObserver(); carregarContadorPublico(); verificarStatusInscricoes(); });
     } else {
       _startAuthObserver();
       carregarContadorPublico();
@@ -3500,12 +3509,13 @@
   }
 
   // #2 — Calcular categoria a partir da data (usando idade real na data do evento)
+  const DATA_EVENTO_CORRIDA = new Date('2026-06-01T00:00:00'); // ← atualizar quando data for confirmada
+
   function calcIdadeNoEvento(nascimento) {
-    // Critério: idade completa na data do evento — atualizar DATA_EVENTO quando data for confirmada
     if (!nascimento) return -1;
-    var DATA_EVENTO = new Date('2026-06-01T00:00:00');
     var nasc = new Date(nascimento + 'T00:00:00');
     if (isNaN(nasc.getTime())) return -1;
+    var DATA_EVENTO = DATA_EVENTO_CORRIDA;
     var idade = DATA_EVENTO.getFullYear() - nasc.getFullYear();
     var m = DATA_EVENTO.getMonth() - nasc.getMonth();
     if (m < 0 || (m === 0 && DATA_EVENTO.getDate() < nasc.getDate())) {
@@ -3728,6 +3738,10 @@
       if (!nome || !nasc || !doc || !bairro || !end) {
         showToast('❌ Preencha todos os campos obrigatórios.', 'erro');
         scrollToFirstEmpty(['nome','nascimento','documento','bairroSel','endereco']); return;
+      }
+      if (end.length < 5) {
+        showToast('❌ Digite o endereço completo (rua, número).', 'erro');
+        document.getElementById('endereco')?.focus(); return;
       }
       const idadeEvento = calcIdadeNoEvento(nasc);
       if (idadeEvento < 6 || idadeEvento > 15) {
@@ -4140,6 +4154,39 @@ Guarde este número para apresentar no dia do evento!`;
     } catch(e) { /* silencioso — não bloqueia a inscrição */ }
   }
 
+  // ================================================================
+  // CONTADOR DE VISITAS
+  // ATENÇÃO — Firestore Security Rules: o doc 'contadores/publico'
+  // precisa permitir update para visitantes não autenticados:
+  //   match /contadores/{doc} {
+  //     allow read: if true;
+  //     allow update: if request.resource.data.diff(resource.data).affectedKeys()
+  //                     .hasOnly(['visitas']) &&
+  //                   request.resource.data.visitas == resource.data.visitas + 1;
+  //     allow create: if request.resource.data.keys().hasOnly(['visitas','corrida','show']);
+  //   }
+  // ================================================================
+  (function() {
+    // Incrementa apenas uma vez por sessão do navegador (sessionStorage)
+    if (sessionStorage.getItem('_ck_visited')) return;
+    sessionStorage.setItem('_ck_visited', '1');
+    // Aguarda Firebase ficar pronto antes de tentar incrementar
+    function tryIncrement() {
+      if (!FIREBASE_OK) { setTimeout(tryIncrement, 600); return; }
+      try {
+        db.collection('contadores').doc('publico').set(
+          { visitas: firebase.firestore.FieldValue.increment(1) },
+          { merge: true }
+        );
+      } catch(e) { /* silencioso */ }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() { setTimeout(tryIncrement, 800); }, { once: true });
+    } else {
+      setTimeout(tryIncrement, 800);
+    }
+  })();
+
 
 
   function animarContador(el, target) {
@@ -4517,7 +4564,7 @@ Guarde este número para apresentar no dia do evento!`;
   }
 
   function renderTabela(lista) {
-    const tbody = document.getElementById('inscritosBody');
+    const tbody = document.getElementById('relBody');
     if (!tbody) return;
     tbody.innerHTML = '';
     lista.forEach(function(it) {
@@ -4570,10 +4617,17 @@ Guarde este número para apresentar no dia do evento!`;
     if (as) as.innerHTML = ok ? `<strong>Admin:</strong> ${esc(user.email)}` : '<strong>Sem permissão</strong>';
     if (!ok) { showToast('❌ Sem permissão de administrador.', 'erro'); showSection('login'); return; }
     try {
-      const [cs, ss] = await Promise.all([
+      const [cs, ss, contSnap] = await Promise.all([
         db.collection(COL_CORRIDA).orderBy('criadoEm','desc').limit(2000).get(),
-        db.collection(COL_SHOW).orderBy('criadoEm','desc').limit(2000).get()
+        db.collection(COL_SHOW).orderBy('criadoEm','desc').limit(2000).get(),
+        db.collection('contadores').doc('publico').get()
       ]);
+      // Exibir contador de visitas no admin
+      const elV = document.getElementById('adminCountVisitas');
+      if (elV) {
+        const v = contSnap.exists ? (contSnap.data().visitas || 0) : 0;
+        animarContador(elV, v);
+      }
       const lista = [];
       cs.forEach(function(d) {
         const r = d.data()||{};
@@ -4979,8 +5033,8 @@ Guarde este número para apresentar no dia do evento!`;
     const val = input.value;
     if (!val) { box.className = 'categoria-box hidden'; box.innerHTML = ''; return; }
 
-    // Critério: idade completa na data do evento — atualizar DATA_EVENTO quando data for confirmada
-    var DATA_EVENTO = new Date('2026-06-01T00:00:00');
+    // Critério: idade completa na data do evento — atualizar DATA_EVENTO_CORRIDA quando data for confirmada
+    var DATA_EVENTO = DATA_EVENTO_CORRIDA;
     const nasc     = new Date(val + 'T00:00:00');
     let idadeRef   = DATA_EVENTO.getFullYear() - nasc.getFullYear();
     var _m = DATA_EVENTO.getMonth() - nasc.getMonth();
@@ -5044,7 +5098,7 @@ Guarde este número para apresentar no dia do evento!`;
       form.addEventListener('touchend', function(e) {
         const dx = e.changedTouches[0].clientX - startX;
         const dy = e.changedTouches[0].clientY - startY;
-        if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+        if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 2.2) return;
         const tag = e.target.tagName;
         if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
         if (dx < 0) nextFn(); else prevFn();
