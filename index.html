@@ -1248,6 +1248,7 @@
     @media print {
       body > *:not(.app) { display: none !important; }
       .app > header, .app > footer { display: none !important; }
+      .topbar { display: none !important; }
       .section { display: none !important; }
       .section.active { display: block !important; }
       .confirm-actions, .confirm-tip, #scrollBar,
@@ -1256,7 +1257,9 @@
       .confirm-section { padding: 24px !important; display: flex !important; flex-direction: column; align-items: center; }
       .confirm-icon { display: none !important; }
       .confirm-num { font-size: 36px !important; letter-spacing: 2px; }
+      body, html { background: #fff !important; color: #000 !important; }
       body::before, body::after { display: none !important; }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     }
 
 
@@ -2273,7 +2276,7 @@
                   <input type="text" id="endereco" placeholder="Rua, nº, complemento" autocomplete="street-address" />
                 </label>
                 <div class="step-nav">
-                  <button type="button" class="btn btn-ghost" onclick="cGoStep(1)">← Voltar</button>
+                  <button type="button" class="btn btn-ghost" onclick="cGoStep(1, true)">← Voltar</button>
                   <button type="button" class="btn btn-next btn" onclick="cNextStep(2)">Próximo →</button>
                 </div>
               </div>
@@ -2421,7 +2424,7 @@
                 <div class="grid">
                   <label>
                     Nome da apresentação *
-                    <input type="text" id="nomeApresentacao" placeholder="Ex.: 'Aquarela'" />
+                    <input type="text" id="nomeApresentacao" placeholder="Ex.: Dança do Leão, Poema da Saudade" />
                   </label>
                   <label>
                     Duração estimada *
@@ -2458,7 +2461,7 @@
                   </div>
                 </div>
                 <div class="step-nav">
-                  <button type="button" class="btn btn-ghost" onclick="sGoStep(1)">← Voltar</button>
+                  <button type="button" class="btn btn-ghost" onclick="sGoStep(1, true)">← Voltar</button>
                   <button type="button" class="btn btn-concordo btn" onclick="sNextStep(2)">✅ Concordo e continuo →</button>
                 </div>
               </div>
@@ -3404,7 +3407,7 @@
 
   function compartilharVideo(vidId, titulo) {
     const base = window.location.href.split('#')[0].split('?')[0].replace(/\/$/, '');
-    const link = base + '/' + vidId;
+    const link = base + '#' + vidId;
     const texto = titulo + ' 🎬 Assista direto no site: ' + link;
     if (navigator.share) {
       navigator.share({ title: titulo, text: texto, url: link }).catch(function() {
@@ -3421,7 +3424,7 @@
 
   function compartilharVideoWhatsApp(vidId, titulo) {
     const base = window.location.href.split('#')[0].split('?')[0].replace(/\/$/, '');
-    const link = base + '/' + vidId;
+    const link = base + '#' + vidId;
     const texto = titulo + ' 🎬 Assista direto no site: ' + link;
     const waUrl = 'https://wa.me/?text=' + encodeURIComponent(texto);
     try { window.open(waUrl, '_blank', 'noopener,noreferrer'); } catch(e) { window.location.href = waUrl; }
@@ -3571,7 +3574,7 @@
     if (!validarCPF(cpfVal)) throw new Error('CPF do responsável inválido. Verifique os números digitados.');
 
     // Verificar inscrição duplicada (mesmo CPF do responsável + nome da criança)
-    const nomeVal  = document.getElementById('nome').value.trim().toLowerCase();
+    const nomeVal  = (document.getElementById('nome')?.value || '').trim().toLowerCase();
     const cpfDigits = onlyDigits(cpfVal);
     const dupSnap = await db.collection(COL_CORRIDA)
       .where('responsavel.cpf', '==', cpfDigits)
@@ -3579,26 +3582,26 @@
       .limit(1).get();
     if (!dupSnap.empty) throw new Error('Esta criança já está inscrita na Corrida Kids com este CPF de responsável.');
 
-    const nascimento = document.getElementById('nascimento').value;
+    const nascimento = document.getElementById('nascimento')?.value || '';
     const dados = {
       tipo:       'corrida',
       nomeLower:  nomeVal,
-      categoria:  calcCategoriaValor(nascimento), // #2
-      nome:       document.getElementById('nome').value.trim(),
+      categoria:  calcCategoriaValor(nascimento),
+      nome:       (document.getElementById('nome')?.value || '').trim(),
       nascimento,
-      documento:  document.getElementById('documento').value.trim(),
+      documento:  (document.getElementById('documento')?.value || '').trim(),
       bairro:     getBairroValue('bairroSel','bairroOutro'),
-      endereco:   document.getElementById('endereco').value.trim(),
+      endereco:   (document.getElementById('endereco')?.value || '').trim(),
       responsavel: {
-        nome:     document.getElementById('respNome').value.trim(),
+        nome:     (document.getElementById('respNome')?.value || '').trim(),
         cpf:      onlyDigits(cpfVal),
-        vinculo:  document.getElementById('respVinculo').value,
-        telefone: onlyDigits(document.getElementById('respTelefone').value),
-        email:    document.getElementById('respEmail').value.trim().toLowerCase() || null
+        vinculo:  document.getElementById('respVinculo')?.value || '',
+        telefone: onlyDigits(document.getElementById('respTelefone')?.value || ''),
+        email:    (document.getElementById('respEmail')?.value || '').trim().toLowerCase() || null
       },
       autorizacao: {
         aceito:       true,
-        assinatura:   document.getElementById('termoAssinatura').value.trim(),
+        assinatura:   (document.getElementById('termoAssinatura')?.value || '').trim(),
         dataHora:     new Date().toISOString()
       },
       criadoEm: firebase.firestore.FieldValue.serverTimestamp()
@@ -3620,8 +3623,8 @@
     // Verificar inscrição duplicada:
     // — Menor: mesmo CPF do responsável + nome do participante
     // — Adulto: mesmo nome + nascimento (não tem CPF)
-    const nomeValShow   = document.getElementById('showNome').value.trim().toLowerCase();
-    const nascValShow   = document.getElementById('showNascimento').value;
+    const nomeValShow   = (document.getElementById('showNome')?.value || '').trim().toLowerCase();
+    const nascValShow   = document.getElementById('showNascimento')?.value || '';
     const cpfDigitsShow = onlyDigits(cpfVal);
     let dupSnapShow;
     if (window._showAdulto === true) {
@@ -3638,25 +3641,25 @@
     }
     if (!dupSnapShow.empty) throw new Error('Este participante já está inscrito no Show de Talentos.');
 
-    const nascimento = document.getElementById('showNascimento').value;
+    const nascimento = document.getElementById('showNascimento')?.value || '';
     const dados = {
       tipo:       'show',
       nomeLower:  nomeValShow,
-      categoria:  calcCategoriaValor(nascimento), // #2
-      nome:       document.getElementById('showNome').value.trim(),
+      categoria:  calcCategoriaValor(nascimento),
+      nome:       (document.getElementById('showNome')?.value || '').trim(),
       nascimento,
       bairro:     getBairroValue('showBairroSel','showBairroOutro'),
       apresentacao: {
-        tipo:    document.getElementById('tipoApresentacao').value,
-        nome:    document.getElementById('nomeApresentacao').value.trim(),
-        duracao: document.getElementById('duracao').value.trim()
+        tipo:    document.getElementById('tipoApresentacao')?.value || '',
+        nome:    (document.getElementById('nomeApresentacao')?.value || '').trim(),
+        duracao: (document.getElementById('duracao')?.value || '').trim()
       },
       responsavel: window._showAdulto === true ? { tipo: 'adulto' } : {
-        nome:     document.getElementById('showRespNome').value.trim(),
+        nome:     (document.getElementById('showRespNome')?.value || '').trim(),
         cpf:      onlyDigits(cpfVal),
-        vinculo:  document.getElementById('showRespVinculo').value,
-        telefone: onlyDigits(document.getElementById('showRespTelefone').value),
-        email:    document.getElementById('showRespEmail').value.trim().toLowerCase() || null
+        vinculo:  document.getElementById('showRespVinculo')?.value || '',
+        telefone: onlyDigits(document.getElementById('showRespTelefone')?.value || ''),
+        email:    (document.getElementById('showRespEmail')?.value || '').trim().toLowerCase() || null
       },
       criadoEm: firebase.firestore.FieldValue.serverTimestamp()
     };
@@ -4163,7 +4166,10 @@ Guarde este número para apresentar no dia do evento!`;
   //     allow update: if request.resource.data.diff(resource.data).affectedKeys()
   //                     .hasOnly(['visitas']) &&
   //                   request.resource.data.visitas == resource.data.visitas + 1;
-  //     allow create: if request.resource.data.keys().hasOnly(['visitas','corrida','show']);
+  //     allow create: if request.resource.data.visitas is int
+  //                   && request.resource.data.visitas <= 1
+  //                   && (!('corrida' in request.resource.data) || request.resource.data.corrida == 0)
+  //                   && (!('show'    in request.resource.data) || request.resource.data.show    == 0);
   //   }
   // ================================================================
   (function() {
@@ -4191,6 +4197,7 @@ Guarde este número para apresentar no dia do evento!`;
 
   function animarContador(el, target) {
     if (!el || isNaN(target)) return;
+    target = Math.max(0, Math.round(target));
     const start = parseInt(el.textContent) || 0;
     if (start === target) { el.textContent = target; return; }
     const dur = 600, steps = 20, inc = (target - start) / steps;
@@ -4198,7 +4205,7 @@ Guarde este número para apresentar no dia do evento!`;
     const timer = setInterval(function() {
       i++;
       cur += inc;
-      el.textContent = Math.round(i < steps ? cur : target);
+      el.textContent = Math.max(0, Math.round(i < steps ? cur : target));
       if (i >= steps) clearInterval(timer);
     }, dur / steps);
   }
@@ -4277,7 +4284,7 @@ Guarde este número para apresentar no dia do evento!`;
           aviso.className = 'encerrado-aviso';
           aviso.style.cssText = 'background:rgba(255,87,34,.10);border:1.5px solid rgba(255,87,34,.30);border-radius:14px;padding:14px 18px;margin-bottom:16px;font-size:13.5px;font-weight:700;color:var(--text);text-align:center;';
           aviso.textContent = '🔒 As inscrições foram encerradas pelos organizadores.';
-          const firstEl = form.querySelector('label, .fstep, .divider, .grid');
+          const firstEl = form.querySelector('.fstep');
           if (firstEl) form.insertBefore(aviso, firstEl);
           else form.insertBefore(aviso, form.firstChild);
         }
@@ -4434,6 +4441,8 @@ Guarde este número para apresentar no dia do evento!`;
       transition:opacity .3s, transform .3s;
       max-width: 90vw; text-align:center;
     `;
+    toast.setAttribute('role', 'alert');
+    toast.setAttribute('aria-live', tipo === 'erro' ? 'assertive' : 'polite');
     toast.textContent = msg;
     document.body.appendChild(toast);
     requestAnimationFrame(() => {
@@ -4612,6 +4621,11 @@ Guarde este número para apresentar no dia do evento!`;
     if (!FIREBASE_OK) return;
     const user = auth.currentUser;
     if (!user) { showSection('login'); return; }
+
+    // Loading state
+    const relBody = document.getElementById('relBody');
+    if (relBody) relBody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:28px;color:var(--muted);font-size:13px;">⏳ Carregando inscrições…</td></tr>';
+
     const ok = await isAdminUser(user);
     const as = document.getElementById('adminStatus');
     if (as) as.innerHTML = ok ? `<strong>Admin:</strong> ${esc(user.email)}` : '<strong>Sem permissão</strong>';
@@ -4661,7 +4675,7 @@ Guarde este número para apresentar no dia do evento!`;
   function exportarCSV() {
     const lista = ultimoFiltrado.length ? ultimoFiltrado : aplicaFiltros(cacheRelatorios);
     const header = ['numero','tipo','categoria','nome','nascimento','bairro','responsavel','vinculo','cpf','telefone','email','criadoEm'];
-    const rows = [header.join(';')];
+    const rows = ['sep=;', header.join(';')];
     lista.forEach(function(it) {
       rows.push([it.numero||'',it.tipo||'',it.categoria||'',it.nome||'',it.nascimento||'',it.bairro||'',
         it.responsavelNome||'',it.responsavelVinculo||'',it.responsavelCpf||'',it.responsavelTelefone||'',it.responsavelEmail||'',fmtData(it.criadoEmMs)]
@@ -5160,10 +5174,12 @@ Guarde este número para apresentar no dia do evento!`;
       const cActive = document.querySelector('#corridaForm .fstep.active');
       const sActive = document.querySelector('#showForm .fstep.active');
       if (cActive) {
+        if (cActive.id === 'cFStep1') { showSection('home', true); return; }
         if (cActive.id === 'cFStep2') { cGoStep(1, true); pushFormState(); return; }
         if (cActive.id === 'cFStep3') { cStep3GoBack(); pushFormState(); return; }
       }
       if (sActive) {
+        if (sActive.id === 'sFStep1') { showSection('home', true); return; }
         if (sActive.id === 'sFStep2') { sGoStep(1, true); pushFormState(); return; }
         if (sActive.id === 'sFStep3') { sStep3GoBack(); pushFormState(); return; }
       }
