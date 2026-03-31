@@ -3422,7 +3422,7 @@
       'Duração máxima por apresentação: 5 minutos.',
       '',
       '== CRITÉRIO DE IDADE ==',
-      'Será considerada a idade que o participante completar até a data do evento (Junho 2026).',
+      'Será considerada a idade que o participante completar até 31/12/2026.',
       '',
       '== REGRAS GERAIS ==',
       '1) Corrida Kids: gratuita para crianças de 6 a 15 anos. Show de Talentos: aberto a todas as idades.',
@@ -3471,7 +3471,7 @@
   }
 
   // #2 — Calcular categoria a partir da data (usando idade real na data do evento)
-  const DATA_EVENTO_CORRIDA = new Date('2026-06-01T00:00:00'); // ← atualizar quando data for confirmada
+  const DATA_EVENTO_CORRIDA = new Date('2026-12-31T00:00:00'); // critério: idade completada até 31/12/2026 (conforme regulamento)
 
   function calcIdadeNoEvento(nascimento) {
     if (!nascimento) return -1;
@@ -3542,6 +3542,13 @@
     if (!dupSnap.empty) throw new Error('Esta criança já está inscrita na Corrida Kids com este CPF de responsável.');
 
     const nascimento = document.getElementById('nascimento')?.value || '';
+
+    // Validação de idade no backend — impede burla via console
+    const idadeValidacao = calcIdadeNoEvento(nascimento);
+    if (!nascimento || idadeValidacao < 6 || idadeValidacao > 15) {
+      throw new Error('A Corrida Kids é exclusiva para crianças de 6 a 15 anos na data do evento.');
+    }
+
     const dados = {
       tipo:       'corrida',
       nomeLower:  nomeVal,
@@ -3606,6 +3613,10 @@
     if (!dupSnapShow.empty) throw new Error('Este participante já está inscrito no Show de Talentos.');
 
     const nascimento = _nascRaw;
+
+    // Validação de nascimento no backend — campo obrigatório
+    if (!nascimento) throw new Error('Data de nascimento é obrigatória.');
+
     const dados = {
       tipo:       'show',
       nomeLower:  nomeValShow,
