@@ -731,6 +731,52 @@
     .crono-badge.show    { background:rgba(255,87,34,.12);  color:var(--accent2); }
     .crono-badge.start   { background:rgba(105,255,71,.15); color:#3a8a00; }
 
+    /* ── Consulta de inscrição ── */
+    .consulta-tab {
+      padding: 10px 14px; border-radius: 14px; border: 1.5px solid rgba(7,23,46,.10);
+      background: rgba(7,23,46,.04); font-family: var(--font-body); font-size: 13px;
+      font-weight: 700; color: var(--muted); cursor: pointer; text-align: center;
+      transition: all .2s ease;
+    }
+    .consulta-tab:hover { background: rgba(7,23,46,.08); color: var(--text); }
+    .consulta-tab.active {
+      background: linear-gradient(135deg, rgba(0,194,255,.15), rgba(0,194,255,.05));
+      border-color: rgba(0,194,255,.40); color: var(--text);
+      box-shadow: 0 4px 16px rgba(0,194,255,.14);
+    }
+    .consulta-card {
+      background: linear-gradient(135deg, rgba(0,194,255,.06), rgba(105,255,71,.04));
+      border: 1.5px solid rgba(0,194,255,.22); border-radius: 20px;
+      padding: 22px 24px; margin-top: 4px;
+    }
+    .consulta-card-header {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
+      padding-bottom: 14px; border-bottom: 1px solid rgba(7,23,46,.07);
+    }
+    .consulta-card-icon {
+      width: 52px; height: 52px; border-radius: 16px; flex-shrink: 0;
+      display: grid; place-items: center; font-size: 24px;
+      background: linear-gradient(135deg, var(--accent1), var(--accent4));
+      box-shadow: 0 8px 24px rgba(0,194,255,.32);
+    }
+    .consulta-num-badge {
+      display: inline-block; font-family: var(--font-num); font-size: 18px;
+      font-weight: 900; letter-spacing: 1px; color: var(--text);
+      background: rgba(0,194,255,.10); border: 1.5px solid rgba(0,194,255,.25);
+      border-radius: 10px; padding: 6px 16px; margin-bottom: 12px;
+    }
+    .consulta-row { display: flex; justify-content: space-between; align-items: baseline;
+      padding: 7px 0; border-bottom: 1px solid rgba(7,23,46,.05); font-size: 13px; }
+    .consulta-row:last-child { border-bottom: none; }
+    .consulta-row .k { color: var(--muted); font-weight: 600; }
+    .consulta-row .v { font-weight: 700; color: var(--text); text-align: right; max-width: 60%; }
+    .consulta-nao-encontrado {
+      text-align: center; padding: 28px 16px;
+      background: rgba(255,87,34,.06); border: 1.5px solid rgba(255,87,34,.20);
+      border-radius: 16px; color: var(--text); font-size: 14px; line-height: 1.7;
+    }
+    .consulta-multiplos { display: grid; gap: 12px; }
+
     /* ── Admin Portal ── */
     .admin-portal-overlay {
       position:fixed; inset:0; z-index:100;
@@ -1778,6 +1824,14 @@
                   <div class="icon" aria-hidden="true">🤝</div>
                 </button>
 
+                <button class="cta" style="background:linear-gradient(135deg,rgba(105,255,71,.14),rgba(105,255,71,.04));border-color:rgba(105,255,71,.28);" onclick="showSection('consulta')" type="button">
+                  <div class="left">
+                    <b>Consultar inscrição</b>
+                    <span>Verifique sua inscrição pelo número, nome ou CPF</span>
+                  </div>
+                  <div class="icon" aria-hidden="true">🔍</div>
+                </button>
+
                 <button class="cta cta-admin-unified" onclick="abrirRelatorios()" type="button" aria-label="Acesso administrativo">
                   <div class="admin-unified-icons"><div class="admin-icon-stack"><div class="admin-icon-main" aria-hidden="true">🔒</div></div></div>
                   <div class="admin-unified-left">
@@ -2231,7 +2285,20 @@
                       <option value="">Selecione</option>
                       <option>Ilha de Santa Maria</option>
                       <option>Ilha de Monte Belo</option>
-                      <option value="OUTRO">Outro (digitar)</option>
+                      <option>Goiabeiras</option>
+                      <option>Jardim Camburi</option>
+                      <option>Jardim da Penha</option>
+                      <option>Maria Ortiz</option>
+                      <option>Bairro República</option>
+                      <option>Bairro de Lourdes</option>
+                      <option>Consolação</option>
+                      <option>Boa Vista</option>
+                      <option>Santa Martha</option>
+                      <option>Maruípe</option>
+                      <option>São Cristóvão</option>
+                      <option>Andorinhas</option>
+                      <option>Centro</option>
+                      <option value="OUTRO">Outro bairro (digitar)</option>
                     </select>
                     <input class="hidden" type="text" id="bairroOutro" aria-label="Digite o bairro/comunidade" placeholder="Digite o bairro/comunidade" />
                   </label>
@@ -2263,7 +2330,7 @@
                 <div class="grid">
                   <label>
                     Nome do responsável *
-                    <input type="text" id="respNome" placeholder="Nome completo" autocomplete="name" />
+                    <input type="text" id="respNome" placeholder="Nome completo" autocomplete="name" onblur="validarNomeResp('respNome','respNomeMsg')" />
                     <span class="field-msg" id="respNomeMsg"></span>
                   </label>
                   <label>
@@ -2369,7 +2436,20 @@
                       <option value="">Selecione</option>
                       <option>Ilha de Santa Maria</option>
                       <option>Ilha de Monte Belo</option>
-                      <option value="OUTRO">Outro (digitar)</option>
+                      <option>Goiabeiras</option>
+                      <option>Jardim Camburi</option>
+                      <option>Jardim da Penha</option>
+                      <option>Maria Ortiz</option>
+                      <option>Bairro República</option>
+                      <option>Bairro de Lourdes</option>
+                      <option>Consolação</option>
+                      <option>Boa Vista</option>
+                      <option>Santa Martha</option>
+                      <option>Maruípe</option>
+                      <option>São Cristóvão</option>
+                      <option>Andorinhas</option>
+                      <option>Centro</option>
+                      <option value="OUTRO">Outro bairro (digitar)</option>
                     </select>
                     <input class="hidden" type="text" id="showBairroOutro" aria-label="Digite o bairro/comunidade" placeholder="Digite o bairro/comunidade" />
                   </label>
@@ -2448,7 +2528,8 @@
                 <div class="grid">
                   <label>
                     Nome do responsável *
-                    <input type="text" id="showRespNome" placeholder="Nome completo" autocomplete="name" />
+                    <input type="text" id="showRespNome" placeholder="Nome completo" autocomplete="name" onblur="validarNomeResp('showRespNome','showRespNomeMsg')" />
+                    <span class="field-msg" id="showRespNomeMsg"></span>
                   </label>
                   <label>
                     CPF do responsável *
@@ -2548,6 +2629,62 @@
 
         <!-- LOGIN (ADMIN) — agora gerenciado pelo modal portal -->
         <section id="login" class="section hidden"></section>
+
+        <!-- CONSULTA DE INSCRIÇÃO -->
+        <section id="consulta" class="section">
+          <div class="card form-card">
+            <div class="form-head">
+              <div>
+                <h2>🔍 Consultar inscrição</h2>
+                <p>Digite os dados abaixo para verificar se sua inscrição foi confirmada.</p>
+              </div>
+              <button type="button" class="btn btn-ghost" onclick="showSection('home')" style="flex-shrink:0;">⬅️ Voltar</button>
+            </div>
+
+            <!-- Tipo de busca -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;">
+              <button type="button" class="consulta-tab active" id="tabNumero"   onclick="consultaSetTab('numero')">🎫 Nº inscrição</button>
+              <button type="button" class="consulta-tab"        id="tabNome"     onclick="consultaSetTab('nome')">👦 Nome da criança</button>
+              <button type="button" class="consulta-tab"        id="tabCpf"      onclick="consultaSetTab('cpf')">🪪 CPF do responsável</button>
+              <button type="button" class="consulta-tab"        id="tabTelefone" onclick="consultaSetTab('telefone')">📱 Telefone</button>
+            </div>
+
+            <!-- Campos de busca -->
+            <div id="consultaCampoNumero">
+              <label>
+                Número da inscrição
+                <input type="text" id="consultaNumeroInput" placeholder="Ex.: CK-2026-AB1C2D" autocomplete="off" style="text-transform:uppercase;" />
+                <span class="hint">Encontrado na tela de confirmação ou WhatsApp</span>
+              </label>
+            </div>
+            <div id="consultaCampoNome" class="hidden">
+              <label>
+                Nome completo da criança
+                <input type="text" id="consultaNomeInput" placeholder="Ex.: Maria Eduarda Souza" autocomplete="off" />
+              </label>
+            </div>
+            <div id="consultaCampoCpf" class="hidden">
+              <label>
+                CPF do responsável
+                <input type="tel" id="consultaCpfInput" inputmode="numeric" placeholder="000.000.000-00" autocomplete="off" oninput="maskCpf(this)" />
+              </label>
+            </div>
+            <div id="consultaCampoTelefone" class="hidden">
+              <label>
+                Telefone/WhatsApp do responsável
+                <input type="tel" id="consultaTelInput" inputmode="tel" placeholder="(27) 99999-8888" autocomplete="off" oninput="maskTel(this)" />
+              </label>
+            </div>
+
+            <div class="actions" style="margin-top:8px;">
+              <button type="button" class="btn btn-primary" onclick="consultarInscricao()" style="flex:1;">🔍 Consultar</button>
+              <button type="button" class="btn btn-ghost" onclick="consultaLimpar()">✕ Limpar</button>
+            </div>
+
+            <!-- Resultado -->
+            <div id="consultaResultado" style="display:none;margin-top:22px;"></div>
+          </div>
+        </section>
 
         <!-- TRAJETO & CATEGORIAS -->
         <section id="trajeto" class="section">
@@ -3389,6 +3526,131 @@
     try { window.open(waUrl, '_blank', 'noopener,noreferrer'); } catch(e) { window.location.href = waUrl; }
   }
 
+  // ================================================================
+  // CONSULTA DE INSCRIÇÃO
+  // ================================================================
+  var _consultaTab = 'numero';
+
+  function consultaSetTab(tab) {
+    _consultaTab = tab;
+    ['numero','nome','cpf','telefone'].forEach(function(t) {
+      document.getElementById('consultaCampo' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('hidden', t !== tab);
+      document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('active', t === tab);
+    });
+    document.getElementById('consultaResultado').style.display = 'none';
+  }
+
+  function consultaLimpar() {
+    ['consultaNumeroInput','consultaNomeInput','consultaCpfInput','consultaTelInput'].forEach(function(id) {
+      var el = document.getElementById(id); if (el) el.value = '';
+    });
+    document.getElementById('consultaResultado').style.display = 'none';
+  }
+
+  function _consultaRenderCard(r) {
+    var tipo = r.tipo === 'corrida' ? '🏃 Corrida Kids' : '🎭 Show de Talentos';
+    var tipoColor = r.tipo === 'corrida' ? 'rgba(79,142,247,.12)' : 'rgba(247,99,79,.12)';
+    var tipoText  = r.tipo === 'corrida' ? '#4f8ef7' : '#f7634f';
+    var cat = r.categoria || '—';
+    var nasc = r.nascimento || '—';
+    return `<div class="consulta-card">
+      <div class="consulta-card-header">
+        <div class="consulta-card-icon">${r.tipo === 'corrida' ? '🏃' : '🎭'}</div>
+        <div>
+          <div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--text);line-height:1.2;">${esc(r.nome)}</div>
+          <div style="margin-top:4px;"><span style="background:${tipoColor};color:${tipoText};padding:2px 10px;border-radius:6px;font-size:12px;font-weight:700;">${tipo}</span></div>
+        </div>
+      </div>
+      <div class="consulta-num-badge">${esc(r.numero)}</div>
+      <div class="consulta-row"><span class="k">Categoria</span><span class="v">${esc(cat)}</span></div>
+      <div class="consulta-row"><span class="k">Nascimento</span><span class="v">${esc(nasc)}</span></div>
+      <div class="consulta-row"><span class="k">Responsável</span><span class="v">${esc(r.responsavelNome || '—')}</span></div>
+      <div class="consulta-row" style="margin-top:8px;border-top:1.5px solid rgba(0,194,255,.15);padding-top:10px;">
+        <span class="k" style="color:#3a8a00;font-weight:800;">✅ Inscrição confirmada</span>
+        <span class="v" style="color:#3a8a00;">Presente no sistema</span>
+      </div>
+    </div>`;
+  }
+
+  async function consultarInscricao() {
+    if (!FIREBASE_OK) { showToast('❌ Firebase indisponível.', 'erro'); return; }
+    var resultado = document.getElementById('consultaResultado');
+    resultado.style.display = 'block';
+    resultado.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;">⏳ Consultando...</div>';
+
+    try {
+      var snaps = [];
+      var tab = _consultaTab;
+
+      if (tab === 'numero') {
+        var num = (document.getElementById('consultaNumeroInput')?.value || '').trim().toUpperCase();
+        if (!num) { resultado.innerHTML = '<div class="consulta-nao-encontrado">⚠️ Digite o número da inscrição.</div>'; return; }
+        var [sc, ss] = await Promise.all([
+          db.collection(COL_CORRIDA).where('numero','==',num).limit(3).get(),
+          db.collection(COL_SHOW).where('numero','==',num).limit(3).get()
+        ]);
+        sc.forEach(function(d){ snaps.push(d.data()); });
+        ss.forEach(function(d){ snaps.push(d.data()); });
+
+      } else if (tab === 'nome') {
+        var nome = (document.getElementById('consultaNomeInput')?.value || '').trim().toLowerCase();
+        if (nome.length < 3) { resultado.innerHTML = '<div class="consulta-nao-encontrado">⚠️ Digite pelo menos 3 letras do nome.</div>'; return; }
+        var [sc2, ss2] = await Promise.all([
+          db.collection(COL_CORRIDA).where('nomeLower','==',nome).limit(5).get(),
+          db.collection(COL_SHOW).where('nomeLower','==',nome).limit(5).get()
+        ]);
+        sc2.forEach(function(d){ snaps.push(d.data()); });
+        ss2.forEach(function(d){ snaps.push(d.data()); });
+
+      } else if (tab === 'cpf') {
+        var cpf = onlyDigits(document.getElementById('consultaCpfInput')?.value || '');
+        if (cpf.length !== 11) { resultado.innerHTML = '<div class="consulta-nao-encontrado">⚠️ Digite o CPF completo (11 dígitos).</div>'; return; }
+        if (!validarCPF(cpf)) { resultado.innerHTML = '<div class="consulta-nao-encontrado">⚠️ CPF inválido. Verifique os números.</div>'; return; }
+        var [sc3, ss3] = await Promise.all([
+          db.collection(COL_CORRIDA).where('responsavel.cpf','==',cpf).limit(10).get(),
+          db.collection(COL_SHOW).where('responsavel.cpf','==',cpf).limit(10).get()
+        ]);
+        sc3.forEach(function(d){ snaps.push(d.data()); });
+        ss3.forEach(function(d){ snaps.push(d.data()); });
+
+      } else if (tab === 'telefone') {
+        var tel = onlyDigits(document.getElementById('consultaTelInput')?.value || '');
+        if (tel.length < 10) { resultado.innerHTML = '<div class="consulta-nao-encontrado">⚠️ Digite o telefone completo com DDD.</div>'; return; }
+        var [sc4, ss4] = await Promise.all([
+          db.collection(COL_CORRIDA).where('responsavel.telefone','==',tel).limit(10).get(),
+          db.collection(COL_SHOW).where('responsavel.telefone','==',tel).limit(10).get()
+        ]);
+        sc4.forEach(function(d){ snaps.push(d.data()); });
+        ss4.forEach(function(d){ snaps.push(d.data()); });
+      }
+
+      if (!snaps.length) {
+        resultado.innerHTML = '<div class="consulta-nao-encontrado">😕 Nenhuma inscrição encontrada com esses dados.<br><span style="font-size:12px;color:var(--muted);">Verifique se os dados estão corretos ou tente outra forma de busca.</span></div>';
+        return;
+      }
+
+      // Monta os cards
+      var cards = snaps.map(function(r) {
+        return _consultaRenderCard({
+          nome: r.nome || '—',
+          tipo: r.tipo || 'corrida',
+          numero: r.numero || '—',
+          categoria: r.categoria || '—',
+          nascimento: r.nascimento || '—',
+          responsavelNome: r.responsavel?.nome || ''
+        });
+      }).join('');
+
+      resultado.innerHTML = snaps.length > 1
+        ? '<div style="font-size:13px;color:var(--muted);margin-bottom:10px;">🔍 ' + snaps.length + ' inscri' + (snaps.length===1?'ção encontrada':'ções encontradas') + '</div><div class="consulta-multiplos">' + cards + '</div>'
+        : cards;
+
+    } catch(err) {
+      console.error(err);
+      resultado.innerHTML = '<div class="consulta-nao-encontrado">❌ Erro ao consultar. Verifique sua conexão e tente novamente.</div>';
+    }
+  }
+
   function downloadRegulamento() {
     const txt = [
       'REGULAMENTO OFICIAL',
@@ -3890,6 +4152,30 @@
   // ================================================================
   // VALIDAÇÃO EM TEMPO REAL
   // ================================================================
+  function validarNomeResp(inputId, msgId) {
+    const inp = document.getElementById(inputId);
+    const msg = document.getElementById(msgId);
+    if (!inp || !msg) return true;
+    const val = inp.value.trim();
+    if (!val) { inp.classList.remove('valid','invalid'); msg.className='field-msg'; return false; }
+    // Só letras, acentos e espaços
+    const somenteLetras = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/.test(val);
+    // Mínimo 2 palavras com pelo menos 2 chars cada
+    const palavras = val.split(/\s+/).filter(p => p.length >= 2);
+    if (somenteLetras && palavras.length >= 2) {
+      inp.classList.add('valid'); inp.classList.remove('invalid');
+      msg.className = 'field-msg ok'; msg.textContent = '✓ Nome válido';
+      return true;
+    } else {
+      inp.classList.add('invalid'); inp.classList.remove('valid');
+      msg.className = 'field-msg erro';
+      msg.textContent = !somenteLetras
+        ? '✗ Use apenas letras e espaços (sem números ou símbolos)'
+        : '✗ Digite o nome completo (nome e sobrenome)';
+      return false;
+    }
+  }
+
   function validarCpfField(inputId, msgId) {
     const inp = document.getElementById(inputId);
     const msg = document.getElementById(msgId);
@@ -4006,6 +4292,10 @@ Guarde este número para apresentar no dia do evento!`;
       showToast('❌ Preencha todos os campos do responsável e a assinatura digital.', 'erro');
       scrollToFirstEmpty(['respNome','respCpf','respVinculo','respTelefone','termoAssinatura']); return;
     }
+    if (!validarNomeResp('respNome','respNomeMsg')) {
+      showToast('❌ Digite o nome completo do responsável (nome e sobrenome).', 'erro');
+      document.getElementById('respNome')?.focus(); return;
+    }
     if (!validarCPF(rCpf)) {
       showToast('❌ CPF do responsável inválido. Verifique os números.', 'erro'); return;
     }
@@ -4072,6 +4362,10 @@ Guarde este número para apresentar no dia do evento!`;
       const sRAssina  = document.getElementById('showTermoAssinatura')?.value.trim();
       if (!sRNome || !sRCpf || !sRVinculo || !sRTel || !sRAssina) {
         showToast('❌ Preencha todos os campos do responsável e a assinatura digital.', 'erro'); return;
+      }
+      if (!validarNomeResp('showRespNome','showRespNomeMsg')) {
+        showToast('❌ Digite o nome completo do responsável (nome e sobrenome).', 'erro');
+        document.getElementById('showRespNome')?.focus(); return;
       }
       if (!validarCPF(sRCpf)) {
         showToast('❌ CPF do responsável inválido. Verifique os números.', 'erro'); return;
