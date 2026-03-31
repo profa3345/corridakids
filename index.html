@@ -7,12 +7,18 @@
   <meta name="description" content="Venha viver a emoção da nossa corrida infantil! Crianças cheias de energia e muita alegria nas Ilhas. Evento gratuito para crianças de 6 a 15 anos — Ilhas de Santa Maria e Monte Belo, Vitória-ES." />
   <meta property="og:title" content="🏃 Corrida Kids Ilhas — Vem aí!" />
   <meta property="og:description" content="Venha viver a emoção da nossa corrida infantil! Crianças cheias de energia e muita alegria nas Ilhas. Inscrição online gratuita!" />
-  <meta property="og:image" content="logo1.png" />
+  <meta property="og:image" content="https://corridakidsilhas.vercel.app/logo1.png" />
+  <meta property="og:url" content="https://corridakidsilhas.vercel.app/" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20100%20100%27%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%27g%27%20x1%3D%270%25%27%20y1%3D%270%25%27%20x2%3D%27100%25%27%20y2%3D%27100%25%27%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%270%25%27%20stop-color%3D%27%252300c2ff%27%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%27100%25%27%20stop-color%3D%27%252369ff47%27%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%3CclipPath%20id%3D%27r%27%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%27100%27%20height%3D%27100%27%20rx%3D%2722%27%2F%3E%0A%20%20%20%20%3C%2FclipPath%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Crect%20width%3D%27100%27%20height%3D%27100%27%20rx%3D%2722%27%20fill%3D%27url%28%2523g%29%27%2F%3E%0A%20%20%3Ctext%20x%3D%2750%27%20y%3D%2762%27%20font-family%3D%27Arial%20Black%2CArial%2Csans-serif%27%20font-weight%3D%27900%27%20font-size%3D%2742%27%20fill%3D%27%2523fff%27%20text-anchor%3D%27middle%27%20letter-spacing%3D%27-2%27%3ECK%3C%2Ftext%3E%0A%3C%2Fsvg%3E" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="logo2.png" />
 
+  <!-- ✅ CSP — Segurança: restringe fontes de scripts, estilos e iframes -->
+  <!-- RECOMENDADO: configurar também no vercel.json para cobertura completa:
+    "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://img.youtube.com https://lh3.googleusercontent.com; frame-src https://www.youtube.com;"
+  -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://img.youtube.com https://lh3.googleusercontent.com blob:; frame-src https://www.youtube.com;" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -1343,27 +1349,6 @@
     .traj-info-icon-img { cursor: zoom-in; }
 
 
-    /* ── Contador público de inscrições ── */
-    .inscricoes-counter {
-      display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap;
-    }
-    .counter-pill {
-      display: flex; align-items: center; gap: 8px;
-      padding: 8px 16px; border-radius: 14px; font-size: 13px; font-weight: 700;
-      transition: transform .2s cubic-bezier(.34,1.56,.64,1);
-      flex: 1; min-width: 120px;
-    }
-    .counter-pill:hover { transform: scale(1.04); }
-    .counter-pill.c-corrida {
-      background: rgba(0,194,255,.10); border: 1.5px solid rgba(0,194,255,.25); color: var(--text);
-    }
-    .counter-pill.c-show {
-      background: rgba(255,87,34,.10); border: 1.5px solid rgba(255,87,34,.25); color: var(--text);
-    }
-    .counter-num { font-family: var(--font-num); font-size: 22px; font-weight: 900; color: var(--text); }
-    .counter-label { font-size: 11px; color: var(--muted); font-weight: 600; line-height: 1.3; }
-
-
     /* ── Inscrições encerradas ── */
     .inscricoes-encerradas-banner {
       display: none;
@@ -1372,7 +1357,7 @@
       border-radius: 18px; padding: 18px 24px;
       text-align: center; width: 100%;
     }
-    .inscricoes-encerradas-banner.visivel { display: block; }
+    .inscricoes-encerradas-banner.visivel { display: block !important; }
     .inscricoes-encerradas-banner h3 { font-size:17px; font-weight:800; color:var(--text); margin:0 0 6px; }
     .inscricoes-encerradas-banner p  { font-size:13px; color:var(--muted); margin:0; line-height:1.6; }
     .btn-encerrar {
@@ -1715,7 +1700,7 @@
         <!-- HOME -->
         <section id="home" class="section active">
 
-          <div id="bannerEncerrado" class="inscricoes-encerradas-banner" style="margin-bottom:16px;">
+          <div id="bannerEncerrado" class="inscricoes-encerradas-banner" style="display:none; margin-bottom:16px;">
             <h3>🔒 Inscrições encerradas</h3>
             <p>As inscrições para a 1ª Corrida Kids Ilhas 2026 foram encerradas pelos organizadores. Obrigado a todos que participaram!</p>
             <p id="bannerEncerradoData" style="font-size:11.5px;color:var(--muted);margin-top:4px;"></p>
@@ -1747,23 +1732,6 @@
 
               </div>
 
-              <!-- Contador de inscrições -->
-              <div class="inscricoes-counter" id="contadorInscricoes" style="display:none;">
-                <div class="counter-pill c-corrida">
-                  <div>
-                    <div class="counter-num" id="countCorrida">—</div>
-                    <div class="counter-label">na Corrida Kids</div>
-                  </div>
-                  <span style="font-size:20px;">🏃</span>
-                </div>
-                <div class="counter-pill c-show">
-                  <div>
-                    <div class="counter-num" id="countShow">—</div>
-                    <div class="counter-label">no Show de Talentos</div>
-                  </div>
-                  <span style="font-size:20px;">🎭</span>
-                </div>
-              </div>
               <!-- Prazo de inscrições (visível se configurado no Firestore) -->
               <div id="prazoInscricoes" style="display:none;font-size:11.5px;font-weight:700;color:var(--muted);margin-top:8px;text-align:center;width:100%;">
                 ⏰ <span id="prazoTexto"></span>
@@ -1958,7 +1926,7 @@
             ">
               <div style="flex:1; min-width: 200px;">
                 <div style="font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--text);margin-bottom:6px;">
-                  🏃 Vagas limitadas — inscreva-se já!
+                  🏃 Inscrições abertas — venha participar!
                 </div>
                 <p style="font-size:13.5px;color:var(--muted);line-height:1.6;margin:0;">
                   Evento <strong>gratuito</strong> para crianças de 6 a 15 anos • Junho 2026 • Ilhas, Vitória-ES
@@ -2250,7 +2218,7 @@
                   </label>
                   <label>
                     Data de nascimento *
-                    <input type="date" id="nascimento" inputmode="numeric" min="2011-01-01" max="2020-12-31" oninput="calcCategoria('nascimento','categoriaBox')" onblur="validarNasc('nascimento','nascMsg','corrida')" />
+                    <input type="date" id="nascimento" inputmode="numeric" autocomplete="bday" min="2011-01-01" max="2020-12-31" oninput="calcCategoria('nascimento','categoriaBox')" onblur="validarNasc('nascimento','nascMsg','corrida')" />
                     <span class="field-msg" id="nascMsg"></span>
                   </label>
                 </div>
@@ -2392,7 +2360,7 @@
                   </label>
                   <label>
                     Data de nascimento *
-                    <input type="date" id="showNascimento" inputmode="numeric" min="1950-01-01" max="2020-12-31" oninput="calcCategoria('showNascimento','showCategoriaBox')" onblur="validarNasc('showNascimento','showNascMsg','show')" />
+                    <input type="date" id="showNascimento" inputmode="numeric" autocomplete="bday" min="1950-01-01" max="2020-12-31" oninput="calcCategoria('showNascimento','showCategoriaBox')" onblur="validarNasc('showNascimento','showNascMsg','show')" />
                     <span class="field-msg" id="showNascMsg"></span>
                   </label>
                 </div>
@@ -2847,15 +2815,6 @@
                 <div class="v" id="countTotal">—</div>
                 <div class="sub">Total geral (Corrida + Show)</div>
               </div>
-
-              <div class="stat s1" style="grid-column: 1 / -1;">
-                <div class="stat-top">
-                  <div class="k">Visitas ao site</div>
-                  <div class="stat-ic" aria-hidden="true">👁️</div>
-                </div>
-                <div class="v" id="adminCountVisitas">—</div>
-                <div class="sub">Acessos únicos por sessão registrados no site</div>
-              </div>
             </div>
 
             <!-- PREMIUM CHART + BAIRRO -->
@@ -3107,17 +3066,15 @@
         _showFbBanner();
       } else {
         _startAuthObserver();
-        carregarContadorPublico();
         verificarStatusInscricoes();
       }
     });
   } else {
     // já carregou — inicia observer quando DOM estiver pronto
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', function() { _startAuthObserver(); carregarContadorPublico(); verificarStatusInscricoes(); });
+      document.addEventListener('DOMContentLoaded', function() { _startAuthObserver(); verificarStatusInscricoes(); });
     } else {
       _startAuthObserver();
-      carregarContadorPublico();
       verificarStatusInscricoes();
     }
   }
@@ -3271,6 +3228,11 @@
   }
 
   function showSection(id, _fromPopstate) {
+    // Bloquear acesso aos formulários se inscrições encerradas
+    if ((id === 'corrida' || id === 'show') && window._inscricoesEncerradas) {
+      showToast('🔒 As inscrições foram encerradas pelos organizadores.', 'erro');
+      return;
+    }
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     const el = document.getElementById(id);
     if (el) el.classList.add('active');
@@ -3293,7 +3255,7 @@
     }
 
     // Verificar status de inscrições ao voltar para home
-    if (id === _HOME_SECTION) { verificarStatusInscricoes(); carregarContadorPublico(); const sh = document.querySelector('.scroll-hint'); if (sh) sh.classList.remove('hidden'); }
+    if (id === _HOME_SECTION) { verificarStatusInscricoes(); const sh = document.querySelector('.scroll-hint'); if (sh) sh.classList.remove('hidden'); }
 
     // Pausar emojis flutuantes em seções de formulário para não distrair
     const formSections = ['corrida', 'show'];
@@ -3411,14 +3373,14 @@
     const texto = titulo + ' 🎬 Assista direto no site: ' + link;
     if (navigator.share) {
       navigator.share({ title: titulo, text: texto, url: link }).catch(function() {
-        navigator.clipboard && navigator.clipboard.writeText(link).then(function() {
-          showToast('✅ Link copiado!', 'sucesso');
-        });
+        navigator.clipboard && navigator.clipboard.writeText(link)
+          .then(function() { showToast('✅ Link copiado!', 'sucesso'); })
+          .catch(function() { showToast('⚠️ Copie o link: ' + link, 'info'); });
       });
     } else if (navigator.clipboard) {
-      navigator.clipboard.writeText(link).then(function() {
-        showToast('✅ Link copiado: ' + link, 'sucesso');
-      });
+      navigator.clipboard.writeText(link)
+        .then(function() { showToast('✅ Link copiado: ' + link, 'sucesso'); })
+        .catch(function() { showToast('⚠️ Copie o link: ' + link, 'info'); });
     }
   }
 
@@ -3463,7 +3425,7 @@
       'Duração máxima por apresentação: 5 minutos.',
       '',
       '== CRITÉRIO DE IDADE ==',
-      'Será considerada a idade que o participante completar até 31/12/2026.',
+      'Será considerada a idade que o participante completar até a data do evento (Junho 2026).',
       '',
       '== REGRAS GERAIS ==',
       '1) Corrida Kids: gratuita para crianças de 6 a 15 anos. Show de Talentos: aberto a todas as idades.',
@@ -3479,7 +3441,7 @@
       'Fernando Soares — Vice-líder comunitário',
     ].join('\n');
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([txt], {type:'text/plain;charset=utf-8'}));
+    a.href = URL.createObjectURL(new Blob(['\uFEFF' + txt], {type:'text/plain;charset=utf-8'}));
     a.download = 'Regulamento_Corrida_Kids_Ilhas_2026.txt';
     a.click();
     URL.revokeObjectURL(a.href);
@@ -3570,7 +3532,7 @@
     if (!FIREBASE_OK) throw new Error('Firebase indisponível. Verifique sua conexão.');
 
     // #8 — Validar CPF
-    const cpfVal = document.getElementById('respCpf').value;
+    const cpfVal = document.getElementById('respCpf')?.value || '';
     if (!validarCPF(cpfVal)) throw new Error('CPF do responsável inválido. Verifique os números digitados.');
 
     // Verificar inscrição duplicada (mesmo CPF do responsável + nome da criança)
@@ -3606,19 +3568,24 @@
       },
       criadoEm: firebase.firestore.FieldValue.serverTimestamp()
     };
-    // #1 — Usa o ID do Firestore como número único
-    const docRef = await db.collection(COL_CORRIDA).add(dados);
+    // #1 — Pré-gera o ID localmente para incluir o número na escrita única (atômico)
+    const docRef = db.collection(COL_CORRIDA).doc();
     const numero = gerarNumeroInscricao('CK', docRef.id);
-    await docRef.update({ numero });
+    dados.numero = numero;
+    await docRef.set(dados);
     return numero;
   }
 
   async function salvarInscricaoShow() {
     if (!FIREBASE_OK) throw new Error('Firebase indisponível. Verifique sua conexão.');
 
+    // Recalcula localmente — não depende da flag global (burlável via console)
+    const _nascRaw = document.getElementById('showNascimento')?.value || '';
+    const _isAdultoSave = _nascRaw ? calcIdadeNoEvento(_nascRaw) >= 18 : false;
+
     // CPF do responsável — apenas para menores
-    const cpfVal = window._showAdulto === true ? '' : document.getElementById('showRespCpf').value;
-    if (window._showAdulto !== true && !validarCPF(cpfVal)) throw new Error('CPF do responsável inválido. Verifique os números digitados.');
+    const cpfVal = _isAdultoSave ? '' : document.getElementById('showRespCpf')?.value || '';
+    if (!_isAdultoSave && !validarCPF(cpfVal)) throw new Error('CPF do responsável inválido. Verifique os números digitados.');
 
     // Verificar inscrição duplicada:
     // — Menor: mesmo CPF do responsável + nome do participante
@@ -3627,7 +3594,7 @@
     const nascValShow   = document.getElementById('showNascimento')?.value || '';
     const cpfDigitsShow = onlyDigits(cpfVal);
     let dupSnapShow;
-    if (window._showAdulto === true) {
+    if (_isAdultoSave) {
       dupSnapShow = await db.collection(COL_SHOW)
         .where('nomeLower',          '==', nomeValShow)
         .where('nascimento',         '==', nascValShow)
@@ -3641,7 +3608,7 @@
     }
     if (!dupSnapShow.empty) throw new Error('Este participante já está inscrito no Show de Talentos.');
 
-    const nascimento = document.getElementById('showNascimento')?.value || '';
+    const nascimento = _nascRaw;
     const dados = {
       tipo:       'show',
       nomeLower:  nomeValShow,
@@ -3654,7 +3621,7 @@
         nome:    (document.getElementById('nomeApresentacao')?.value || '').trim(),
         duracao: (document.getElementById('duracao')?.value || '').trim()
       },
-      responsavel: window._showAdulto === true ? { tipo: 'adulto' } : {
+      responsavel: _isAdultoSave ? { tipo: 'adulto' } : {
         nome:     (document.getElementById('showRespNome')?.value || '').trim(),
         cpf:      onlyDigits(cpfVal),
         vinculo:  document.getElementById('showRespVinculo')?.value || '',
@@ -3663,10 +3630,11 @@
       },
       criadoEm: firebase.firestore.FieldValue.serverTimestamp()
     };
-    // #1 — Usa o ID do Firestore como número único
-    const docRef = await db.collection(COL_SHOW).add(dados);
+    // #1 — Pré-gera o ID localmente para incluir o número na escrita única (atômico)
+    const docRef = db.collection(COL_SHOW).doc();
     const numero = gerarNumeroInscricao('ST', docRef.id);
-    await docRef.update({ numero });
+    dados.numero = numero;
+    await docRef.set(dados);
     return numero;
   }
 
@@ -3825,7 +3793,7 @@
     }
   }
   function showIsAdulto() {
-    const nasc = document.getElementById('showNascimento').value;
+    const nasc = document.getElementById('showNascimento')?.value || '';
     if (!nasc) return false;
     return calcIdadeNoEvento(nasc) >= 18;
   }
@@ -3977,6 +3945,8 @@
     if (navigator.clipboard) {
       navigator.clipboard.writeText(num).then(function() {
         showToast('✅ Número copiado: ' + num, 'sucesso');
+      }).catch(function() {
+        showToast('⚠️ Copie manualmente: ' + num, 'info');
       });
     } else {
       showToast('⚠️ Copie o número: ' + num, 'info');
@@ -3985,8 +3955,8 @@
 
   function compartilharConfirma(tipo) {
     const num = tipo === 'corrida'
-      ? document.getElementById('confirmaCorridaNum').textContent
-      : document.getElementById('confirmaShowNum').textContent;
+      ? (document.getElementById('confirmaCorridaNum')?.textContent || '')
+      : (document.getElementById('confirmaShowNum')?.textContent || '');
     const evento = tipo === 'corrida' ? 'Corrida Kids Ilhas 2026 🏃' : 'Show de Talentos Ilhas 2026 🎭';
     const texto = `✅ Inscrição confirmada na ${evento}!
 
@@ -4052,11 +4022,19 @@ Guarde este número para apresentar no dia do evento!`;
       document.getElementById('confirmaCorridaNum').textContent = num;
       if (nomeC) { const el = document.getElementById('confirmaCorridaNome'); el.textContent = '👦 ' + nomeC; el.style.display = 'block'; }
       showSection('confirmaCorrida');
-      incrementarContador('corrida').then(carregarContadorPublico);
+      
       window.launchConfetti && window.launchConfetti(120);
     } catch(err) {
+      _lastSubmitTs.corrida = 0; // permite retry imediato após erro
       console.error(err);
-      showToast('❌ ' + err.message, 'erro');
+      const _msg = err.code === 'permission-denied'
+        ? 'Inscrições não estão disponíveis no momento.'
+        : err.code === 'failed-precondition'
+        ? 'Erro de configuração do servidor. Contate o organizador.'
+        : (err.code?.includes('unavailable') || err.message?.includes('network'))
+        ? 'Sem conexão. Verifique sua internet e tente novamente.'
+        : err.message;
+      showToast('❌ ' + _msg, 'erro');
     } finally {
       btn.disabled = false; btn.innerHTML = txtOriginal;
     }
@@ -4112,88 +4090,23 @@ Guarde este número para apresentar no dia do evento!`;
       document.getElementById('confirmaShowNum').textContent = num;
       if (nomeS) { const el = document.getElementById('confirmaShowNome'); el.textContent = '🎤 ' + nomeS; el.style.display = 'block'; }
       showSection('confirmaShow');
-      incrementarContador('show').then(carregarContadorPublico);
+      
       window.launchConfetti && window.launchConfetti(120);
     } catch(err) {
+      _lastSubmitTs.show = 0; // permite retry imediato após erro
       console.error(err);
-      showToast('❌ ' + err.message, 'erro');
+      const _msgS = err.code === 'permission-denied'
+        ? 'Inscrições não estão disponíveis no momento.'
+        : err.code === 'failed-precondition'
+        ? 'Erro de configuração do servidor. Contate o organizador.'
+        : (err.code?.includes('unavailable') || err.message?.includes('network'))
+        ? 'Sem conexão. Verifique sua internet e tente novamente.'
+        : err.message;
+      showToast('❌ ' + _msgS, 'erro');
     } finally {
       btn.disabled = false; btn.innerHTML = txtOriginal;
     }
   });
-
-
-  // ================================================================
-  // CONTADOR PÚBLICO DE INSCRIÇÕES
-  // ================================================================
-  async function carregarContadorPublico() {
-    if (!FIREBASE_OK) return;
-    try {
-      const snap = await db.collection('contadores').doc('publico').get();
-      if (!snap.exists) return;
-      const data = snap.data();
-      const totalC = data.corrida || 0;
-      const totalS = data.show    || 0;
-      const el  = document.getElementById('contadorInscricoes');
-      const elC = document.getElementById('countCorrida');
-      const elS = document.getElementById('countShow');
-      if (elC) animarContador(elC, totalC);
-      if (elS) animarContador(elS, totalS);
-      if (el && (totalC > 0 || totalS > 0)) {
-        el.style.display = 'flex';
-        el.style.animation = 'appear .5s cubic-bezier(.34,1.56,.64,1) both';
-      }
-    } catch(e) { /* silencioso — não crítico */ }
-  }
-
-  async function incrementarContador(tipo) {
-    if (!FIREBASE_OK) return;
-    try {
-      const campo = tipo === 'corrida' ? 'corrida' : 'show';
-      await db.collection('contadores').doc('publico').set(
-        { [campo]: firebase.firestore.FieldValue.increment(1) },
-        { merge: true }
-      );
-    } catch(e) { /* silencioso — não bloqueia a inscrição */ }
-  }
-
-  // ================================================================
-  // CONTADOR DE VISITAS
-  // ATENÇÃO — Firestore Security Rules: o doc 'contadores/publico'
-  // precisa permitir update para visitantes não autenticados:
-  //   match /contadores/{doc} {
-  //     allow read: if true;
-  //     allow update: if request.resource.data.diff(resource.data).affectedKeys()
-  //                     .hasOnly(['visitas']) &&
-  //                   request.resource.data.visitas == resource.data.visitas + 1;
-  //     allow create: if request.resource.data.visitas is int
-  //                   && request.resource.data.visitas <= 1
-  //                   && (!('corrida' in request.resource.data) || request.resource.data.corrida == 0)
-  //                   && (!('show'    in request.resource.data) || request.resource.data.show    == 0);
-  //   }
-  // ================================================================
-  (function() {
-    // Incrementa apenas uma vez por sessão do navegador (sessionStorage)
-    if (sessionStorage.getItem('_ck_visited')) return;
-    sessionStorage.setItem('_ck_visited', '1');
-    // Aguarda Firebase ficar pronto antes de tentar incrementar
-    function tryIncrement() {
-      if (!FIREBASE_OK) { setTimeout(tryIncrement, 600); return; }
-      try {
-        db.collection('contadores').doc('publico').set(
-          { visitas: firebase.firestore.FieldValue.increment(1) },
-          { merge: true }
-        );
-      } catch(e) { /* silencioso */ }
-    }
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', function() { setTimeout(tryIncrement, 800); }, { once: true });
-    } else {
-      setTimeout(tryIncrement, 800);
-    }
-  })();
-
-
 
   function animarContador(el, target) {
     if (!el || isNaN(target)) return;
@@ -4214,14 +4127,22 @@ Guarde este número para apresentar no dia do evento!`;
   // ENCERRAMENTO DE INSCRIÇÕES
   // ================================================================
   const COL_CONFIG = 'configuracoes';
+  var _statusCache = null, _statusCacheTs = 0;
 
   async function verificarStatusInscricoes() {
     if (!FIREBASE_OK) return;
+    // Cache de 30s — evita reads repetidos ao navegar para home
+    if (_statusCache !== null && Date.now() - _statusCacheTs < 30000) {
+      aplicarStatusInscricoes(_statusCache.encerrado, _statusCache.atualizadoEm);
+      return;
+    }
     try {
       const snap = await db.collection(COL_CONFIG).doc('evento').get();
       const data = snap.exists ? snap.data() : {};
       const encerrado = data.inscricoesEncerradas === true;
       const atualizadoEm = data.atualizadoEm;
+      _statusCache = { encerrado, atualizadoEm, prazoInscricoes: data.prazoInscricoes };
+      _statusCacheTs = Date.now();
       aplicarStatusInscricoes(encerrado, atualizadoEm);
       // Prazo de inscrições
       const prazoEl  = document.getElementById('prazoInscricoes');
@@ -4349,6 +4270,7 @@ Guarde este número para apresentar no dia do evento!`;
           { merge: true }
         );
         aplicarStatusInscricoes(!encerrado, !encerrado ? new Date() : null);
+        _statusCache = null; // invalida cache para próxima navegação home
         showToast((encerrado ? '✅ Inscrições reabertas!' : '🔒 Inscrições encerradas!'), 'sucesso');
       } catch(e) {
         showToast('❌ Erro ao salvar: ' + esc(e.message), 'erro');
@@ -4365,11 +4287,16 @@ Guarde este número para apresentar no dia do evento!`;
   // ================================================================
   // ADMIN
   // ================================================================
+  var _adminCache = null, _adminCacheTs = 0;
   async function isAdminUser(user) {
     if (!user || !FIREBASE_OK) return false;
+    // Cache por 60s — evita reads repetidos no mesmo login
+    if (_adminCache !== null && Date.now() - _adminCacheTs < 60000) return _adminCache;
     try {
       const snap = await db.collection(COL_ADMINS).doc(user.uid).get();
-      return snap.exists && (snap.data()||{}).ativo === true;
+      _adminCache = snap.exists && (snap.data()||{}).ativo === true;
+      _adminCacheTs = Date.now();
+      return _adminCache;
     } catch(e) { console.error(e); return false; }
   }
 
@@ -4397,9 +4324,12 @@ Guarde este número para apresentar no dia do evento!`;
     }
   });
 
-  // Close on Escape
+  // Close on Escape — handler centralizado com prioridade: vídeo > lightbox > admin modal
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') fecharAdminPortal();
+    if (e.key !== 'Escape') return;
+    if (document.getElementById('videoDeepModal')?.classList.contains('open')) { window.vdmFechar(); return; }
+    if (document.getElementById('lightboxOverlay')?.classList.contains('open')) { closeLightbox(); return; }
+    if (!document.getElementById('adminPortalOverlay')?.classList.contains('hidden')) { fecharAdminPortal(); return; }
   });
 
   async function abrirRelatorios() {
@@ -4416,6 +4346,8 @@ Guarde este número para apresentar no dia do evento!`;
 
   async function logout() {
     if (!FIREBASE_OK) return;
+    cacheRelatorios = []; ultimoFiltrado = [];
+    _adminCache = null; _adminCacheTs = 0; // limpa cache de admin
     await auth.signOut();
     showSection('home');
   }
@@ -4526,8 +4458,8 @@ Guarde este número para apresentar no dia do evento!`;
       if (tipo && tipo !== 'todos' && it.tipo !== tipo) return false;
       if (nome && !normaliza(it.nome).includes(nome)) return false;
       if (bairro && !normaliza(it.bairro).includes(bairro)) return false;
-      if (start && it.criadoEmMs && it.criadoEmMs < start.getTime()) return false;
-      if (end   && it.criadoEmMs && it.criadoEmMs > end.getTime())   return false;
+      if (start && (!it.criadoEmMs || it.criadoEmMs < start.getTime())) return false;
+      if (end   && (!it.criadoEmMs || it.criadoEmMs > end.getTime()))   return false;
       return true;
     });
   }
@@ -4597,7 +4529,7 @@ Guarde este número para apresentar no dia do evento!`;
     if (!canvas) return;
     const box = canvas.parentElement;
     canvas.width  = box.clientWidth  || 320;
-    canvas.height = box.clientHeight || 270;
+    canvas.height = canvas.offsetHeight || box.clientHeight || 270;
     const ctx = canvas.getContext('2d');
     const labels = ['Corrida','Show'];
     const values = [corrida, show];
@@ -4620,7 +4552,7 @@ Guarde este número para apresentar no dia do evento!`;
   async function carregarRelatorios() {
     if (!FIREBASE_OK) return;
     const user = auth.currentUser;
-    if (!user) { showSection('login'); return; }
+    if (!user) { showSection('home'); abrirAdminPortal(); return; }
 
     // Loading state
     const relBody = document.getElementById('relBody');
@@ -4629,19 +4561,12 @@ Guarde este número para apresentar no dia do evento!`;
     const ok = await isAdminUser(user);
     const as = document.getElementById('adminStatus');
     if (as) as.innerHTML = ok ? `<strong>Admin:</strong> ${esc(user.email)}` : '<strong>Sem permissão</strong>';
-    if (!ok) { showToast('❌ Sem permissão de administrador.', 'erro'); showSection('login'); return; }
+    if (!ok) { showToast('❌ Sem permissão de administrador.', 'erro'); showSection('home'); abrirAdminPortal(); return; }
     try {
-      const [cs, ss, contSnap] = await Promise.all([
+      const [cs, ss] = await Promise.all([
         db.collection(COL_CORRIDA).orderBy('criadoEm','desc').limit(2000).get(),
-        db.collection(COL_SHOW).orderBy('criadoEm','desc').limit(2000).get(),
-        db.collection('contadores').doc('publico').get()
+        db.collection(COL_SHOW).orderBy('criadoEm','desc').limit(2000).get()
       ]);
-      // Exibir contador de visitas no admin
-      const elV = document.getElementById('adminCountVisitas');
-      if (elV) {
-        const v = contSnap.exists ? (contSnap.data().visitas || 0) : 0;
-        animarContador(elV, v);
-      }
       const lista = [];
       cs.forEach(function(d) {
         const r = d.data()||{};
@@ -4674,6 +4599,7 @@ Guarde este número para apresentar no dia do evento!`;
   // ================================================================
   function exportarCSV() {
     const lista = ultimoFiltrado.length ? ultimoFiltrado : aplicaFiltros(cacheRelatorios);
+    if (!lista.length) { showToast('⚠️ Nenhum inscrito para exportar.', 'info'); return; }
     const header = ['numero','tipo','categoria','nome','nascimento','bairro','responsavel','vinculo','cpf','telefone','email','criadoEm'];
     const rows = ['sep=;', header.join(';')];
     lista.forEach(function(it) {
@@ -4690,6 +4616,7 @@ Guarde este número para apresentar no dia do evento!`;
 
   function exportarXLSX() {
     const lista = ultimoFiltrado.length ? ultimoFiltrado : aplicaFiltros(cacheRelatorios);
+    if (!lista.length) { showToast('⚠️ Nenhum inscrito para exportar.', 'info'); return; }
     const sheetData = [['Nº','Tipo','Categoria','Nome','Nascimento','Bairro','Responsável','Vínculo','CPF','Telefone','E-mail','Criado em']];
     lista.forEach(function(it) {
       sheetData.push([it.numero||'',it.tipo||'',it.categoria||'',it.nome||'',it.nascimento||'',it.bairro||'',
@@ -4752,6 +4679,18 @@ Guarde este número para apresentar no dia do evento!`;
       const el = document.getElementById(id);
       if (el) el.addEventListener('input', function() { maskTel(this); });
     });
+
+    // max dinâmico nos campos de nascimento — evita que o limite fique desatualizado
+    // Corrida: crianças de 6 a 15 anos na data do evento
+    var maxNascCorrida = new Date(DATA_EVENTO_CORRIDA);
+    maxNascCorrida.setFullYear(maxNascCorrida.getFullYear() - 6);
+    // min = 16 anos antes do evento + 1 dia = inclui quem faz exatamente 15 no evento
+    var minNascCorrida = new Date(DATA_EVENTO_CORRIDA);
+    minNascCorrida.setFullYear(minNascCorrida.getFullYear() - 16);
+    minNascCorrida.setDate(minNascCorrida.getDate() + 1);
+    var fmtDate = function(d) { return d.toISOString().split('T')[0]; };
+    var elNasc = document.getElementById('nascimento');
+    if (elNasc) { elNasc.max = fmtDate(maxNascCorrida); elNasc.min = fmtDate(minNascCorrida); }
   });
 
   // Reatividade filtros
@@ -5228,9 +5167,6 @@ Guarde este número para apresentar no dia do evento!`;
     overlay.classList.remove('open');
     document.body.style.overflow = '';
   }
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeLightbox();
-  });
   </script>
 
   <!-- MODAL DEEP-LINK VÍDEO -->
@@ -5326,11 +5262,6 @@ Guarde este número para apresentar no dia do evento!`;
       // (se vier de popstate, o navegador já tratou o histórico)
       if (!_fromPopstate) _historyReplace(null);
     };
-
-    // Fechar com ESC
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') window.vdmFechar();
-    });
 
     // Fechar clicando fora do card
     document.getElementById('videoDeepModal').addEventListener('click', function(e) {
