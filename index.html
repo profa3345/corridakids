@@ -2061,6 +2061,35 @@
                 </div>
               </div>
 
+              <div class="video-card">
+                <div class="video-embed" id="vid3">
+                  <div class="yt-thumb" onclick="loadYtEmbed('vid3','mAm26VkLcdA')" title="Clique para assistir">
+                    <img src="https://img.youtube.com/vi/mAm26VkLcdA/hqdefault.jpg" alt="Thumbnail vídeo 3" loading="lazy" />
+                    <div class="yt-play-btn">▶</div>
+                    <div class="yt-play-label">Clique para assistir</div>
+                  </div>
+                  <div class="vid-fallback hidden" id="vid3-fb">
+                    <img src="" data-src="https://img.youtube.com/vi/mAm26VkLcdA/hqdefault.jpg" alt="Thumbnail do vídeo" loading="lazy" />
+                    <a href="https://youtu.be/mAm26VkLcdA" target="_blank" rel="noopener" class="play-overlay">
+                      <span class="play-btn">▶</span>
+                      <span class="play-label">Assistir no YouTube</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="video-info">
+                  <h3>🏃 Corrida Kids Ilhas 2026</h3>
+                  <p>Confira mais um vídeo especial do evento! Uma experiência incrível para crianças e famílias das Ilhas.</p>
+                  <div class="share-actions">
+                    <button type="button" class="share-btn" onclick="compartilharVideo('vid3','🏃 Corrida Kids Ilhas 2026')">
+                      📤 Compartilhar link
+                    </button>
+                    <button type="button" class="share-btn" onclick="compartilharVideoWhatsApp('vid3','🏃 Corrida Kids Ilhas 2026')">
+                      💬 Enviar no WhatsApp
+                    </button>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -5519,7 +5548,8 @@ Guarde este número para apresentar no dia do evento!`;
 
     var VIDEOS = {
       'vid1': { wrapId:'vid1', videoId:'Z0gcIo0Bfo0', title:'🏃 Corrida Kids Ilhas — Vem aí!' },
-      'vid2': { wrapId:'vid2', videoId:'Umr56L32nkw', title:'🎭 Show de Talentos — Mostre seu Talento!' }
+      'vid2': { wrapId:'vid2', videoId:'Umr56L32nkw', title:'🎭 Show de Talentos — Mostre seu Talento!' },
+      'vid3': { wrapId:'vid3', videoId:'mAm26VkLcdA', title:'🏃 Corrida Kids Ilhas 2026' }
     };
 
     function abrirModalVideo(hash) {
