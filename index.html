@@ -236,7 +236,7 @@
     .wrap { max-width: 1160px; margin: 0 auto; display: grid; gap: 40px; }
 
     /* ── Hero ── */
-    .hero { display:grid; grid-template-columns: 1.3fr .7fr; gap: 24px; align-items: start; }
+    .hero { display:grid; grid-template-columns: 1.3fr .7fr; gap: 24px; align-items: stretch; }
     .hero > .card { display:flex; flex-direction:column; }
 
     /* ── Cards ── */
@@ -256,6 +256,7 @@
       padding: 36px 30px 30px;
       position: relative; overflow: hidden;
       display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
+      flex: 1;
     }
     /* Diagonal color accent strip */
     .hero-left::after {
@@ -284,6 +285,7 @@
     .hero-logos-wrap {
       display: flex; justify-content: center; align-items: center;
       gap: 18px; margin: 0 0 8px; flex-wrap: wrap; position: relative;
+      min-height: 120px;
     }
     .hero-logos-wrap::before {
       content: '';
@@ -345,7 +347,7 @@
     .badge small { color: var(--muted); font-weight: 500; }
 
     /* ── Hero Right — CTA grid ── */
-    .hero-right { padding: 18px; display:flex; flex-direction:column; gap:11px; }
+    .hero-right { padding: 18px; display:flex; flex-direction:column; gap:11px; flex: 1; }
     .hero-right-title {
       font-family: var(--font-display); font-size: 19px; font-weight: 700; color: var(--text);
       padding: 2px 4px 11px;
@@ -1925,6 +1927,22 @@
   <div class="blob b3"></div>
   <div class="blob b4"></div>
   <div class="copy-toast" id="copyToast">✅ Link copiado!</div>
+
+  <script>
+  // Colapsa o wrap de logos e reequilibra o grid hero se todas as imagens falharem
+  function _checkLogosLoaded() {
+    var wrap = document.querySelector('.hero-logos-wrap');
+    if (!wrap) return;
+    var imgs = wrap.querySelectorAll('img');
+    var allHidden = Array.from(imgs).every(function(img) { return img.style.display === 'none'; });
+    if (allHidden) {
+      wrap.style.display = 'none';
+      // Reequilibra o grid: sem as logos, os dois cards ficam equivalentes
+      var hero = document.querySelector('.hero');
+      if (hero) hero.style.gridTemplateColumns = '1fr 1fr';
+    }
+  }
+  </script>
 
   <!-- Botão fixo de inscrição (FAB) -->
   <button id="fabInscricao" type="button" class="hidden" onclick="showSection('corrida')" aria-label="Inscrever-se na Corrida Kids — botão de ação rápida">
@@ -5166,9 +5184,14 @@
       const doc  = document.getElementById('documento').value.trim();
       const bairro = document.getElementById('bairroSel').value;
       const end  = document.getElementById('endereco').value.trim();
+      const camisa = document.getElementById('camisaTamanho').value;
       if (!nome || !nasc || !doc || !bairro || !end) {
         showToast('❌ Preencha todos os campos obrigatórios.', 'erro');
         scrollToFirstEmpty(['nome','nascimento','documento','bairroSel','endereco','camisaTamanho']); return;
+      }
+      if (!camisa) {
+        showToast('❌ Selecione o tamanho da camisa.', 'erro');
+        scrollToFirstEmpty(['camisaTamanho']); return;
       }
       // Validação: nome deve ter pelo menos nome e sobrenome
       const palavrasNome = nome.split(/\s+/).filter(p => p.length >= 2);
@@ -6812,7 +6835,7 @@
         : '<span style="background:rgba(46,125,50,.10);color:#2e7d32;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:700;">✅ Ativa</span>';
       if (it.cancelada) tr.style.opacity = '0.5';
       const waLink = it.responsavelTelefone
-        ? `<a href="https://wa.me/55${it.responsavelTelefone}?text=${encodeURIComponent('Olá! Confirmando a inscrição de ' + it.nome + ' na Corrida Kids Ilhas 2026 — Nº ' + it.numero)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;background:#25d366;color:#fff;padding:3px 10px;border-radius:8px;font-size:11px;font-weight:700;text-decoration:none;">💬 WA</a>`
+        ? `<a href="https://wa.me/55${esc(it.responsavelTelefone)}?text=${encodeURIComponent('Olá! Confirmando a inscrição de ' + it.nome + ' na Corrida Kids Ilhas 2026 — Nº ' + it.numero)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;background:#25d366;color:#fff;padding:3px 10px;border-radius:8px;font-size:11px;font-weight:700;text-decoration:none;">💬 WA</a>`
         : '<span style="color:#aaa;font-size:11px;">—</span>';
       tr.innerHTML = `<td>${esc(it.numero)||'—'}</td><td>${tag}</td><td>${cat}</td><td>${esc(it.camisa||'—')}</td><td>${esc(it.nome)}</td><td>${esc(it.nascimento)}</td><td>${esc(it.bairro)}</td><td>${esc(it.responsavelNome)}</td><td>${esc(it.responsavelTelefone)}</td><td>${esc(it.responsavelEmail)}</td><td>${cancelTag}</td><td>${waLink}</td><td>${fmtData(it.criadoEmMs)}</td>`;
       tbody.appendChild(tr);
