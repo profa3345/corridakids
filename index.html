@@ -255,7 +255,7 @@
     .hero-left {
       padding: 36px 30px 30px;
       position: relative; overflow: hidden;
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
     }
     /* Diagonal color accent strip */
     .hero-left::after {
@@ -298,7 +298,6 @@
     }
     .hero-logo-item {
       width: min(340px, 48%); height: auto; display: block;
-      aspect-ratio: 340 / 220;
       filter: drop-shadow(0 20px 44px rgba(0,0,0,.32));
       transition: transform .35s cubic-bezier(.34,1.56,.64,1), filter .35s;
     }
@@ -4407,7 +4406,7 @@
       <div class="consulta-num-badge">${esc(r.numero)}</div>
       <div class="consulta-row"><span class="k">Categoria</span><span class="v">${esc(cat)}</span></div>
       ${catShowBadge}
-      <div class="consulta-row"><span class="k">Nascimento</span><span class="v">${esc(nasc)}</span></div>
+      <div class="consulta-row"><span class="k">Nascimento</span><span class="v">${nasc !== '—' ? nasc.replace(/^(\d{4})-(\d{2})-(\d{2})$/, '**/**/$1') : '—'}</span></div>
       <div class="consulta-row"><span class="k">Responsável</span><span class="v">${esc(respExibido)}</span></div>
       <div class="consulta-row" style="margin-top:8px;border-top:1.5px solid rgba(0,194,255,.15);padding-top:10px;">
         ${r.cancelada
@@ -4669,12 +4668,24 @@
       } else if (tab === 'nome') {
         var nome = (document.getElementById('consultaNomeInput')?.value || '').trim().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
         if (nome.length < 3) { resultado.innerHTML = '<div class="consulta-nao-encontrado">⚠️ Digite pelo menos 3 letras do nome.</div>'; return; }
+        // Remove partículas comuns para melhorar a chance de match
+        var nomeNorm = nome.replace(/\b(da|de|do|das|dos|e)\b/g, '').replace(/\s+/g,' ').trim();
         var [sc2, ss2] = await Promise.all([
-          db.collection(COL_CORRIDA).where('nomeLower','==',nome).limit(5).get(),
-          db.collection(COL_SHOW).where('nomeLower','==',nome).limit(5).get()
+          db.collection(COL_CORRIDA).where('nomeLower','==',nomeNorm).limit(5).get(),
+          db.collection(COL_SHOW).where('nomeLower','==',nomeNorm).limit(5).get()
         ]);
-        sc2.forEach(function(d){ snaps.push(d.data()); });
-        ss2.forEach(function(d){ snaps.push(d.data()); });
+        // Fallback: tenta com o nome original caso a versão sem partículas não bata
+        if (sc2.empty && ss2.empty && nomeNorm !== nome) {
+          var [sc2b, ss2b] = await Promise.all([
+            db.collection(COL_CORRIDA).where('nomeLower','==',nome).limit(5).get(),
+            db.collection(COL_SHOW).where('nomeLower','==',nome).limit(5).get()
+          ]);
+          sc2b.forEach(function(d){ snaps.push(d.data()); });
+          ss2b.forEach(function(d){ snaps.push(d.data()); });
+        } else {
+          sc2.forEach(function(d){ snaps.push(d.data()); });
+          ss2.forEach(function(d){ snaps.push(d.data()); });
+        }
 
       } else if (tab === 'cpf') {
         var cpf = onlyDigits(document.getElementById('consultaCpfInput')?.value || '');
@@ -4699,7 +4710,8 @@
       }
 
       if (!snaps.length) {
-        resultado.innerHTML = '<div class="consulta-nao-encontrado">😕 Nenhuma inscrição encontrada com esses dados.<br><span style="font-size:12px;color:var(--muted);">Verifique se os dados estão corretos ou tente outra forma de busca.</span></div>';
+        var dicaNome = (tab === 'nome') ? '<br><span style="font-size:11.5px;color:var(--muted);margin-top:6px;display:block;">💡 A busca por nome precisa ser <strong>exatamente igual</strong> ao cadastrado. Tente pelo número de inscrição, CPF ou telefone para um resultado mais preciso.</span>' : '';
+        resultado.innerHTML = '<div class="consulta-nao-encontrado">😕 Nenhuma inscrição encontrada com esses dados.<br><span style="font-size:12px;color:var(--muted);">Verifique se os dados estão corretos ou tente outra forma de busca.</span>' + dicaNome + '</div>';
         return;
       }
 
@@ -4945,7 +4957,7 @@
       autorizacao: {
         aceito:       true,
         assinatura:   (document.getElementById('termoAssinatura')?.value || '').trim(),
-        dataHora:     new Date().toISOString()
+        dataHora:     firebase.firestore.FieldValue.serverTimestamp()
       },
       criadoEm: firebase.firestore.FieldValue.serverTimestamp()
     };
