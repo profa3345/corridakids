@@ -18,12 +18,15 @@
   <!-- ✅ CSP configurada via vercel.json (HTTP header) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- dns-prefetch como fallback para navegadores sem preconnect -->
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- ✅ reCAPTCHA v3 — proteção anti-bot nas inscrições -->
+  <!-- ✅ reCAPTCHA v3 — carregado apenas quando o formulário é acessado (performance mobile) -->
   <!-- IMPORTANTE: substitua SUA_CHAVE_RECAPTCHA_V3_AQUI pela chave do Google reCAPTCHA v3 -->
   <!-- Obtenha em: https://www.google.com/recaptcha/admin/create -->
-  <script src="https://www.google.com/recaptcha/api.js?render=6Le18KcsAAAAAPXHTgEZSmq2dvj1s3JMHRQQ6Yw4" async defer></script>
+  <!-- Script carregado via JS lazy em showSection('corrida') e showSection('show') -->
 
   <style>
     :root{
@@ -72,6 +75,7 @@
       font-family: var(--font-body);
       color: var(--text);
       overflow-x: hidden;
+      overscroll-behavior-y: contain;
       background: var(--bg-deep);
     }
 
@@ -79,6 +83,7 @@
     body::after {
       content: '';
       position: fixed; inset: 0;
+      contain: strict;
       background:
         radial-gradient(ellipse 140% 80% at 10% -10%, rgba(0,194,255,.38) 0%, transparent 55%),
         radial-gradient(ellipse 100% 80% at 90% 10%, rgba(255,87,34,.26) 0%, transparent 50%),
@@ -91,12 +96,22 @@
     /* Performance: reduz aurora em mobile */
     @media (max-width: 768px) {
       body::after { animation: none; opacity: .7; }
+      /* Performance mobile: remover will-change que consome memória GPU */
+      .card, .hero-logo-item, .btn-primary:hover, .cta:hover { will-change: auto; }
     }
     @keyframes auroraShift {
       0%   { opacity:1; filter: hue-rotate(0deg); }
       50%  { opacity:.82; filter: hue-rotate(18deg); }
       100% { opacity:1; filter: hue-rotate(0deg); }
     }
+    /* Aumentar área de toque em dispositivos touchscreen (pointer: coarse) */
+    @media (pointer: coarse) {
+      .btn { min-height: 48px; }
+      .cta { min-height: 52px; }
+      .consulta-tab { min-height: 44px; padding: 12px 14px; }
+      .crono-dot { width: 20px; height: 20px; }
+    }
+
     /* Respeitar preferência do sistema por menos animação */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
@@ -106,13 +121,14 @@
     body::before {
       content: '';
       position: fixed; inset: 0;
+      contain: strict;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.038'/%3E%3C/svg%3E");
       pointer-events: none; z-index: 0;
     }
     @media (max-width: 768px) { body::before { display: none; } }
 
     /* ── Floating emoji layer ── */
-    #floatEmojis { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    #floatEmojis { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; contain: strict; }
     .float-emoji {
       position: absolute; opacity: 0;
       animation: floatUp linear infinite;
@@ -127,7 +143,7 @@
     }
 
     /* ── Confetti canvas ── */
-    #confettiCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 999; }
+    #confettiCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 999; contain: strict; }
 
     /* ── Blobs ── */
     .blob {
@@ -135,6 +151,8 @@
       filter: blur(60px); opacity: .18;
       pointer-events: none; z-index: 0;
       animation: floaty 18s ease-in-out infinite;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
     .blob.b1 { width:700px; height:700px; background:var(--accent1); left:-310px; top:-130px; animation-duration:22s; opacity:.18; }
     .blob.b2 { width:580px; height:580px; background:var(--accent2); right:-220px; top:160px; animation-delay:-6s; animation-duration:18s; opacity:.15; }
@@ -249,6 +267,7 @@
       transition: transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .35s ease;
     }
     /* Hover suavizado — menos efeito, mais elegância */
+    .card { will-change: transform; }
     .card:hover { transform: translateY(-3px); box-shadow: 0 40px 80px rgba(0,0,0,.36); }
 
     /* ── Hero Left ── */
@@ -357,6 +376,7 @@
 
     .cta-grid { display:flex; flex-direction:column; gap:10px; flex:1; }
     .cta {
+      touch-action: manipulation;
       border-radius: 18px; padding: 13px 16px;
       display: flex; align-items: center; justify-content: space-between; gap: 12px;
       cursor: pointer; width: 100%; border: 1.5px solid transparent;
@@ -393,7 +413,7 @@
     .cta:hover .icon { transform: scale(1.18) rotate(-8deg); box-shadow: 0 10px 28px rgba(0,0,0,.18); }
 
     /* ── Sections ── */
-    .section { display:none; animation: appear .45s cubic-bezier(.34,1.56,.64,1) both; }
+    .section { display:none; animation: appear .45s cubic-bezier(.34,1.56,.64,1) both; contain: layout style; content-visibility: auto; }
     .section.active { display:block; }
     @keyframes appear {
       from { opacity:0; transform:translateY(24px) scale(.96); }
@@ -456,6 +476,7 @@
 
     /* ── Buttons ── */
     .btn {
+      touch-action: manipulation;
       appearance:none; border:0; border-radius:16px; padding:13px 24px;
       font-family:var(--font-body); font-size:13px; font-weight:700;
       cursor:pointer; letter-spacing:.2px;
@@ -518,6 +539,7 @@
       font-weight: 800; font-size: 13.5px; color: var(--text);
     }
     .termo-body {
+      -webkit-overflow-scrolling: touch;
       padding: 14px 18px;
       font-size: 12.5px; color: var(--muted); line-height: 1.75;
       max-height: 240px; overflow-y: auto;
@@ -926,6 +948,7 @@
     .chart-box canvas { width:100% !important; height:270px !important; }
 
     .table-wrap {
+      -webkit-overflow-scrolling: touch;
       overflow:auto; border-radius:18px;
       border:1px solid rgba(7,23,46,.09);
       background:rgba(255,255,255,.92);
@@ -2561,7 +2584,7 @@
                   </label>
                   <label>
                     CPF do responsável *
-                    <input type="tel" id="respCpf" inputmode="numeric" placeholder="000.000.000-00" autocomplete="off" required oninput="maskCpf(this)" onblur="validarCpfField('respCpf','respCpfMsg')" />
+                    <input type="tel" id="respCpf" spellcheck="false" inputmode="numeric" placeholder="000.000.000-00" autocomplete="off" required oninput="maskCpf(this)" onblur="validarCpfField('respCpf','respCpfMsg')" />
                     <span class="hint">Com ou sem pontuação</span>
                     <span class="field-msg" id="respCpfMsg"></span>
                   </label>
@@ -2580,7 +2603,7 @@
                   </label>
                   <label>
                     Telefone/WhatsApp *
-                    <input type="tel" id="respTelefone" inputmode="tel" placeholder="(27) 99999-8888" autocomplete="tel" required onblur="validarTelField('respTelefone','respTelMsg')" />
+                    <input type="tel" id="respTelefone" spellcheck="false" inputmode="tel" placeholder="(27) 99999-8888" autocomplete="tel" required onblur="validarTelField('respTelefone','respTelMsg')" />
                     <span class="field-msg" id="respTelMsg"></span>
                   </label>
                 </div>
@@ -2652,7 +2675,7 @@
                   </label>
                   <label for="showNascimento">
                     Data de nascimento *
-                    <input type="date" id="showNascimento" inputmode="numeric" autocomplete="bday" min="1900-01-01" max="2022-12-31" oninput="calcCategoria('showNascimento','showCategoriaBox')" onblur="validarNasc('showNascimento','showNascMsg','show')" />
+                    <input type="date" id="showNascimento" inputmode="numeric" autocomplete="bday" min="1900-01-01" max="" oninput="calcCategoria('showNascimento','showCategoriaBox')" onblur="validarNasc('showNascimento','showNascMsg','show')" />
                     <span class="field-msg" id="showNascMsg"></span>
                   </label>
                 </div>
@@ -2722,7 +2745,7 @@
                 <div class="grid">
                   <label>
                     Nome da apresentação *
-                    <input type="text" id="nomeApresentacao" placeholder="Ex.: Dança do Leão, Poema da Saudade" maxlength="100"
+                    <input type="text" id="nomeApresentacao" autocapitalize="words" placeholder="Ex.: Dança do Leão, Poema da Saudade" maxlength="100"
                       oninput="(function(el){ var c=document.getElementById('nomeApresentacaoCounter'); if(c) c.textContent=el.value.length+'/100'; })(this)"/>
                     <span class="hint" id="nomeApresentacaoCounter" aria-live="polite" style="text-align:right;display:block;">0/100</span>
                   </label>
@@ -2801,7 +2824,7 @@
                   </label>
                   <label>
                     CPF do responsável *
-                    <input type="tel" id="showRespCpf" inputmode="numeric" placeholder="000.000.000-00" autocomplete="off" required oninput="maskCpf(this)" onblur="validarCpfField('showRespCpf','showRespCpfMsg')" />
+                    <input type="tel" id="showRespCpf" spellcheck="false" inputmode="numeric" placeholder="000.000.000-00" autocomplete="off" required oninput="maskCpf(this)" onblur="validarCpfField('showRespCpf','showRespCpfMsg')" />
                     <span class="hint">Com ou sem pontuação</span>
                     <span class="field-msg" id="showRespCpfMsg"></span>
                   </label>
@@ -2821,7 +2844,7 @@
                   </label>
                   <label>
                     Telefone/WhatsApp *
-                    <input type="tel" id="showRespTelefone" inputmode="tel" placeholder="(27) 99999-8888" autocomplete="tel" required onblur="validarTelField('showRespTelefone','showRespTelMsg')" />
+                    <input type="tel" id="showRespTelefone" spellcheck="false" inputmode="tel" placeholder="(27) 99999-8888" autocomplete="tel" required onblur="validarTelField('showRespTelefone','showRespTelMsg')" />
                     <span class="field-msg" id="showRespTelMsg"></span>
                   </label>
                 </div>
@@ -2984,13 +3007,13 @@
             <div id="consultaCampoCpf" class="hidden">
               <label>
                 CPF do responsável
-                <input type="tel" id="consultaCpfInput" inputmode="numeric" placeholder="000.000.000-00" autocomplete="off" oninput="maskCpf(this)" />
+                <input type="tel" id="consultaCpfInput" spellcheck="false" inputmode="numeric" placeholder="000.000.000-00" autocomplete="off" oninput="maskCpf(this)" />
               </label>
             </div>
             <div id="consultaCampoTelefone" class="hidden">
               <label>
                 Telefone/WhatsApp do responsável
-                <input type="tel" id="consultaTelInput" inputmode="tel" placeholder="(27) 99999-8888" autocomplete="off" oninput="maskTel(this)" />
+                <input type="tel" id="consultaTelInput" spellcheck="false" inputmode="tel" placeholder="(27) 99999-8888" autocomplete="off" oninput="maskTel(this)" />
               </label>
             </div>
 
@@ -3000,7 +3023,7 @@
             </div>
 
             <!-- Resultado -->
-            <div id="consultaResultado" style="display:none;margin-top:22px;"></div>
+            <div id="consultaResultado" role="status" aria-live="polite" style="display:none;margin-top:22px;"></div>
           </div>
         </section>
 
@@ -3454,7 +3477,7 @@
               <label style="font-size:12px;font-weight:800;color:#1a2e50;">
                 Número da inscrição *
                 <input type="text" id="cancelNumero" placeholder="Ex.: CK-2026-AB1C2D ou ST-2026-AB1C2D"
-                  autocomplete="off" maxlength="30"
+                  autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="30"
                   style="margin-top:6px;text-transform:uppercase;"
                   oninput="this.value=this.value.toUpperCase(); _atualizarLabelCancelCpf(this.value);" />
                 <span class="hint">Não sabe o número? <button type="button" onclick="showSection('consulta')" style="background:none;border:none;color:#0066cc;font-size:11px;font-weight:700;cursor:pointer;padding:0;text-decoration:underline;">Consulte aqui</button></span>
@@ -3462,7 +3485,7 @@
 
               <label style="font-size:12px;font-weight:800;color:#1a2e50;">
                 <span id="cancelCpfLabel">CPF do responsável *</span>
-                <input type="tel" id="cancelCpf" inputmode="numeric" placeholder="000.000.000-00"
+                <input type="tel" id="cancelCpf" spellcheck="false" inputmode="numeric" placeholder="000.000.000-00"
                   autocomplete="off" maxlength="14"
                   style="margin-top:6px;"
                   oninput="maskCpf(this)" />
@@ -3471,7 +3494,7 @@
             </div>
 
             <!-- Resultado -->
-            <div id="cancelResultado" style="display:none;margin-top:18px;"></div>
+            <div id="cancelResultado" role="status" aria-live="polite" style="display:none;margin-top:18px;"></div>
 
             <div class="actions" style="margin-top:20px;">
               <button type="button" class="btn btn-ghost" onclick="showSection('home')">⬅️ Voltar</button>
@@ -3533,12 +3556,12 @@
             <div class="grid">
               <label>
                 Nome (contém)
-                <input type="text" id="filtroNome" placeholder="Ex.: Maria" />
+                <input type="text" id="filtroNome" placeholder="Ex.: Maria" autocomplete="off" autocapitalize="words" />
               </label>
 
               <label>
                 Bairro (contém)
-                <input type="text" id="filtroBairro" placeholder="Ex.: Ilha de Santa Maria" />
+                <input type="text" id="filtroBairro" placeholder="Ex.: Ilha de Santa Maria" autocomplete="off" autocapitalize="words" />
               </label>
             </div>
 
@@ -4236,6 +4259,14 @@
       }
     }
 
+    // Lazy load do reCAPTCHA v3 apenas quando o formulário é acessado
+    if ((id === 'corrida' || id === 'show') && !window._recaptchaLoaded) {
+      window._recaptchaLoaded = true;
+      var rcScript = document.createElement('script');
+      rcScript.src = 'https://www.google.com/recaptcha/api.js?render=6Le18KcsAAAAAPXHTgEZSmq2dvj1s3JMHRQQ6Yw4';
+      rcScript.async = true; rcScript.defer = true;
+      document.head.appendChild(rcScript);
+    }
     // Reset multi-step ao abrir formulários (integrado aqui, sem override)
     if (id === 'corrida') { cGoStep(1); }
     if (id === 'show')    { window._showAdulto = false; sGoStep(1); }
@@ -6019,7 +6050,7 @@
       }
       showSection('confirmaCorrida');
       setTimeout(function() { window._dispararQRCorrida && window._dispararQRCorrida(num); }, 400);
-      window.launchConfetti && window.launchConfetti(120);
+      if (window.innerWidth >= 768) { window.launchConfetti && window.launchConfetti(80); }
     } catch(err) {
       _prog.fail();
       _lastSubmitTs.corrida = 0; // permite retry imediato após erro
@@ -6131,7 +6162,7 @@
       if (nomeS) { const el = document.getElementById('confirmaShowNome'); el.textContent = '🎤 ' + nomeS; el.style.display = 'block'; }
       showSection('confirmaShow');
       setTimeout(function() { window._dispararQRShow && window._dispararQRShow(num); }, 400);
-      window.launchConfetti && window.launchConfetti(120);
+      if (window.innerWidth >= 768) { window.launchConfetti && window.launchConfetti(80); }
     } catch(err) {
       _progS.fail();
       _lastSubmitTs.show = 0; // permite retry imediato após erro
@@ -7056,6 +7087,10 @@
     var fmtDate = function(d) { return d.toISOString().split('T')[0]; };
     var elNasc = document.getElementById('nascimento');
     if (elNasc) { elNasc.max = fmtDate(maxNascCorrida); elNasc.min = fmtDate(minNascCorrida); }
+    // Show de Talentos: qualquer idade >= 0 — max = hoje (ninguém nasce no futuro)
+    // min já definido no HTML como 1900-01-01
+    var elNascShow = document.getElementById('showNascimento');
+    if (elNascShow) { elNascShow.max = fmtDate(new Date()); }
 
     // Fix 9: Enter dispara a consulta de inscrição nos inputs correspondentes
     ['consultaNumeroInput','consultaNomeInput','consultaCpfInput','consultaTelInput'].forEach(function(id) {
@@ -7067,9 +7102,20 @@
   });
 
   // Reatividade filtros
-  ['filtroTipo','filtroGrafico','dataInicio','dataFim','filtroNome','filtroBairro','filtroStatus','filtroCatShow'].forEach(function(id) {
+  // Filtros de texto com debounce (300ms) — evita recalcular a cada tecla no mobile
+  var _filtroDebounce;
+  function _atualizarTudoDebounced() {
+    clearTimeout(_filtroDebounce);
+    _filtroDebounce = setTimeout(atualizarTudo, 300);
+  }
+  ['filtroTipo','filtroGrafico','dataInicio','dataFim','filtroStatus','filtroCatShow'].forEach(function(id) {
     const el = document.getElementById(id);
     if (el) { el.addEventListener('input', atualizarTudo); el.addEventListener('change', atualizarTudo); }
+  });
+  // Campos de texto livres: debounce para não filtrar a cada tecla
+  ['filtroNome','filtroBairro'].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (el) { el.addEventListener('input', _atualizarTudoDebounced); el.addEventListener('change', atualizarTudo); }
   });
 
   </script>
@@ -7156,7 +7202,10 @@
     let W, H, pieces = [], running = false;
 
     function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-    window.addEventListener('resize', resize); resize();
+    // Debounce do resize para não recalcular a cada pixel (performance mobile)
+    var _resizeTimer;
+    window.addEventListener('resize', function(){ clearTimeout(_resizeTimer); _resizeTimer = setTimeout(resize, 150); }, { passive: true });
+    resize();
 
     const COLORS = ['#00a8ff','#ff5722','#ffd600','#76e000','#ff3cac','#a855f7','#fff','#ffb347'];
     function rand(a,b){ return Math.random()*(b-a)+a; }
@@ -7335,7 +7384,7 @@
           obs.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.08 });
+    }, { threshold: 0.05, rootMargin: '0px 0px 60px 0px' }); // rootMargin: anima um pouco antes de entrar na viewport
 
     targets.forEach((el, i) => {
       el.style.opacity = '0';
