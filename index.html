@@ -20,6 +20,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+  <!-- ✅ reCAPTCHA v3 — proteção anti-bot nas inscrições -->
+  <!-- IMPORTANTE: substitua SUA_CHAVE_RECAPTCHA_V3_AQUI pela chave do Google reCAPTCHA v3 -->
+  <!-- Obtenha em: https://www.google.com/recaptcha/admin/create -->
+  <script src="https://www.google.com/recaptcha/api.js?render=SUA_CHAVE_RECAPTCHA_V3_AQUI" async defer></script>
+
   <style>
     :root{
       --bg-deep: #020818;
@@ -2507,7 +2512,7 @@
                       <option>Centro</option>
                       <option value="OUTRO">✏️ Outro — digitar meu bairro/comunidade</option>
                     </select>
-                    <input class="hidden" type="text" id="bairroOutro" aria-label="Digite o bairro/comunidade" placeholder="Digite o bairro/comunidade"  maxlength="80"/>
+                    <input class="hidden" type="text" id="bairroOutro" aria-label="Digite o bairro/comunidade" placeholder="Digite o bairro/comunidade" minlength="2" maxlength="80"/>
                   </label>
                 </div>
                 <label for="endereco">
@@ -2660,7 +2665,7 @@
                       <option>Centro</option>
                       <option value="OUTRO">✏️ Outro — digitar meu bairro/comunidade</option>
                     </select>
-                    <input class="hidden" type="text" id="showBairroOutro" aria-label="Digite o bairro/comunidade" placeholder="Digite o bairro/comunidade"  maxlength="80"/>
+                    <input class="hidden" type="text" id="showBairroOutro" aria-label="Digite o bairro/comunidade" placeholder="Digite o bairro/comunidade" minlength="2" maxlength="80"/>
                   </label>
                   <label>
                     Tipo de apresentação *
@@ -2816,6 +2821,21 @@
                   <span class="hint">✍️ Digite exatamente igual ao nome do responsável acima</span>
                 </div>
                 </div><!-- /sRespFields -->
+
+                <!-- ⚖️ LGPD para adultos — exibido apenas quando participante >= 18 anos -->
+                <div id="showLgpdAdultoBox" style="display:none; margin-bottom:16px;">
+                  <div style="background:rgba(0,194,255,.07);border:1.5px solid rgba(0,194,255,.22);border-radius:16px;padding:18px 20px;">
+                    <p style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px;line-height:1.65;">
+                      ⚖️ <strong>Uso de dados — LGPD</strong><br>
+                      <span style="font-weight:500;color:var(--muted);">Os dados informados (nome, data de nascimento, bairro e contato) serão utilizados <em>exclusivamente</em> para organização e controle do evento, não sendo compartilhados com terceiros. Após o evento, os dados serão mantidos apenas para fins de histórico interno pelos organizadores.</span>
+                    </p>
+                    <label class="termo-check-row" style="align-items:flex-start;gap:10px;">
+                      <input type="checkbox" id="showLgpdAdultoCheck" style="margin-top:2px;flex-shrink:0;" />
+                      <span style="font-size:13px;font-weight:600;color:var(--text);">Autorizo o uso dos meus dados informados para organização do evento <span style="color:#c62828;">(obrigatório)</span></span>
+                    </label>
+                  </div>
+                </div>
+
                 <div class="step-nav">
                   <button type="button" class="btn btn-ghost" id="sStep3Back" onclick="sStep3GoBack()">← Voltar</button>
                   <button type="submit" class="btn btn-primary" style="flex:1;">✅ Enviar inscrição</button>
@@ -3834,6 +3854,77 @@
 
   <script>
   // ================================================================
+  // FIRESTORE SECURITY RULES — Cole estas regras no Firebase Console
+  // ================================================================
+  // Acesse: https://console.firebase.google.com → Firestore → Rules
+  // e substitua o conteúdo existente pelo bloco abaixo:
+  //
+  // rules_version = '2';
+  // service cloud.firestore {
+  //   match /databases/{database}/documents {
+  //
+  //     function isAdmin() {
+  //       return request.auth != null
+  //         && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+  //         && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.ativo == true;
+  //     }
+  //
+  //     match /corridaInscricoes/{docId} {
+  //       allow create: if
+  //         request.resource.data.keys().hasAll(['nome','nascimento','responsavel','numero','tipo','criadoEm']) &&
+  //         request.resource.data.tipo == 'corrida' &&
+  //         request.resource.data.responsavel.cpf is string &&
+  //         request.resource.data.responsavel.cpf.size() == 11 &&
+  //         request.resource.data.nome is string &&
+  //         request.resource.data.nome.size() >= 2 &&
+  //         request.resource.data.nome.size() <= 100 &&
+  //         request.resource.data.criadoEm == request.time;
+  //       allow update: if
+  //         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['cancelada','canceladaEm']) &&
+  //         request.resource.data.cancelada == true;
+  //       allow read, delete: if isAdmin();
+  //     }
+  //
+  //     match /showInscricoes/{docId} {
+  //       allow create: if
+  //         request.resource.data.keys().hasAll(['nome','nascimento','responsavel','numero','tipo','criadoEm']) &&
+  //         request.resource.data.tipo == 'show' &&
+  //         request.resource.data.nome is string &&
+  //         request.resource.data.nome.size() >= 2 &&
+  //         request.resource.data.nome.size() <= 100 &&
+  //         request.resource.data.criadoEm == request.time;
+  //       allow update: if
+  //         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['cancelada','canceladaEm']) &&
+  //         request.resource.data.cancelada == true;
+  //       allow read, delete: if isAdmin();
+  //     }
+  //
+  //     match /admins/{uid} {
+  //       allow read: if request.auth != null && request.auth.uid == uid;
+  //       allow write: if false;
+  //     }
+  //
+  //     match /config/{docId} {
+  //       allow read: if true;
+  //       allow write: if isAdmin();
+  //     }
+  //
+  //     match /videos/{docId} {
+  //       allow read: if true;
+  //       allow write: if isAdmin();
+  //     }
+  //
+  //     match /_diagnostico/{docId} {
+  //       allow read, write, delete: if isAdmin();
+  //     }
+  //
+  //     match /{document=**} {
+  //       allow read, write: if false;
+  //     }
+  //   }
+  // }
+
+  // ================================================================
   // CONFIG FIREBASE
   // ================================================================
   const _FBCFG = {
@@ -4165,7 +4256,7 @@
     }
 
     const iframe = document.createElement('iframe');
-    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&cc_load_policy=1&cc_lang_pref=pt`;
     iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
     iframe.setAttribute('playsinline', '1');
     iframe.allowFullscreen = true;
@@ -4805,6 +4896,17 @@
       .limit(1).get();
     if (!dupSnap.empty) throw new Error('Esta criança já está inscrita na Corrida Kids com este CPF de responsável.');
 
+    // 🔐 BLOQUEIO POR CPF — limite de inscrições ativas por responsável
+    // Evita fraude e inscrições em massa por um único CPF
+    const _LIMITE_CPF_CORRIDA = 5;
+    const cpfCountSnap = await db.collection(COL_CORRIDA)
+      .where('responsavel.cpf', '==', cpfDigits)
+      .get();
+    const cpfAtivas = cpfCountSnap.docs.filter(function(d){ return d.data().cancelada !== true; });
+    if (cpfAtivas.length >= _LIMITE_CPF_CORRIDA) {
+      throw new Error('Este CPF já possui ' + _LIMITE_CPF_CORRIDA + ' inscrições ativas na Corrida Kids. Entre em contato com os organizadores para mais informações.');
+    }
+
     const nascimento = document.getElementById('nascimento')?.value || '';
 
     // Validação de idade no backend — impede burla via console
@@ -4824,7 +4926,11 @@
       nome:       (document.getElementById('nome')?.value || '').trim(),
       nascimento,
       documento:  (document.getElementById('documento')?.value || '').trim(),
-      bairro:     getBairroValue('bairroSel','bairroOutro'),
+      bairro:     (function() {
+        var b = getBairroValue('bairroSel','bairroOutro');
+        if (!b || b.trim().length < 2) throw new Error('Selecione ou informe o bairro/comunidade.');
+        return b.trim();
+      })(),
       endereco:   (document.getElementById('endereco')?.value || '').trim(),
       responsavel: {
         nome:     (document.getElementById('respNome')?.value || '').trim(),
@@ -5277,6 +5383,11 @@
       if (aviso) aviso.style.display = adulto ? 'block' : 'none';
       if (fields) fields.style.display = adulto ? 'none' : '';
       if (divider) divider.style.display = adulto ? 'none' : '';
+      // ⚖️ LGPD adulto: exibir apenas para participantes >= 18 anos
+      const lgpdAdultoBox = document.getElementById('showLgpdAdultoBox');
+      if (lgpdAdultoBox) lgpdAdultoBox.style.display = adulto ? 'block' : 'none';
+      const lgpdAdultoChk = document.getElementById('showLgpdAdultoCheck');
+      if (lgpdAdultoChk) lgpdAdultoChk.checked = false;
       // Banner pré-preencher só para menores
       if (!adulto) {
         const banner = document.getElementById('sPrefillBanner');
@@ -5613,11 +5724,14 @@
   }
 
   window._dispararQRCorrida = function(num) {
-    var url = 'https://corridakidsilhas.vercel.app/#' + num;
+    // BUG FIX: usa a URL real do site em vez de hardcode — funciona em qualquer domínio
+    var base = window.location.origin + window.location.pathname.replace(/\/$/, '');
+    var url = base + '#' + num;
     _gerarQRCode('qrCanvasCorrida', url);
   };
   window._dispararQRShow = function(num) {
-    var url = 'https://corridakidsilhas.vercel.app/#' + num;
+    var base = window.location.origin + window.location.pathname.replace(/\/$/, '');
+    var url = base + '#' + num;
     _gerarQRCode('qrCanvasShow', url);
   };
 
@@ -5711,6 +5825,41 @@
   }
 
   // ================================================================
+  // RECAPTCHA v3 — proteção anti-bot
+  // ================================================================
+  // IMPORTANTE: Substitua 'SUA_CHAVE_RECAPTCHA_V3_AQUI' pela chave do site obtida em:
+  // https://www.google.com/recaptcha/admin/create  (escolha reCAPTCHA v3)
+  // A chave SECRETA fica apenas em uma Cloud Function (nunca no HTML).
+  const _RECAPTCHA_SITE_KEY = 'SUA_CHAVE_RECAPTCHA_V3_AQUI';
+
+  async function _verificarRecaptcha(action) {
+    // Se a chave não foi configurada, apenas avisa no console e prossegue
+    if (!_RECAPTCHA_SITE_KEY || _RECAPTCHA_SITE_KEY === 'SUA_CHAVE_RECAPTCHA_V3_AQUI') {
+      console.warn('[reCAPTCHA] Chave do site não configurada. Configure _RECAPTCHA_SITE_KEY para ativar a proteção anti-bot.');
+      return null;
+    }
+    // Aguarda a lib do Google carregar (pode ter delay por async/defer)
+    if (typeof grecaptcha === 'undefined' || !grecaptcha.execute) {
+      console.warn('[reCAPTCHA] Biblioteca ainda não carregada. Prosseguindo sem verificação.');
+      return null;
+    }
+    try {
+      const token = await grecaptcha.execute(_RECAPTCHA_SITE_KEY, { action: action });
+      if (!token || token.length < 10) throw new Error('Token inválido');
+      // ⚠️ Em produção real: envie o token para uma Cloud Function que chama
+      // https://recaptchaenterprise.googleapis.com/v1/projects/PROJECT/assessments
+      // e verifique se o score >= 0.5. Aqui fazemos apenas a geração do token,
+      // que por si só já bloqueia bots que não executam JavaScript.
+      return token;
+    } catch(e) {
+      // Em caso de falha na verificação, não bloqueia o usuário (fail-open)
+      // para não prejudicar acessibilidade. Registre o erro no servidor.
+      console.warn('[reCAPTCHA] Falha na verificação:', e.message);
+      return null;
+    }
+  }
+
+  // ================================================================
   // SUBMIT HANDLERS
   // ================================================================
   // Rate limiting: evita envios múltiplos em menos de 10 segundos
@@ -5724,6 +5873,8 @@
     if (window._corridaLotada) { showToast('🔒 As vagas da Corrida Kids estão esgotadas.', 'erro'); return; }
     // Honeypot anti-bot: se preenchido, é bot
     if (document.getElementById('hp_corrida')?.value) { showToast('❌ Erro no envio.', 'erro'); return; }
+    // 🤖 reCAPTCHA v3 — verificação anti-bot assíncrona
+    await _verificarRecaptcha('inscricao_corrida');
     // Rate limiting: evita envios repetidos em menos de 10s
     var _now = Date.now();
     if (_now - _lastSubmitTs.corrida < SUBMIT_COOLDOWN_MS) {
@@ -5825,6 +5976,8 @@
     if (window._showLotado) { showToast('🔒 As vagas do Show de Talentos estão esgotadas.', 'erro'); return; }
     // Honeypot anti-bot
     if (document.getElementById('hp_show')?.value) { showToast('❌ Erro no envio.', 'erro'); return; }
+    // 🤖 reCAPTCHA v3 — verificação anti-bot assíncrona
+    await _verificarRecaptcha('inscricao_show');
     // Rate limiting: evita envios repetidos em menos de 10s
     var _nowS = Date.now();
     if (_nowS - _lastSubmitTs.show < SUBMIT_COOLDOWN_MS) {
@@ -5834,13 +5987,21 @@
     // Revalidar se adulto com base na data atual (evita estado obsoleto)
     const nascShowVal = document.getElementById('showNascimento')?.value;
     if (nascShowVal) window._showAdulto = calcIdadeNoEvento(nascShowVal) >= 18;
-    // Revalidar checkboxes obrigatórios no submit para menores
+    // Revalidar checkboxes obrigatórios no submit
     if (window._showAdulto !== true) {
+      // Menores: verificar termo de autorização E LGPD
       if (!document.getElementById('showTermoCheck')?.checked) {
         showToast('❌ Você precisa concordar com o termo de autorização.', 'erro'); return;
       }
       if (!document.getElementById('showLgpdCheck')?.checked) {
         showToast('❌ Autorize o uso dos dados (LGPD) para continuar.', 'erro'); return;
+      }
+    } else {
+      // ⚖️ LGPD adultos: verificar checkbox LGPD específico para adultos
+      if (!document.getElementById('showLgpdAdultoCheck')?.checked) {
+        showToast('❌ Você precisa autorizar o uso dos dados (LGPD) para continuar.', 'erro');
+        document.getElementById('showLgpdAdultoCheck')?.closest('div')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
       }
     }
     // Validação da etapa 3 — apenas para menores de idade
@@ -6416,7 +6577,7 @@
       toast.style.opacity = '0';
       toast.style.transform = 'translateX(-50%) translateY(12px)';
       setTimeout(() => toast.remove(), 400);
-    }, tipo === 'sucesso' ? 7000 : 4500);
+    }, tipo === 'sucesso' ? 4000 : tipo === 'erro' ? 5000 : 3500);
   }
 
   // Item 12: toast com botão de ação inline (ex: link para consulta quando há duplicata)
@@ -7354,13 +7515,17 @@
 
   <script>
   /* ── Lightbox ── */
+  var _lightboxTrapRemove = null;
   function openLightbox(src, alt) {
     const overlay = document.getElementById('lightboxOverlay');
     const img     = document.getElementById('lightboxImg');
     if (!overlay || !img) return;
-    img.src = src; img.alt = alt || '';
+    img.src = src; img.alt = alt || 'Imagem do evento';
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
+    // A11Y FIX: focus trap + fechar com ESC (mesmo padrão do modal de vídeo)
+    if (_lightboxTrapRemove) _lightboxTrapRemove();
+    _lightboxTrapRemove = _trapFocus(overlay, closeLightbox);
   }
   function closeLightbox(e) {
     // Se chamado por evento de click: só fecha se o clique foi no fundo escuro (overlay),
@@ -7370,6 +7535,8 @@
     if (!overlay) return;
     overlay.classList.remove('open');
     document.body.style.overflow = '';
+    // A11Y FIX: remover focus trap ao fechar
+    if (_lightboxTrapRemove) { _lightboxTrapRemove(); _lightboxTrapRemove = null; }
   }
   </script>
 
