@@ -23,7 +23,7 @@
   <!-- ✅ reCAPTCHA v3 — proteção anti-bot nas inscrições -->
   <!-- IMPORTANTE: substitua SUA_CHAVE_RECAPTCHA_V3_AQUI pela chave do Google reCAPTCHA v3 -->
   <!-- Obtenha em: https://www.google.com/recaptcha/admin/create -->
-  <script src="https://www.google.com/recaptcha/api.js?render=SUA_CHAVE_RECAPTCHA_V3_AQUI" async defer></script>
+  <script src="https://www.google.com/recaptcha/api.js?render=6Le18KcsAAAAAPXHTgEZSmq2dvj1s3JMHRQQ6Yw4" async defer></script>
 
   <style>
     :root{
@@ -4433,17 +4433,17 @@
     if (!label || !input || !hint) return;
     var isShow = (numero || '').toUpperCase().startsWith('ST-');
     if (isShow) {
-      label.textContent = 'CPF do responsável ou nome do participante *';
-      input.placeholder = 'CPF (000.000.000-00) ou nome completo';
+      label.textContent = 'CPF do responsável (menores) ou nome do participante (adultos) *';
+      input.placeholder = 'CPF (000.000.000-00) ou nome completo do participante';
       input.inputMode   = 'text';
       input.maxLength   = 100;
-      hint.textContent  = 'Para menores: CPF do responsável. Para adultos inscritos: nome completo do participante.';
+      hint.textContent  = 'Menores de 18 anos: informe o CPF do responsável. Adultos inscritos no Show: informe o nome completo do participante.';
     } else {
       label.textContent = 'CPF do responsável *';
       input.placeholder = '000.000.000-00';
       input.inputMode   = 'numeric';
       input.maxLength   = 14;
-      hint.textContent  = 'Mesmo CPF usado no momento da inscrição.';
+      hint.textContent  = 'Mesmo CPF informado no momento da inscrição.';
     }
   };
 
@@ -4819,7 +4819,9 @@
   // ⚠️ ATENÇÃO: SUBSTITUA ESTA DATA PELA DATA REAL DO EVENTO ANTES DE PUBLICAR!
   // Impacta: categorias de idade (Corrida e Show), validação de nascimento, exibição de categorias.
   // Formato: 'AAAA-MM-DD'  Exemplo: '2026-06-15'
-  const DATA_EVENTO_STR = '2026-12-31'; // ← ALTERE AQUI pela data real do evento
+  // RISCO: com '2026-12-31' crianças que completam 6-15 anos só até dez/2026 são aceitas,
+  // mas crianças que completariam a idade SÓ após a data real do evento seriam indevidamente elegíveis.
+  const DATA_EVENTO_STR = '2026-06-30'; // ← ALTERE AQUI pela data real do evento (ex: '2026-06-15')
   const DATA_EVENTO_CORRIDA = new Date(DATA_EVENTO_STR + 'T00:00:00');
 
   function calcIdadeNoEvento(nascimento) {
@@ -5822,7 +5824,7 @@
       a.download = 'comprovante-' + num + '.html';
       a.click();
     }
-    setTimeout(function() { URL.revokeObjectURL(url); }, 30000);
+    setTimeout(function() { URL.revokeObjectURL(url); }, 600000); // 10 min — tempo suficiente para imprimir
   }
 
   // ================================================================
@@ -5831,7 +5833,7 @@
   // IMPORTANTE: Substitua 'SUA_CHAVE_RECAPTCHA_V3_AQUI' pela chave do site obtida em:
   // https://www.google.com/recaptcha/admin/create  (escolha reCAPTCHA v3)
   // A chave SECRETA fica apenas em uma Cloud Function (nunca no HTML).
-  const _RECAPTCHA_SITE_KEY = 'SUA_CHAVE_RECAPTCHA_V3_AQUI';
+  const _RECAPTCHA_SITE_KEY = '6Le18KcsAAAAAPXHTgEZSmq2dvj1s3JMHRQQ6Yw4';
 
   async function _verificarRecaptcha(action) {
     // Se a chave não foi configurada, apenas avisa no console e prossegue
@@ -6157,24 +6159,30 @@
   async function _verificarVagas(limiteCorrida, limiteShow) {
     if (!FIREBASE_OK) return;
     try {
-      // Conta apenas inscrições sem o campo cancelada==true.
-      // Usa where('cancelada','==',false) + get() para documentos explicitamente não-cancelados,
-      // mais get() sem filtro para documentos sem o campo (inscrições novas nunca têm o campo).
-      // Abordagem simplificada: busca tudo e filtra no cliente — coleções pequenas (<1000 docs).
-      const [snapC, snapS] = await Promise.all([
-        limiteCorrida > 0 ? db.collection(COL_CORRIDA).get() : Promise.resolve(null),
-        limiteShow    > 0 ? db.collection(COL_SHOW).get()    : Promise.resolve(null)
-      ]);
+      // Usa contador atômico no doc 'meta/contadores' para evitar leitura de toda a coleção.
+      // Estrutura esperada: { totalCorrida: N, totalCorridaCanceladas: N, totalShow: N, totalShowCanceladas: N }
+      // Fallback: se o doc não existir, conta via query (coleções pequenas).
+      const metaSnap = await db.collection('meta').doc('contadores').get();
+      let totalC = 0, totalS = 0;
 
-      const totalC = snapC ? snapC.docs.filter(function(d){ return d.data().cancelada !== true; }).length : 0;
-      const totalS = snapS ? snapS.docs.filter(function(d){ return d.data().cancelada !== true; }).length : 0;
+      if (metaSnap.exists) {
+        const m = metaSnap.data() || {};
+        totalC = (m.totalCorrida || 0) - (m.totalCorridaCanceladas || 0);
+        totalS = (m.totalShow    || 0) - (m.totalShowCanceladas    || 0);
+      } else {
+        // Fallback para coleções pequenas (< 500 docs) enquanto o contador não estiver configurado
+        const [snapC, snapS] = await Promise.all([
+          limiteCorrida > 0 ? db.collection(COL_CORRIDA).get() : Promise.resolve(null),
+          limiteShow    > 0 ? db.collection(COL_SHOW).get()    : Promise.resolve(null)
+        ]);
+        totalC = snapC ? snapC.docs.filter(function(d){ return d.data().cancelada !== true; }).length : 0;
+        totalS = snapS ? snapS.docs.filter(function(d){ return d.data().cancelada !== true; }).length : 0;
+      }
 
-      // Corrida — bloquear se lotou
       if (limiteCorrida > 0) {
         const vagasC = Math.max(0, limiteCorrida - totalC);
         _aplicarVagas('corrida', vagasC, limiteCorrida);
       }
-      // Show — bloquear se lotou
       if (limiteShow > 0) {
         const vagasS = Math.max(0, limiteShow - totalS);
         _aplicarVagas('show', vagasS, limiteShow);
@@ -7478,12 +7486,27 @@
       const cActive = document.querySelector('#corridaForm .fstep.active');
       const sActive = document.querySelector('#showForm .fstep.active');
       if (cActive) {
-        if (cActive.id === 'cFStep1') { showSection('home', true); return; }
+        if (cActive.id === 'cFStep1') {
+          // Verifica se há dados preenchidos antes de sair silenciosamente
+          if (typeof _isFormDirty === 'function' && _isFormDirty()) {
+            if (!confirm('Você tem dados preenchidos no formulário. Deseja mesmo sair e perder o preenchimento?')) {
+              pushFormState(); return;
+            }
+          }
+          showSection('home', true); return;
+        }
         if (cActive.id === 'cFStep2') { cGoStep(1, true); pushFormState(); return; }
         if (cActive.id === 'cFStep3') { cStep3GoBack(); pushFormState(); return; }
       }
       if (sActive) {
-        if (sActive.id === 'sFStep1') { showSection('home', true); return; }
+        if (sActive.id === 'sFStep1') {
+          if (typeof _isFormDirty === 'function' && _isFormDirty()) {
+            if (!confirm('Você tem dados preenchidos no formulário. Deseja mesmo sair e perder o preenchimento?')) {
+              pushFormState(); return;
+            }
+          }
+          showSection('home', true); return;
+        }
         if (sActive.id === 'sFStep2') { sGoStep(1, true); pushFormState(); return; }
         if (sActive.id === 'sFStep3') { sStep3GoBack(); pushFormState(); return; }
       }
