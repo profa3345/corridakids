@@ -1896,13 +1896,9 @@
 
   <!--
     🔐 reCAPTCHA v3 — proteção invisível contra bots.
-    ANTES DE PUBLICAR: substitua RECAPTCHA_SITE_KEY pela chave real do seu site.
-    Obtenha em: https://www.google.com/recaptcha/admin/create
-    Tipo: reCAPTCHA v3 | Domínios: corridakidsilhas.vercel.app, localhost
-    A verificação do token deve ser feita no servidor (Cloud Function / backend).
-    Por ora, o token é gerado e logado — pronto para integrar ao backend.
+    Script carregado no <head> com a chave real. Esta tag foi removida para evitar duplo carregamento.
+    Domínios: corridakidsilhas.vercel.app, localhost
   -->
-  <script src="https://www.google.com/recaptcha/api.js?render=RECAPTCHA_SITE_KEY" async defer></script>
 </head>
 
 <body>
@@ -2052,7 +2048,7 @@
                 <button class="cta c4" onclick="downloadRegulamento()" type="button">
                   <div class="left">
                     <b>Baixar regulamento</b>
-                    <span>Arquivo TXT para imprimir/compartilhar</span>
+                    <span>Arquivo TXT · ~2 KB · imprimir/compartilhar</span>
                   </div>
                   <div class="icon" aria-hidden="true">📄</div>
                 </button>
@@ -4338,7 +4334,7 @@
       if (w) w.classList.remove('hidden');
     }
 
-    [['vid1','Z0gcIo0Bfo0'],['vid2','Umr56L32nkw'],['vid3','mAm26VkLcdA']].forEach(function(pair) {
+    [['vid1','Z0gcIo0Bfo0'],['vid2','Umr56L32nkw'],['vid3','mAm26VkLcdA'],['vid4','92Ov4e9Ffgw']].forEach(function(pair) {
       const wrap = document.getElementById(pair[0]);
       if (!wrap) return;
       const iframe = wrap.querySelector('iframe');
@@ -4349,19 +4345,27 @@
     });
   });
 
-  function compartilharVideo(vidId, titulo) {
+  function compartilharVideo(vidId, titulo, btnEl) {
     const base = window.location.href.split('#')[0].split('?')[0].replace(/\/$/, '');
     const link = base + '#' + vidId;
     const texto = titulo + ' 🎬 Assista direto no site: ' + link;
+    function _feedbackBtn(btn) {
+      if (!btn) return;
+      var orig = btn.innerHTML;
+      btn.innerHTML = '✅ Copiado!';
+      btn.style.color = '#3a8a00';
+      btn.style.borderColor = 'rgba(58,138,0,.45)';
+      setTimeout(function() { btn.innerHTML = orig; btn.style.color = ''; btn.style.borderColor = ''; }, 2200);
+    }
     if (navigator.share) {
       navigator.share({ title: titulo, text: texto, url: link }).catch(function() {
         navigator.clipboard && navigator.clipboard.writeText(link)
-          .then(function() { showToast('✅ Link copiado!', 'sucesso'); })
+          .then(function() { showToast('✅ Link copiado!', 'sucesso'); _feedbackBtn(btnEl); })
           .catch(function() { showToast('⚠️ Copie o link: ' + link, 'info'); });
       });
     } else if (navigator.clipboard) {
       navigator.clipboard.writeText(link)
-        .then(function() { showToast('✅ Link copiado: ' + link, 'sucesso'); })
+        .then(function() { showToast('✅ Link copiado: ' + link, 'sucesso'); _feedbackBtn(btnEl); })
         .catch(function() { showToast('⚠️ Copie o link: ' + link, 'info'); });
     }
   }
@@ -4468,8 +4472,7 @@
     if (!FIREBASE_OK) { showToast('❌ Firebase indisponível.', 'erro'); return; }
 
     // Rate limiting
-    var agora = Date.now();
-    if (agora - _lastCancelTs < 5000) {
+    if (Date.now() - _lastCancelTs < 5000) {
       showToast('⏳ Aguarde alguns segundos antes de tentar novamente.', 'info'); return;
     }
     // Limite de tentativas por sessão
@@ -4486,37 +4489,15 @@
       showToast('❌ CPF inválido. Verifique os números.', 'erro'); return;
     }
 
-    // UX-CANCELCONFIRM: confirmação antes de executar ação irreversível
-    var resultado = document.getElementById('cancelResultado');
-    if (resultado) {
-      // Se ainda não confirmou, mostrar banner de confirmação em vez de executar
-      if (!cancelarInscricao._confirmado) {
-        cancelarInscricao._confirmado = true;
-        resultado.style.display = 'block';
-        resultado.innerHTML = '<div style="background:rgba(198,40,40,.10);border:1.5px solid rgba(198,40,40,.35);border-radius:14px;padding:16px 18px;font-size:13.5px;font-weight:700;color:var(--text);">' +
-          '⚠️ Tem certeza que deseja cancelar a inscrição <strong>' + num + '</strong>? Esta ação não pode ser desfeita.<br><br>' +
-          '<div style="display:flex;gap:10px;margin-top:8px;">' +
-          '<button type="button" onclick="cancelarInscricao._confirmado=false;document.getElementById(\'cancelResultado\').style.display=\'none\';" ' +
-          'style="flex:1;padding:10px;border-radius:10px;border:1.5px solid rgba(0,0,0,.12);background:#fff;font-weight:700;cursor:pointer;">Não, voltar</button>' +
-          '<button type="button" onclick="cancelarInscricao._confirmado=\'sim\';cancelarInscricao();" ' +
-          'style="flex:1;padding:10px;border-radius:10px;border:none;background:linear-gradient(135deg,#c62828,#b71c1c);color:#fff;font-weight:800;cursor:pointer;">Sim, cancelar</button>' +
-          '</div></div>';
-        return;
-      }
-      // Se _confirmado='sim', prossegue; reseta para próxima vez
-      cancelarInscricao._confirmado = false;
-      resultado.style.display = 'none';
-      resultado.innerHTML = '';
-    }
-
+    // Consome tentativa e registra timestamp antes da busca
     _cancelTentativas++;
+    _lastCancelTs = Date.now();
 
     var resultado = document.getElementById('cancelResultado');
     var btn = document.getElementById('btnCancelarInscricao');
     resultado.style.display = 'block';
     resultado.innerHTML = '<div style="text-align:center;padding:16px;color:var(--muted);font-size:13px;">⏳ Verificando inscrição…</div>';
     if (btn) { btn.disabled = true; btn.innerHTML = '⏳ Verificando…'; }
-    _lastCancelTs = agora;
 
     try {
       // Busca nas duas coleções pelo número
@@ -4625,9 +4606,10 @@
         canceladaEm: firebase.firestore.FieldValue.serverTimestamp()
       });
       resultado.innerHTML = _cancelMsg('sucesso',
-        '✅ Inscrição cancelada com sucesso.<br><span style="font-size:12px;color:#3d5068;">Obrigado por nos avisar. Esperamos te ver em outro evento! 💙</span>');
+        '✅ Inscrição cancelada com sucesso.<br><span style="font-size:12px;color:#3d5068;">Obrigado por nos avisar. Esperamos te ver em outro evento! 💙</span>' +
+        '<br><button type="button" onclick="_resetCancelForm()" style="margin-top:10px;padding:8px 18px;border-radius:10px;border:1.5px solid rgba(46,125,50,.35);background:rgba(46,125,50,.08);color:#1b5e20;font-weight:700;font-size:12px;cursor:pointer;">🔄 Cancelar outra inscrição</button>');
       _cancelTentativas = 0; // reset após sucesso
-      // Limpa os campos e desabilita botão definitivamente
+      // Limpa os campos e desabilita botão principal
       if (document.getElementById('cancelNumero')) document.getElementById('cancelNumero').value = '';
       if (document.getElementById('cancelCpf')) document.getElementById('cancelCpf').value = '';
       const btnCancel = document.getElementById('btnCancelarInscricao');
@@ -4638,7 +4620,6 @@
         btnCancel.style.cursor = 'not-allowed';
       }
     } catch(e) {
-      // error silenciado em prod
       resultado.innerHTML = _cancelMsg('erro', '❌ Erro ao cancelar. Tente novamente ou entre em contato com os organizadores.');
     }
   };
@@ -4648,6 +4629,17 @@
     var borda = tipo === 'sucesso' ? 'rgba(46,125,50,.25)'  : tipo === 'aviso' ? 'rgba(255,160,0,.30)'  : 'rgba(198,40,40,.25)';
     return `<div style="background:${bg};border:1.5px solid ${borda};border-radius:14px;padding:16px 18px;font-size:13px;color:#07172e;line-height:1.7;">${html}</div>`;
   }
+
+  // Fix 11: reseta o formulário de cancelamento para permitir cancelar outra inscrição
+  window._resetCancelForm = function() {
+    var resultado = document.getElementById('cancelResultado');
+    if (resultado) { resultado.style.display = 'none'; resultado.innerHTML = ''; }
+    var btn = document.getElementById('btnCancelarInscricao');
+    if (btn) { btn.disabled = false; btn.innerHTML = '❌ Cancelar minha inscrição'; btn.style.opacity = ''; btn.style.cursor = ''; }
+    if (document.getElementById('cancelNumero')) document.getElementById('cancelNumero').value = '';
+    if (document.getElementById('cancelCpf'))    document.getElementById('cancelCpf').value = '';
+    _cancelTentativas = 0;
+  };
 
   async function consultarInscricao() {
     if (!FIREBASE_OK) { showToast('❌ Firebase indisponível.', 'erro'); return; }
@@ -4692,7 +4684,7 @@
           db.collection(COL_CORRIDA).where('nomeLower','==',nomeNorm).limit(5).get(),
           db.collection(COL_SHOW).where('nomeLower','==',nomeNorm).limit(5).get()
         ]);
-        // Fallback: tenta com o nome original caso a versão sem partículas não bata
+        // Fallback 1: tenta com o nome original caso a versão sem partículas não bata
         if (sc2.empty && ss2.empty && nomeNorm !== nome) {
           var [sc2b, ss2b] = await Promise.all([
             db.collection(COL_CORRIDA).where('nomeLower','==',nome).limit(5).get(),
@@ -4703,6 +4695,16 @@
         } else {
           sc2.forEach(function(d){ snaps.push(d.data()); });
           ss2.forEach(function(d){ snaps.push(d.data()); });
+        }
+        // Fallback 2: busca por prefixo — encontra nomes parciais (ex: "maria" acha "maria silva")
+        if (!snaps.length) {
+          var prefixo = nomeNorm || nome;
+          var [sc2c, ss2c] = await Promise.all([
+            db.collection(COL_CORRIDA).orderBy('nomeLower').startAt(prefixo).endAt(prefixo + '\uf8ff').limit(8).get(),
+            db.collection(COL_SHOW).orderBy('nomeLower').startAt(prefixo).endAt(prefixo + '\uf8ff').limit(8).get()
+          ]);
+          sc2c.forEach(function(d){ snaps.push(d.data()); });
+          ss2c.forEach(function(d){ snaps.push(d.data()); });
         }
 
       } else if (tab === 'cpf') {
@@ -4728,7 +4730,7 @@
       }
 
       if (!snaps.length) {
-        var dicaNome = (tab === 'nome') ? '<br><span style="font-size:11.5px;color:var(--muted);margin-top:6px;display:block;">💡 A busca por nome precisa ser <strong>exatamente igual</strong> ao cadastrado. Tente pelo número de inscrição, CPF ou telefone para um resultado mais preciso.</span>' : '';
+        var dicaNome = (tab === 'nome') ? '<br><span style="font-size:11.5px;color:var(--muted);margin-top:6px;display:block;">💡 Tente digitar pelo menos o primeiro nome completo. Para resultado mais preciso, use o número de inscrição, CPF ou telefone.</span>' : '';
         resultado.innerHTML = '<div class="consulta-nao-encontrado">😕 Nenhuma inscrição encontrada com esses dados.<br><span style="font-size:12px;color:var(--muted);">Verifique se os dados estão corretos ou tente outra forma de busca.</span>' + dicaNome + '</div>';
         return;
       }
@@ -4851,7 +4853,12 @@
   // Formato: 'AAAA-MM-DD'  Exemplo: '2026-06-15'
   // RISCO: com '2026-12-31' crianças que completam 6-15 anos só até dez/2026 são aceitas,
   // mas crianças que completariam a idade SÓ após a data real do evento seriam indevidamente elegíveis.
-  const DATA_EVENTO_STR = '2026-06-30'; // ← ALTERE AQUI pela data real do evento (ex: '2026-06-15')
+  // Critério oficial: idade que o participante completar até 31/12/2026
+  // A data do evento ainda não foi definida — o cálculo de categoria usa 31/12/2026
+  // para garantir que qualquer criança elegível no ano do evento seja aceita.
+  // Quando a data real for confirmada, atualize apenas DATA_EVENTO_CORRIDA abaixo
+  // para fins de exibição/cronograma — o critério de elegibilidade permanece 31/12/2026.
+  const DATA_EVENTO_STR = '2026-12-31'; // critério oficial de idade (não alterar)
   const DATA_EVENTO_CORRIDA = new Date(DATA_EVENTO_STR + 'T00:00:00');
 
   function calcIdadeNoEvento(nascimento) {
@@ -4970,7 +4977,11 @@
         cpf:      onlyDigits(cpfVal),
         vinculo:  document.getElementById('respVinculo')?.value || '',
         telefone: onlyDigits(document.getElementById('respTelefone')?.value || ''),
-        email:    (document.getElementById('respEmail')?.value || '').trim().toLowerCase() || ''
+        email:    (function() {
+          var em = (document.getElementById('respEmail')?.value || '').trim().toLowerCase();
+          if (em && (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em))) throw new Error('E-mail do responsável inválido. Verifique o endereço digitado.');
+          return em;
+        })()
       },
       autorizacao: {
         aceito:       true,
@@ -5076,7 +5087,11 @@
         cpf:      onlyDigits(cpfVal),
         vinculo:  document.getElementById('showRespVinculo')?.value || '',
         telefone: onlyDigits(document.getElementById('showRespTelefone')?.value || ''),
-        email:    (document.getElementById('showRespEmail')?.value || '').trim().toLowerCase() || ''
+        email:    (function() {
+          var em = (document.getElementById('showRespEmail')?.value || '').trim().toLowerCase();
+          if (em && (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em))) throw new Error('E-mail do responsável inválido. Verifique o endereço digitado.');
+          return em;
+        })()
       },
       criadoEm: firebase.firestore.FieldValue.serverTimestamp()
     };
@@ -5150,6 +5165,14 @@
     });
     cUpdateProgress(step);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    // UX: aguarda scroll completar antes de focar (evita teclado iOS ocultar campo)
+    setTimeout(function() {
+      var secao = document.getElementById('cFStep' + step);
+      if (secao) {
+        var primeiro = secao.querySelector('input:not([type="hidden"]):not([type="checkbox"]):not([style*="display:none"]), select');
+        if (primeiro && primeiro.offsetParent !== null) primeiro.focus({ preventScroll: true });
+      }
+    }, 380);
     if (step === 3) {
       const banner = document.getElementById('cPrefillBanner');
       if (banner) {
@@ -5212,7 +5235,8 @@
         showToast('❌ A Corrida Kids é exclusiva para crianças de 6 a 15 anos.', 'erro'); return;
       }
       if (bairro === 'OUTRO' && !document.getElementById('bairroOutro').value.trim()) {
-        showToast('❌ Digite o bairro/comunidade.', 'erro'); return;
+        showToast('❌ Digite o bairro/comunidade.', 'erro');
+        scrollToFirstEmpty(['bairroOutro']); return;
       }
       if (navigator.vibrate) navigator.vibrate(40);
       _historyPush({ formStep: true });
@@ -5269,9 +5293,13 @@
       setStatus(els, 'loading', 'Verificando adequação ao evento…');
 
       try {
-        // S1: Esta chamada funciona no ambiente claude.ai (artifact) via proxy.
-        // Em deploy próprio, adicione um proxy server-side para proteger a chave.
-        // Para produção standalone: substitua por uma Cloud Function/Edge Function.
+        // ⚠️  SEGURANÇA — AÇÃO NECESSÁRIA ANTES DE IR PARA PRODUÇÃO:
+        // Esta chamada usa o header 'anthropic-dangerous-direct-browser-access' que
+        // expõe o acesso à API diretamente no browser. Qualquer visitante pode usá-la.
+        // SOLUÇÃO: crie uma Vercel Edge Function (api/moderar-talento.js) que receba
+        // o valor, faça a chamada server-side com a chave real e retorne apenas o JSON.
+        // Enquanto não houver a Edge Function, a moderação continua funcionando mas
+        // a chave de acesso fica exposta — remova ou proteja antes do lançamento.
         const resp = await fetch('https://api.anthropic.com/v1/messages', {
           method: 'POST',
           headers: {
@@ -5412,6 +5440,14 @@
     sUpdateProgress(step);
     if (document.activeElement) document.activeElement.blur();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    // UX: aguarda scroll completar antes de focar (evita teclado iOS ocultar campo no Android/iOS)
+    setTimeout(function() {
+      var secao = document.getElementById('sFStep' + step);
+      if (secao) {
+        var primeiro = secao.querySelector('input:not([type="hidden"]):not([type="checkbox"]):not([style*="display:none"]), select');
+        if (primeiro && primeiro.offsetParent !== null) primeiro.focus({ preventScroll: true });
+      }
+    }, 380);
     if (step === 3) {
       const adulto = window._showAdulto === true;
       // Mostrar/ocultar campos do responsável conforme idade
@@ -5482,9 +5518,9 @@
         document.getElementById('showNome')?.focus(); return;
       }
       if (bairro === 'OUTRO' && !document.getElementById('showBairroOutro').value.trim()) {
-        showToast('❌ Digite o bairro/comunidade.', 'erro'); return;
+        showToast('❌ Digite o bairro/comunidade.', 'erro');
+        scrollToFirstEmpty(['showBairroOutro']); return;
       }
-      // Validar campo "Outro talento" (campo livre + moderação por IA)
       if (typeof window._getOutroTalentoValido === 'function') {
         var _ot = window._getOutroTalentoValido();
         if (_ot.necessario) {
@@ -6429,14 +6465,9 @@
   // ADMIN
   // ================================================================
   var _adminCache = null, _adminCacheTs = 0;
-  // ⚠️ COMPORTAMENTO DO CACHE DE ADMIN (TTL = 60s):
-  // Se um admin for removido da coleção 'admins' no Firestore, ele continuará
-  // com acesso às funções administrativas por até 60 segundos (duração do cache).
-  // Isso é aceitável para eventos pequenos, mas é importante estar ciente:
-  //   - O cache é invalidado automaticamente no logout (linha abaixo: _adminCache = null)
-  //   - Para revogação imediata, reduza 60000 para um valor menor (ex: 10000 = 10s)
-  //     mas isso aumenta os reads no Firestore a cada navegação admin.
-  const ADMIN_CACHE_TTL_MS = 60000; // 60 segundos
+  // Cache de admin: 15s — reduzido de 60s para minimizar a janela de acesso
+  // após remoção de um admin no Firestore. Custo: ~4 reads extras/min por aba admin.
+  const ADMIN_CACHE_TTL_MS = 15000; // 15 segundos
   async function isAdminUser(user) {
     if (!user || !FIREBASE_OK) return false;
     // Cache por ADMIN_CACHE_TTL_MS — evita reads repetidos no mesmo login
@@ -7014,17 +7045,25 @@
       if (el) el.addEventListener('input', function() { maskTel(this); });
     });
 
-    // max dinâmico nos campos de nascimento — evita que o limite fique desatualizado
-    // Corrida: crianças de 6 a 15 anos na data do evento
+    // max/min dinâmico do campo nascimento — baseado no critério oficial: idade até 31/12/2026
+    // Corrida: aceita crianças de 6 a 15 anos até 31/12/2026
     var maxNascCorrida = new Date(DATA_EVENTO_CORRIDA);
     maxNascCorrida.setFullYear(maxNascCorrida.getFullYear() - 6);
-    // min = 16 anos antes do evento + 1 dia = inclui quem faz exatamente 15 no evento
+    // min = 16 anos antes de 31/12/2026 + 1 dia (quem faz exatamente 15 até 31/12/2026)
     var minNascCorrida = new Date(DATA_EVENTO_CORRIDA);
     minNascCorrida.setFullYear(minNascCorrida.getFullYear() - 16);
     minNascCorrida.setDate(minNascCorrida.getDate() + 1);
     var fmtDate = function(d) { return d.toISOString().split('T')[0]; };
     var elNasc = document.getElementById('nascimento');
     if (elNasc) { elNasc.max = fmtDate(maxNascCorrida); elNasc.min = fmtDate(minNascCorrida); }
+
+    // Fix 9: Enter dispara a consulta de inscrição nos inputs correspondentes
+    ['consultaNumeroInput','consultaNomeInput','consultaCpfInput','consultaTelInput'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); consultarInscricao(); }
+      });
+    });
   });
 
   // Reatividade filtros
@@ -7342,7 +7381,7 @@
     const val = input.value;
     if (!val) { box.className = 'categoria-box hidden'; box.innerHTML = ''; return; }
 
-    // Critério: idade completa na data do evento — atualizar DATA_EVENTO_CORRIDA quando data for confirmada
+    // Critério oficial: idade que o participante completar até 31/12/2026
     var DATA_EVENTO = DATA_EVENTO_CORRIDA;
     const nasc     = new Date(val + 'T00:00:00');
     let idadeRef   = DATA_EVENTO.getFullYear() - nasc.getFullYear();
@@ -7643,7 +7682,8 @@
     var _VIDEOS_DEFAULTS = [
       { id:'vid1', videoId:'Z0gcIo0Bfo0', titulo:'🏃 Corrida Kids Ilhas — Vem aí!',             descricao:'Venha viver a emoção da nossa corrida infantil! Crianças cheias de energia e muita alegria nas Ilhas.', ordem:1 },
       { id:'vid2', videoId:'Umr56L32nkw', titulo:'🎭 Show de Talentos — Mostre seu Talento!',   descricao:'Música, dança, teatro e muito mais! Mostre seu talento no palco das Ilhas — inscreva-se no Show de Talentos!', ordem:2 },
-      { id:'vid3', videoId:'mAm26VkLcdA', titulo:'🏃 Corrida Kids e Show de Talentos — Vem aí!', descricao:'A Corrida Kids e o Show de Talentos estão chegando! Prepare-se para uma festa incrível nas Ilhas. Não perca!', ordem:3 }
+      { id:'vid3', videoId:'mAm26VkLcdA', titulo:'🏃 Corrida Kids e Show de Talentos — Vem aí!', descricao:'A Corrida Kids e o Show de Talentos estão chegando! Prepare-se para uma festa incrível nas Ilhas. Não perca!', ordem:3 },
+      { id:'vid4', videoId:'92Ov4e9Ffgw', titulo:'🐣 Feliz Páscoa',                               descricao:'Confira mais um vídeo especial da Corrida Kids Ilhas 2026! Venha fazer parte dessa festa incrível nas Ilhas de Santa Maria e Monte Belo.', ordem:4 }
     ];
 
     function _ytIdFromUrl(url) {
@@ -7685,7 +7725,7 @@
           '<h3>' + titulo + '</h3>' +
           '<p>' + descricao + '</p>' +
           '<div class="share-actions">' +
-            '<button type="button" class="share-btn" onclick="compartilharVideo(\'' + wid + '\',\'' + titulo + '\')">📤 Compartilhar link</button>' +
+            '<button type="button" class="share-btn" onclick="compartilharVideo(\'' + wid + '\',\'' + titulo + '\',this)">📤 Compartilhar link</button>' +
             '<button type="button" class="share-btn" onclick="compartilharVideoWhatsApp(\'' + wid + '\',\'' + titulo + '\')">💬 Enviar no WhatsApp</button>' +
           '</div>' +
         '</div>' +
@@ -7697,7 +7737,12 @@
       var grid = document.getElementById('videosGrid');
       if (!grid) return;
       if (!lista || lista.length === 0) {
-        grid.innerHTML = '<div style="text-align:center;padding:32px;color:rgba(255,255,255,.5);font-size:13px;">Nenhum vídeo cadastrado ainda.</div>';
+        grid.innerHTML = '<div style="text-align:center;padding:48px 24px;color:rgba(255,255,255,.6);">' +
+          '<div style="font-size:48px;margin-bottom:16px;opacity:.5;">🎬</div>' +
+          '<div style="font-size:15px;font-weight:700;margin-bottom:8px;color:rgba(255,255,255,.75);">Nenhum vídeo disponível no momento</div>' +
+          '<div style="font-size:13px;line-height:1.6;margin-bottom:20px;">Em breve publicaremos os vídeos do evento aqui.</div>' +
+          '<button type="button" onclick="showSection(\'corrida\')" style="display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:14px;background:linear-gradient(135deg,#ff5722,#ffd600);color:#fff;font-weight:700;font-size:13px;border:0;cursor:pointer;">🏃 Inscreva-se agora</button>' +
+          '</div>';
         return;
       }
       lista.sort(function(a,b){ return (a.ordem||0)-(b.ordem||0); });
