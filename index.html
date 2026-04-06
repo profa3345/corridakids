@@ -2530,7 +2530,7 @@
                   </label>
                   <label>
                     Bairro / Comunidade *
-                    <select id="bairroSel" required>
+                    <select id="bairroSel" aria-required="true" required>
                       <option value="">Selecione</option>
                       <option>Ilha de Santa Maria</option>
                       <option>Ilha de Monte Belo</option>
@@ -2554,7 +2554,7 @@
                 </div>
                 <label for="endereco">
                   Endereço completo *
-                  <input type="text" id="endereco" aria-required="true" placeholder="Rua, nº, complemento" autocomplete="street-address" required maxlength="200"/>
+                  <input type="text" id="endereco" aria-required="true" placeholder="Rua, nº, complemento" autocomplete="street-address" required minlength="5" maxlength="200"/>
                 </label>
                 <div class="step-nav">
                   <button type="button" class="btn btn-ghost" onclick="cGoStep(1, true)">← Voltar</button>
@@ -2592,7 +2592,7 @@
                 <div class="grid">
                   <label>
                     Vínculo com a criança *
-                    <select id="respVinculo" required>
+                    <select id="respVinculo" aria-required="true" required>
                       <option value="">Selecione...</option>
                       <option value="Pai">Pai</option>
                       <option value="Mãe">Mãe</option>
@@ -2683,7 +2683,7 @@
                 <div class="grid">
                   <label>
                     Bairro / Comunidade *
-                    <select id="showBairroSel">
+                    <select id="showBairroSel" required aria-required="true">
                       <option value="">Selecione</option>
                       <option>Ilha de Santa Maria</option>
                       <option>Ilha de Monte Belo</option>
@@ -2706,7 +2706,7 @@
                   </label>
                   <label>
                     Tipo de apresentação *
-                    <select id="tipoApresentacao">
+                    <select id="tipoApresentacao" required aria-required="true">
                       <option value="">Selecione</option>
                       <option>Canto</option>
                       <option>Dança</option>
@@ -7180,17 +7180,12 @@
       // FAB: aparece após 300px de scroll, some nos formulários
       // P-SCROLL: activeSection cacheada na closure — sem querySelector por tick
       if (fab) {
-        if (!fabShown && scrolled > 300) {
-          const activeSection = document.querySelector('.section.active');
-          const isForm = activeSection && ['corrida','show','confirmaCorrida','confirmaShow'].includes(activeSection.id);
-          if (!isForm) { fab.classList.remove('hidden'); fabShown = true; }
+        // FAB: aparece após 300px de scroll na home; showSection() controla nas demais seções
+        if (!fabShown && scrolled > 300 && !window._inscricoesEncerradas) {
+          if (!fab.classList.contains('hidden')) { fabShown = true; }
+          else { fab.classList.remove('hidden'); fabShown = true; }
         } else if (fabShown && scrolled <= 300) {
           fab.classList.add('hidden'); fabShown = false;
-        } else if (fabShown) {
-          const activeSection = document.querySelector('.section.active');
-          if (activeSection && ['corrida','show','confirmaCorrida','confirmaShow'].includes(activeSection.id)) {
-            fab.classList.add('hidden'); fabShown = false;
-          }
         }
       }
     }, { passive: true }); // P1: passive evita bloqueio da thread principal no scroll
