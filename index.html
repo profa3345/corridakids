@@ -83,7 +83,7 @@
     body::after {
       content: '';
       position: fixed; inset: 0;
-      contain: strict;
+      contain: paint style;
       background:
         radial-gradient(ellipse 140% 80% at 10% -10%, rgba(0,194,255,.38) 0%, transparent 55%),
         radial-gradient(ellipse 100% 80% at 90% 10%, rgba(255,87,34,.26) 0%, transparent 50%),
@@ -121,14 +121,14 @@
     body::before {
       content: '';
       position: fixed; inset: 0;
-      contain: strict;
+      contain: paint style;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.038'/%3E%3C/svg%3E");
       pointer-events: none; z-index: 0;
     }
     @media (max-width: 768px) { body::before { display: none; } }
 
     /* ── Floating emoji layer ── */
-    #floatEmojis { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; contain: strict; }
+    #floatEmojis { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; contain: paint style; }
     .float-emoji {
       position: absolute; opacity: 0;
       animation: floatUp linear infinite;
@@ -143,7 +143,7 @@
     }
 
     /* ── Confetti canvas ── */
-    #confettiCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 999; contain: strict; }
+    #confettiCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 999; contain: paint style; }
 
     /* ── Blobs ── */
     .blob {
@@ -413,8 +413,8 @@
     .cta:hover .icon { transform: scale(1.18) rotate(-8deg); box-shadow: 0 10px 28px rgba(0,0,0,.18); }
 
     /* ── Sections ── */
-    .section { display:none; animation: appear .45s cubic-bezier(.34,1.56,.64,1) both; contain: layout style; content-visibility: auto; }
-    .section.active { display:block; }
+    .section { display:none; animation: appear .45s cubic-bezier(.34,1.56,.64,1) both; contain: layout style; }
+    .section.active { display:block; content-visibility: visible; }
     @keyframes appear {
       from { opacity:0; transform:translateY(24px) scale(.96); }
       to   { opacity:1; transform:translateY(0) scale(1); }
@@ -2485,13 +2485,13 @@
                 <div class="grid">
                   <label>
                     Nome completo da criança *
-                    <input type="text" id="nome" placeholder="Ex.: Maria Eduarda Souza" autocomplete="name" maxlength="100" required onblur="validarNomeParticipante('nome','nomeMsg')"/>
+                    <input type="text" id="nome" aria-required="true" autocapitalize="words" placeholder="Ex.: Maria Eduarda Souza" autocomplete="name" maxlength="100" required onblur="validarNomeParticipante('nome','nomeMsg')"/>
                     <span class="hint">Como está no documento</span>
                     <span class="field-msg" id="nomeMsg"></span>
                   </label>
                   <label for="nascimento">
                     Data de nascimento *
-                    <input type="date" id="nascimento" inputmode="numeric" autocomplete="bday" required oninput="calcCategoria('nascimento','categoriaBox')" onblur="validarNasc('nascimento','nascMsg','corrida')" />
+                    <input type="date" id="nascimento" aria-required="true" inputmode="numeric" autocomplete="bday" required oninput="calcCategoria('nascimento','categoriaBox')" onblur="validarNasc('nascimento','nascMsg','corrida')" />
                     <span class="field-msg" id="nascMsg"></span>
                   </label>
                 </div>
@@ -2520,7 +2520,7 @@
                 <div class="grid">
                   <label for="documento">
                     RG ou Certidão *
-                    <input type="text" id="documento" placeholder="Digite o número" maxlength="30" required
+                    <input type="text" id="documento" aria-required="true" placeholder="Ex.: 1234567 ou 12345678-9" maxlength="30" required
                       onblur="(function(el){
                         var v=el.value.trim();
                         if(!v){el.classList.remove('valid','invalid');return;}
@@ -2554,7 +2554,7 @@
                 </div>
                 <label for="endereco">
                   Endereço completo *
-                  <input type="text" id="endereco" placeholder="Rua, nº, complemento" autocomplete="street-address" required maxlength="200"/>
+                  <input type="text" id="endereco" aria-required="true" placeholder="Rua, nº, complemento" autocomplete="street-address" required maxlength="200"/>
                 </label>
                 <div class="step-nav">
                   <button type="button" class="btn btn-ghost" onclick="cGoStep(1, true)">← Voltar</button>
@@ -2579,12 +2579,12 @@
                 <div class="grid">
                   <label>
                     Nome do responsável *
-                    <input type="text" id="respNome" placeholder="Nome completo" autocomplete="name" required onblur="validarNomeResp('respNome','respNomeMsg')"  maxlength="100"/>
+                    <input type="text" id="respNome" aria-required="true" autocapitalize="words" placeholder="Nome completo" autocomplete="name" required onblur="validarNomeResp('respNome','respNomeMsg')"  maxlength="100"/>
                     <span class="field-msg" id="respNomeMsg"></span>
                   </label>
                   <label>
                     CPF do responsável *
-                    <input type="tel" id="respCpf" spellcheck="false" inputmode="numeric" placeholder="000.000.000-00" autocomplete="off" required oninput="maskCpf(this)" onblur="validarCpfField('respCpf','respCpfMsg')" />
+                    <input type="tel" id="respCpf" aria-required="true" spellcheck="false" inputmode="numeric" placeholder="000.000.000-00" autocomplete="off" required oninput="maskCpf(this)" onblur="validarCpfField('respCpf','respCpfMsg')" />
                     <span class="hint">Com ou sem pontuação</span>
                     <span class="field-msg" id="respCpfMsg"></span>
                   </label>
@@ -2603,7 +2603,7 @@
                   </label>
                   <label>
                     Telefone/WhatsApp *
-                    <input type="tel" id="respTelefone" spellcheck="false" inputmode="tel" placeholder="(27) 99999-8888" autocomplete="tel" required onblur="validarTelField('respTelefone','respTelMsg')" />
+                    <input type="tel" id="respTelefone" aria-required="true" spellcheck="false" inputmode="tel" placeholder="(27) 99999-8888" autocomplete="tel" required onblur="validarTelField('respTelefone','respTelMsg')" />
                     <span class="field-msg" id="respTelMsg"></span>
                   </label>
                 </div>
@@ -2613,7 +2613,7 @@
                 </label>
                 <div class="termo-assinatura">
                   <label for="termoAssinatura">Confirme seu nome como assinatura digital *</label>
-                  <input type="text" id="termoAssinatura" placeholder="Digite seu nome completo" autocomplete="name" required style="min-height:48px;" maxlength="100"/>
+                  <input type="text" id="termoAssinatura" aria-required="true" autocapitalize="words" placeholder="Digite seu nome completo" autocomplete="name" required style="min-height:48px;" maxlength="100"/>
                   <span class="hint">✍️ Digite exatamente igual ao nome do responsável acima</span>
                 </div>
                 <div class="step-nav">
@@ -2670,7 +2670,7 @@
                 <div class="grid">
                   <label>
                     Nome do participante *
-                    <input type="text" id="showNome" placeholder="Nome completo" autocomplete="name" maxlength="100" required onblur="validarNomeParticipante('showNome','showNomeMsg')"/>
+                    <input type="text" id="showNome" aria-required="true" autocapitalize="words" placeholder="Nome completo" autocomplete="name" maxlength="100" required onblur="validarNomeParticipante('showNome','showNomeMsg')"/>
                     <span class="field-msg" id="showNomeMsg"></span>
                   </label>
                   <label for="showNascimento">
@@ -2819,12 +2819,12 @@
                 <div class="grid">
                   <label>
                     Nome do responsável *
-                    <input type="text" id="showRespNome" placeholder="Nome completo" autocomplete="name" required onblur="validarNomeResp('showRespNome','showRespNomeMsg')"  maxlength="100"/>
+                    <input type="text" id="showRespNome" aria-required="true" autocapitalize="words" placeholder="Nome completo" autocomplete="name" required onblur="validarNomeResp('showRespNome','showRespNomeMsg')"  maxlength="100"/>
                     <span class="field-msg" id="showRespNomeMsg"></span>
                   </label>
                   <label>
                     CPF do responsável *
-                    <input type="tel" id="showRespCpf" spellcheck="false" inputmode="numeric" placeholder="000.000.000-00" autocomplete="off" required oninput="maskCpf(this)" onblur="validarCpfField('showRespCpf','showRespCpfMsg')" />
+                    <input type="tel" id="showRespCpf" aria-required="true" spellcheck="false" inputmode="numeric" placeholder="000.000.000-00" autocomplete="off" required oninput="maskCpf(this)" onblur="validarCpfField('showRespCpf','showRespCpfMsg')" />
                     <span class="hint">Com ou sem pontuação</span>
                     <span class="field-msg" id="showRespCpfMsg"></span>
                   </label>
@@ -2844,7 +2844,7 @@
                   </label>
                   <label>
                     Telefone/WhatsApp *
-                    <input type="tel" id="showRespTelefone" spellcheck="false" inputmode="tel" placeholder="(27) 99999-8888" autocomplete="tel" required onblur="validarTelField('showRespTelefone','showRespTelMsg')" />
+                    <input type="tel" id="showRespTelefone" aria-required="true" spellcheck="false" inputmode="tel" placeholder="(27) 99999-8888" autocomplete="tel" required onblur="validarTelField('showRespTelefone','showRespTelMsg')" />
                     <span class="field-msg" id="showRespTelMsg"></span>
                   </label>
                 </div>
@@ -2854,7 +2854,7 @@
                 </label>
                 <div class="termo-assinatura">
                   <label for="showTermoAssinatura">Confirme seu nome como assinatura digital *</label>
-                  <input type="text" id="showTermoAssinatura" placeholder="Digite seu nome completo" autocomplete="name" required style="min-height:48px;" maxlength="100"/>
+                  <input type="text" id="showTermoAssinatura" aria-required="true" autocapitalize="words" placeholder="Digite seu nome completo" autocomplete="name" required style="min-height:48px;" maxlength="100"/>
                   <span class="hint">✍️ Digite exatamente igual ao nome do responsável acima</span>
                 </div>
                 </div><!-- /sRespFields -->
@@ -2907,7 +2907,7 @@
 
               <!-- QR Code -->
               <div class="qr-box" id="qrBoxCorrida">
-                <canvas id="qrCanvasCorrida" width="140" height="140"></canvas>
+                <canvas id="qrCanvasCorrida" role="img" aria-label="QR Code da inscrição da Corrida Kids" width="140" height="140"></canvas>
                 <div class="qr-box-label">📱 Escaneie no dia do evento</div>
               </div>
 
@@ -2949,7 +2949,7 @@
 
               <!-- QR Code -->
               <div class="qr-box" id="qrBoxShow">
-                <canvas id="qrCanvasShow" width="140" height="140"></canvas>
+                <canvas id="qrCanvasShow" role="img" aria-label="QR Code da inscrição do Show de Talentos" width="140" height="140"></canvas>
                 <div class="qr-box-label">📱 Escaneie no dia do evento</div>
               </div>
 
@@ -2994,7 +2994,7 @@
             <div id="consultaCampoNumero">
               <label>
                 Número da inscrição
-                <input type="text" id="consultaNumeroInput" placeholder="Ex.: CK-2026-AB1C2D" autocomplete="off" style="text-transform:uppercase;" />
+                <input type="text" id="consultaNumeroInput" placeholder="Ex.: CK-2026-AB1C2D" autocomplete="off" autocapitalize="characters" spellcheck="false" style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()" />
                 <span class="hint">Encontrado na tela de confirmação ou WhatsApp</span>
               </label>
             </div>
@@ -4206,7 +4206,7 @@
     const el = document.getElementById(id);
     if (el) el.classList.add('active');
     if (document.activeElement) document.activeElement.blur();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(_) { window.scrollTo(0, 0); }
 
     // Atualizar título da aba para leitores de tela (itens 3 e 14)
     document.title = _SECTION_TITLES[id] || '🏃 Corrida Kids Ilhas — Vem aí!';
@@ -4535,7 +4535,7 @@
       var isCorrida = num.startsWith('CK-');
       var isShow    = num.startsWith('ST-');
       if (!isCorrida && !isShow) {
-        resultado.innerHTML = _cancelMsg('erro', '❌ Número inválido. Use o formato <strong>CK-2026-XXXXXX</strong> (Corrida) ou <strong>ST-2026-XXXXXX</strong> (Show).');
+        resultado.innerHTML = _cancelMsg('erro', '❌ Número inválido. O número está no comprovante de inscrição, no formato <strong>CK-2026-XXXXXX</strong> (Corrida) ou <strong>ST-2026-XXXXXX</strong> (Show de Talentos).');
         return;
       }
 
@@ -4787,6 +4787,7 @@
     } catch(err) {
       // error silenciado em prod
       resultado.innerHTML = '<div class="consulta-nao-encontrado">❌ Erro ao consultar. Verifique sua conexão e tente novamente.</div>';
+      window._lastConsultaTs = 0; // permite retry imediato após erro
     } finally {
       if (btnConsultar) { btnConsultar.disabled = false; btnConsultar.innerHTML = '🔍 Consultar'; }
     }
@@ -5195,7 +5196,7 @@
       if (i === step) { el.classList.add('active'); if (isBack) el.classList.add('back'); }
     });
     cUpdateProgress(step);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(_) { window.scrollTo(0, 0); }
     // UX: aguarda scroll completar antes de focar (evita teclado iOS ocultar campo)
     setTimeout(function() {
       var secao = document.getElementById('cFStep' + step);
@@ -5470,7 +5471,7 @@
     });
     sUpdateProgress(step);
     if (document.activeElement) document.activeElement.blur();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(_) { window.scrollTo(0, 0); }
     // UX: aguarda scroll completar antes de focar (evita teclado iOS ocultar campo no Android/iOS)
     setTimeout(function() {
       var secao = document.getElementById('sFStep' + step);
@@ -7610,12 +7611,6 @@
       const sActive = document.querySelector('#showForm .fstep.active');
       if (cActive) {
         if (cActive.id === 'cFStep1') {
-          // Verifica se há dados preenchidos antes de sair silenciosamente
-          if (typeof _isFormDirty === 'function' && _isFormDirty()) {
-            if (!confirm('Você tem dados preenchidos no formulário. Deseja mesmo sair e perder o preenchimento?')) {
-              pushFormState(); return;
-            }
-          }
           showSection('home', true); return;
         }
         if (cActive.id === 'cFStep2') { cGoStep(1, true); pushFormState(); return; }
@@ -7623,11 +7618,6 @@
       }
       if (sActive) {
         if (sActive.id === 'sFStep1') {
-          if (typeof _isFormDirty === 'function' && _isFormDirty()) {
-            if (!confirm('Você tem dados preenchidos no formulário. Deseja mesmo sair e perder o preenchimento?')) {
-              pushFormState(); return;
-            }
-          }
           showSection('home', true); return;
         }
         if (sActive.id === 'sFStep2') { sGoStep(1, true); pushFormState(); return; }
