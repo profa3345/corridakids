@@ -2725,14 +2725,18 @@
                       <div style="position:relative;">
                         <input type="text" id="outroTalentoInput"
                           placeholder="Ex.: Malabarismo, Contorcionismo, Ventriloquismo…"
-                          maxlength="80"
+                          maxlength="150"
                           autocomplete="off"
                           style="padding-right:44px;"
+                          oninput="(function(el){ var c=document.getElementById('outroTalentoCounter'); if(c) c.textContent=el.value.length+'/150'; })(this)"
                         />
                         <span id="outroTalentoStatus" style="
                           position:absolute;right:12px;top:50%;transform:translateY(-50%);
                           font-size:18px;pointer-events:none;transition:opacity .2s;opacity:0;
                         "></span>
+                      </div>
+                      <div style="display:flex;justify-content:flex-end;margin-top:3px;">
+                        <span id="outroTalentoCounter" style="font-size:11px;color:var(--muted);font-weight:600;">0/150</span>
                       </div>
                       <span id="outroTalentoMsg" class="hint" style="display:none;font-weight:600;margin-top:4px;"></span>
                     </label>
@@ -5103,9 +5107,15 @@
         tipo:    document.getElementById('tipoApresentacao')?.value || '',
         tipoDetalhe: (function(){
           // Salva o texto livre quando "Outro talento" foi selecionado
+          // Remove tags HTML, entidades HTML e normaliza espaços — armazenado como texto puro
           var sel = document.getElementById('tipoApresentacao');
           if (sel && sel.value === 'Outro talento') {
-            return (document.getElementById('outroTalentoInput')?.value || '').replace(/<[^>]*>/g, '').trim();
+            return (document.getElementById('outroTalentoInput')?.value || '')
+              .replace(/<[^>]*>/g, '')
+              .replace(/&[a-z#0-9]+;/gi, '')
+              .replace(/\s+/g, ' ')
+              .trim()
+              .slice(0, 150);
           }
           return '';
         })(),
@@ -5311,15 +5321,21 @@
       }
     }
 
+    // Normaliza valor para uso no cache (remove espaços extras internos)
+    function _normalizeVal(s) { return s.replace(/\s+/g, ' ').toLowerCase(); }
+
     async function moderarTalento(valor, els) {
       if (!valor || valor.length < 3) {
         setStatus(els, '', '');
         _moderationResult = null;
         return;
       }
-      if (valor === _lastChecked) return; // sem mudança
-      _lastChecked = valor;
+      var valorNorm = _normalizeVal(valor);
+      if (valorNorm === _lastChecked) return; // sem mudança
+      _lastChecked = valorNorm;
       _moderationResult = null;
+      // Garantir que borda de erro anterior seja limpa antes de nova chamada
+      if (els.input) els.input.style.borderColor = '';
       setStatus(els, 'loading', 'Verificando adequação ao evento…');
 
       try {
@@ -5327,27 +5343,38 @@
         // que mantém a chave de API no servidor. Se o proxy não existir (404/502),
         // a moderação é ignorada e o campo é aprovado (fail-open).
         // Para criar o proxy: api/moderar-talento.js com POST → Anthropic server-side.
+        const controller = new AbortController();
+        const timeoutId = setTimeout(function() { controller.abort(); }, 12000);
         const resp = await fetch('/api/moderar-talento', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ valor: valor })
+          body: JSON.stringify({ valor: valor }),
+          signal: controller.signal
         });
+        clearTimeout(timeoutId);
 
         if (!resp.ok) throw new Error('proxy ' + resp.status);
         const parsed = await resp.json();
 
+        // Valida que a resposta tem o formato esperado
+        if (!parsed || typeof parsed.aprovado !== 'boolean') {
+          throw new Error('resposta inesperada do servidor');
+        }
+
         if (parsed.aprovado === true) {
           _moderationResult = true;
           setStatus(els, 'ok', parsed.motivo || 'Apresentação aprovada para o evento.');
-          els.input.style.borderColor = '';
+          if (els.input) els.input.style.borderColor = '';
         } else {
           _moderationResult = false;
           setStatus(els, 'blocked', parsed.motivo || 'Tipo de apresentação não permitido neste evento.');
-          els.input.style.borderColor = '#c62828';
+          // Borda vermelha persistente enquanto valor bloqueado estiver no campo
+          if (els.input) els.input.style.borderColor = '#c62828';
         }
       } catch(e) {
         // Em caso de falha na API, não bloqueia o usuário — apenas avisa
         _moderationResult = true; // permissivo em caso de erro
+        if (els.input) els.input.style.borderColor = '';
         setStatus(els, 'error', 'Não foi possível verificar agora. Prossiga — a organização revisará.');
       }
     }
@@ -5360,6 +5387,8 @@
       if (!isOutro) {
         // Limpar ao trocar de opção
         if (els.input)  { els.input.value = ''; els.input.style.borderColor = ''; }
+        var counter = document.getElementById('outroTalentoCounter');
+        if (counter) counter.textContent = '0/150';
         setStatus(els, '', '');
         _lastChecked = '';
         _moderationResult = null;
@@ -5385,12 +5414,22 @@
             setStatus(els, '', '');
             _moderationResult = null;
             _lastChecked = '';
+            // Limpa borda ao apagar o conteúdo
+            this.style.borderColor = '';
             return;
           }
-          setStatus(els, 'loading', 'Aguardando você terminar de digitar…');
+          // Sem mensagem durante debounce — evita ruído visual no mobile
+          setStatus(els, 'loading', '');
           _moderationTimer = setTimeout(function() {
             moderarTalento(val, els);
           }, 800);
+        });
+
+        // Manter borda vermelha persistente ao sair do foco se ainda bloqueado
+        els.input.addEventListener('blur', function() {
+          if (_moderationResult === false) {
+            this.style.borderColor = '#c62828';
+          }
         });
       }
     });
@@ -5403,6 +5442,16 @@
       return { necessario: true, valor: val, aprovado: _moderationResult };
     };
 
+    // Disparo imediato da moderação (chamado pelo sNextStep quando _moderationResult===null)
+    window._dispararModeracaoImediata = function() {
+      var els = getOutroTalentoEls();
+      if (!els.input) return;
+      var val = els.input.value.trim();
+      if (!val || val.length < 3) return;
+      if (_moderationTimer) { clearTimeout(_moderationTimer); _moderationTimer = null; }
+      moderarTalento(val, els);
+    };
+
     // B-MODERATION: expor reset para uso após submit do showForm
     window._resetOutroTalento = function() {
       _lastChecked = '';
@@ -5411,6 +5460,8 @@
       var els = getOutroTalentoEls();
       if (els.input)  { els.input.value = ''; els.input.style.borderColor = ''; }
       if (els.box)    { els.box.classList.add('hidden'); }
+      var counter = document.getElementById('outroTalentoCounter');
+      if (counter) counter.textContent = '0/150';
       setStatus(els, '', '');
     };
   })();
@@ -5541,7 +5592,11 @@
             document.getElementById('outroTalentoInput')?.focus(); return;
           }
           if (_ot.aprovado === null) {
-            showToast('⏳ Aguarde a verificação do tipo de apresentação.', 'info');
+            // Dispara moderação imediatamente (sem esperar debounce) e bloqueia avanço
+            if (typeof window._dispararModeracaoImediata === 'function') {
+              window._dispararModeracaoImediata();
+            }
+            showToast('⏳ Verificando tipo de apresentação, aguarde…', 'info');
             document.getElementById('outroTalentoInput')?.focus(); return;
           }
           if (_ot.aprovado === false) {
