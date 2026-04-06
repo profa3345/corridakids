@@ -71,7 +71,7 @@ export default async function handler(req) {
   try {
     // ── Timeout de 10s para não travar o usuário ──
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
 
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
