@@ -59,15 +59,7 @@
     /* Custom scrollbar */
     ::-webkit-scrollbar { width: 5px; }
 
-    /* A1: Skip link — pular para conteúdo principal */
-    .skip-link {
-      position: fixed; top: -9999px; left: 50%; transform: translateX(-50%);
-      background: var(--accent1); color: #020818; font-weight: 800;
-      padding: 10px 22px; border-radius: 0 0 14px 14px;
-      font-family: var(--font-body); font-size: 14px; z-index: 99999;
-      text-decoration: none; transition: top .15s;
-    }
-    .skip-link:focus { top: 0; outline: 3px solid var(--accent3); outline-offset: 2px; }
+    /* A1: Skip link — pular para conteúdo principal (definição única abaixo) */
     ::-webkit-scrollbar-track { background: var(--bg-deep); }
     ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent1), var(--accent5)); border-radius: 999px; }
 
@@ -545,15 +537,16 @@
       max-height: 240px; overflow-y: auto;
     }
     .termo-box { position: relative; }
-    .termo-body::after {
-      content: ''; pointer-events: none;
+    /* Gradiente inferior do termo — implementado via .termo-fade (div real) para compatibilidade
+       cross-browser (position:sticky em ::after não funciona no Firefox/Safari iOS) */
+    .termo-fade {
       position: sticky; bottom: 0; left: 0; right: 0;
-      display: block; height: 28px; margin-top: -28px;
+      height: 28px; margin-top: -28px; pointer-events: none;
       background: linear-gradient(to bottom, transparent, rgba(255,255,255,.95));
       border-radius: 0 0 10px 10px;
+      transition: opacity .3s;
     }
-    .termo-body.fully-read::after { opacity: 0; transition: opacity .3s; }
-    .termo-body::after { transition: opacity .3s; }
+    .termo-body.fully-read + .termo-fade { opacity: 0; }
     .termo-body::-webkit-scrollbar { width: 4px; }
     .termo-body::-webkit-scrollbar-thumb { background: rgba(0,194,255,.35); border-radius: 99px; }
     .termo-footer {
@@ -1820,13 +1813,14 @@
 
     /* ── Skip link acessibilidade ── */
     .skip-link {
-      position: absolute; top: -100px; left: 16px; z-index: 99999;
-      background: #fff; color: var(--text); padding: 10px 20px;
-      border-radius: 8px; font-weight: 800; font-size: 14px;
-      border: 2px solid var(--accent1); text-decoration: none;
-      transition: top .2s;
+      position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
+      z-index: 99999; background: var(--accent1); color: #020818;
+      padding: 10px 24px; border-radius: 0 0 14px 14px;
+      font-weight: 800; font-size: 14px; font-family: var(--font-body);
+      border: 2px solid rgba(255,255,255,.3); text-decoration: none;
+      transition: top .2s; box-shadow: 0 4px 20px rgba(0,0,0,.3);
     }
-    .skip-link:focus { top: 16px; }
+    .skip-link:focus, .skip-link:focus-visible { top: 0; outline: 3px solid var(--accent3); outline-offset: 2px; }
 
     /* ── Focus visible global melhorado ── */
     :focus-visible {
@@ -2462,6 +2456,7 @@
                     <strong>5.</strong> Estou ciente de que o evento é gratuito e que a organização poderá fazer registros fotográficos e em vídeo para divulgação do evento.<br><br>
                     <strong>6. Uso de dados (LGPD):</strong> Os dados informados (nome, CPF, telefone e endereço) serão utilizados <em>exclusivamente</em> para organização e controle do evento, não sendo compartilhados com terceiros. Após o evento, os dados serão mantidos apenas para fins de histórico interno pelos organizadores.
                   </div>
+                  <div class="termo-fade" aria-hidden="true"></div>
                   <div class="termo-footer">
                     <label class="termo-check-row">
                       <input type="checkbox" id="termoCheck" />
@@ -2501,7 +2496,7 @@
                 <div id="camisaBox" class="hidden" style="margin-top:12px;">
                   <label style="font-size:12px;font-weight:800;color:#1a2e50;">
                     🎽 Tamanho da camisa (considere escolher um tamanho maior em caso de dúvida) *
-                    <select id="camisaTamanho" style="margin-top:6px;">
+                    <select id="camisaTamanho" required aria-required="true" style="margin-top:6px;">
                       <option value="">Selecione o tamanho</option>
                       <option value="Infantil 6">Infantil 6 (4–5 anos)</option>
                       <option value="Infantil 8">Infantil 8 (6–7 anos)</option>
@@ -2617,10 +2612,11 @@
                   <span class="hint">✍️ Digite exatamente igual ao nome do responsável acima</span>
                 </div>
                 <div class="step-nav">
-                  <button type="button" class="btn btn-ghost" onclick="cGoStep(2, true)">← Voltar</button>
+                  <button type="button" class="btn btn-ghost" onclick="cStep3GoBack()">← Voltar</button>
                   <button type="submit" class="btn btn-primary" style="flex:1;">✅ Enviar inscrição</button>
                 </div>
-              </div>
+              </div><!-- /cRespFields -->
+              </div><!-- /cFStep3 -->
 
             </form>
           </div>
@@ -2745,7 +2741,7 @@
                 <div class="grid">
                   <label>
                     Nome da apresentação *
-                    <input type="text" id="nomeApresentacao" autocapitalize="words" placeholder="Ex.: Dança do Leão, Poema da Saudade" maxlength="100"
+                    <input type="text" id="nomeApresentacao" aria-required="true" autocapitalize="words" placeholder="Ex.: Dança do Leão, Poema da Saudade" maxlength="100"
                       oninput="(function(el){ var c=document.getElementById('nomeApresentacaoCounter'); if(c) c.textContent=el.value.length+'/100'; })(this)"/>
                     <span class="hint" id="nomeApresentacaoCounter" aria-live="polite" style="text-align:right;display:block;">0/100</span>
                   </label>
@@ -2785,6 +2781,7 @@
                     <strong>5.</strong> Confirmo que as informações preenchidas neste formulário são verdadeiras.<br><br>
                     <strong>6. Uso de dados (LGPD):</strong> Os dados informados serão utilizados <em>exclusivamente</em> para organização e controle do evento, não sendo compartilhados com terceiros.
                   </div>
+                  <div class="termo-fade" aria-hidden="true"></div>
                   <div class="termo-footer">
                     <label class="termo-check-row">
                       <input type="checkbox" id="showTermoCheck" />
@@ -4880,18 +4877,19 @@
   }
 
   // #2 — Calcular categoria a partir da data (usando idade real na data do evento)
-  // ⚠️ ATENÇÃO: SUBSTITUA ESTA DATA PELA DATA REAL DO EVENTO ANTES DE PUBLICAR!
-  // Impacta: categorias de idade (Corrida e Show), validação de nascimento, exibição de categorias.
-  // Formato: 'AAAA-MM-DD'  Exemplo: '2026-06-15'
-  // RISCO: com '2026-12-31' crianças que completam 6-15 anos só até dez/2026 são aceitas,
-  // mas crianças que completariam a idade SÓ após a data real do evento seriam indevidamente elegíveis.
-  // Critério oficial: idade que o participante completar até 31/12/2026
-  // A data do evento ainda não foi definida — o cálculo de categoria usa 31/12/2026
-  // para garantir que qualquer criança elegível no ano do evento seja aceita.
-  // Quando a data real for confirmada, atualize apenas DATA_EVENTO_CORRIDA abaixo
-  // para fins de exibição/cronograma — o critério de elegibilidade permanece 31/12/2026.
-  const DATA_EVENTO_STR = '2026-12-31'; // critério oficial de idade (não alterar)
+  // ╔══════════════════════════════════════════════════════════════════╗
+  // ║  ⚠️  AÇÃO PENDENTE — ATUALIZAR ANTES DE PUBLICAR               ║
+  // ║  DATA_EVENTO_STR controla a classificação de grupos etários.    ║
+  // ║  Critério oficial: idade que o participante completar           ║
+  // ║  até 31/12/2026. Quando a data real do evento for confirmada,   ║
+  // ║  atualize a constante DATA_EVENTO_CORRIDA para exibição do      ║
+  // ║  cronograma — o critério de elegibilidade permanece 31/12/2026. ║
+  // ║  Formato: 'AAAA-MM-DD'  Exemplo: '2026-06-15'                  ║
+  // ╚══════════════════════════════════════════════════════════════════╝
+  const DATA_EVENTO_STR = '2026-12-31'; // critério oficial de elegibilidade (não alterar)
   const DATA_EVENTO_CORRIDA = new Date(DATA_EVENTO_STR + 'T00:00:00');
+  // TODO: quando a data real for confirmada, defina DATA_EVENTO_REAL:
+  // const DATA_EVENTO_REAL = new Date('2026-06-XX' + 'T00:00:00');
 
   function calcIdadeNoEvento(nascimento) {
     if (!nascimento) return -1;
@@ -5325,41 +5323,18 @@
       setStatus(els, 'loading', 'Verificando adequação ao evento…');
 
       try {
-        // ⚠️  SEGURANÇA — AÇÃO NECESSÁRIA ANTES DE IR PARA PRODUÇÃO:
-        // Esta chamada usa o header 'anthropic-dangerous-direct-browser-access' que
-        // expõe o acesso à API diretamente no browser. Qualquer visitante pode usá-la.
-        // SOLUÇÃO: crie uma Vercel Edge Function (api/moderar-talento.js) que receba
-        // o valor, faça a chamada server-side com a chave real e retorne apenas o JSON.
-        // Enquanto não houver a Edge Function, a moderação continua funcionando mas
-        // a chave de acesso fica exposta — remova ou proteja antes do lançamento.
-        const resp = await fetch('https://api.anthropic.com/v1/messages', {
+        // SEGURANÇA: chamada passa pelo proxy /api/moderar-talento (Vercel Edge Function)
+        // que mantém a chave de API no servidor. Se o proxy não existir (404/502),
+        // a moderação é ignorada e o campo é aprovado (fail-open).
+        // Para criar o proxy: api/moderar-talento.js com POST → Anthropic server-side.
+        const resp = await fetch('/api/moderar-talento', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'anthropic-dangerous-direct-browser-access': 'true'
-          },
-          body: JSON.stringify({
-            model: 'claude-sonnet-4-20250514',
-            max_tokens: 120,
-            system: [
-              'Você é um moderador de inscrições para um Show de Talentos Infantil/Familiar.',
-              'O evento é voltado para crianças e famílias. Apresentações devem ser adequadas para todos os públicos.',
-              'Analise o tipo de apresentação informado e responda SOMENTE com JSON no formato:',
-              '{"aprovado": true/false, "motivo": "string curta em português"}',
-              'Aprove qualquer talento artístico, criativo ou esportivo adequado ao público familiar.',
-              'Bloqueie apenas conteúdo: sexual, violento, de ódio, relacionado a drogas/álcool, palavrões, ou claramente ofensivo.',
-              'Seja tolerante e inclusivo. Em caso de dúvida, aprove.',
-              'Responda APENAS com o JSON, sem mais nada.'
-            ].join(' '),
-            messages: [{ role: 'user', content: 'Tipo de apresentação: "' + valor + '"' }]
-          })
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ valor: valor })
         });
 
-        if (!resp.ok) throw new Error('API ' + resp.status);
-        const data = await resp.json();
-        const raw  = (data.content || []).map(function(b){ return b.text || ''; }).join('');
-        const clean = raw.replace(/```json|```/g, '').trim();
-        const parsed = JSON.parse(clean);
+        if (!resp.ok) throw new Error('proxy ' + resp.status);
+        const parsed = await resp.json();
 
         if (parsed.aprovado === true) {
           _moderationResult = true;
@@ -5505,6 +5480,11 @@
         }
       }
     }
+  }
+
+  // Equivalente ao sStep3GoBack para o formulário da Corrida Kids
+  function cStep3GoBack() {
+    cGoStep(2, true);
   }
 
   function sStep3GoBack() {
@@ -6583,7 +6563,17 @@
     if (!ok) { abrirAdminPortal(); return; }
     showSection('relatorios');
     carregarRelatorios();
-    if (typeof vmCarregarLista === 'function') vmCarregarLista();
+    // vmCarregarLista é definida no IIFE de deeplink mais abaixo — verifica disponibilidade
+    if (typeof vmCarregarLista === 'function') {
+      vmCarregarLista();
+    } else {
+      // Aguarda o IIFE carregar (máx 2s)
+      var _vmWait = 0;
+      var _vmTimer = setInterval(function() {
+        if (typeof vmCarregarLista === 'function') { clearInterval(_vmTimer); vmCarregarLista(); }
+        else if (++_vmWait > 10) clearInterval(_vmTimer);
+      }, 200);
+    }
   }
 
   async function logout() {
@@ -6769,7 +6759,15 @@
         fecharAdminPortal();
         showSection('relatorios');
         carregarRelatorios();
-        if (typeof vmCarregarLista === 'function') vmCarregarLista();
+        if (typeof vmCarregarLista === 'function') {
+          vmCarregarLista();
+        } else {
+          var _vmWait2 = 0;
+          var _vmTimer2 = setInterval(function() {
+            if (typeof vmCarregarLista === 'function') { clearInterval(_vmTimer2); vmCarregarLista(); }
+            else if (++_vmWait2 > 10) clearInterval(_vmTimer2);
+          }, 200);
+        }
       } catch(err) {
         // error silenciado em prod
         showToast('❌ Não foi possível entrar. Verifique e-mail e senha.', 'erro');
@@ -6898,7 +6896,7 @@
         : '<span style="background:rgba(46,125,50,.10);color:#2e7d32;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:700;">✅ Ativa</span>';
       if (it.cancelada) tr.style.opacity = '0.5';
       const waLink = it.responsavelTelefone
-        ? `<a href="https://wa.me/55${esc(it.responsavelTelefone)}?text=${encodeURIComponent('Olá! Confirmando a inscrição de ' + it.nome + ' na Corrida Kids Ilhas 2026 — Nº ' + it.numero)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;background:#25d366;color:#fff;padding:3px 10px;border-radius:8px;font-size:11px;font-weight:700;text-decoration:none;">💬 WA</a>`
+        ? `<a href="https://wa.me/55${esc(it.responsavelTelefone)}?text=${encodeURIComponent('Olá! Confirmando a inscrição de ' + String(it.nome||'').replace(/`/g,'') + ' na Corrida Kids Ilhas 2026 — Nº ' + String(it.numero||'').replace(/`/g,''))}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;background:#25d366;color:#fff;padding:3px 10px;border-radius:8px;font-size:11px;font-weight:700;text-decoration:none;">💬 WA</a>`
         : '<span style="color:#aaa;font-size:11px;">—</span>';
       tr.innerHTML = `<td>${esc(it.numero)||'—'}</td><td>${tag}</td><td>${cat}</td><td>${esc(it.camisa||'—')}</td><td>${esc(it.nome)}</td><td>${esc(it.nascimento)}</td><td>${esc(it.bairro)}</td><td>${esc(it.responsavelNome)}</td><td>${esc(it.responsavelTelefone)}</td><td>${esc(it.responsavelEmail)}</td><td>${cancelTag}</td><td>${waLink}</td><td>${fmtData(it.criadoEmMs)}</td>`;
       tbody.appendChild(tr);
@@ -7566,12 +7564,17 @@
 
   <script>
 
-  /* ── Termo scroll indicator — remove gradient when fully read ── */
+  /* ── Termo scroll indicator — oculta .termo-fade quando texto lido por completo ── */
   document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.termo-body').forEach(function(body) {
       function checkScroll() {
         const fullyRead = body.scrollTop + body.clientHeight >= body.scrollHeight - 4;
         body.classList.toggle('fully-read', fullyRead);
+        // Controla também o div irmão .termo-fade (compatível Firefox/Safari iOS)
+        var fade = body.nextElementSibling;
+        if (fade && fade.classList.contains('termo-fade')) {
+          fade.style.opacity = fullyRead ? '0' : '';
+        }
       }
       body.addEventListener('scroll', checkScroll, { passive: true });
       checkScroll();
