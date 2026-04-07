@@ -407,6 +407,42 @@
     /* ── Sections ── */
     .section { display:none; animation: appear .45s cubic-bezier(.34,1.56,.64,1) both; contain: layout style; }
     .section.active { display:block; content-visibility: visible; }
+
+    /* ── Legibilidade: cards nas seções com fundo sólido e contraste real ── */
+    .section .card {
+      background: rgba(255,255,255,0.97) !important;
+      backdrop-filter: blur(20px) !important;
+    }
+    /* Texto secundário com contraste reforçado */
+    .form-head p { color: #2a3f5f !important; }
+
+    /* ── Seção Origem — classes semânticas (light mode) ── */
+    .origem-hero-card {
+      background: rgba(255,255,255,0.92);
+      border: 1.5px solid rgba(0,149,255,.35);
+      border-radius: 20px;
+      padding: 28px 28px 24px;
+      margin-bottom: 22px;
+      text-align: center;
+      backdrop-filter: blur(12px);
+    }
+    .origem-h3 {
+      font-family: var(--font-display);
+      font-size: 20px; font-weight: 800;
+      color: #07172e; margin: 0 0 10px;
+    }
+    .origem-p { font-size: 14px; color: #1a2e50; line-height: 1.75; margin: 0 0 20px; }
+    .origem-quote {
+      background: rgba(255,255,255,0.85);
+      border-left: 4px solid #0095ff;
+      border-radius: 0 14px 14px 0;
+      padding: 16px 20px; text-align: left; margin-top: 4px;
+    }
+    .origem-quote-text { font-size: 17px; font-weight: 800; color: #07172e; line-height: 1.6; margin: 0 0 8px; font-style: italic; }
+    .origem-quote-author { font-size: 12px; font-weight: 700; color: #0055bb; letter-spacing: .5px; }
+    .origem-label { font-size: 13px; font-weight: 800; margin: 0 0 6px; text-transform: uppercase; letter-spacing: .5px; }
+    .origem-body { font-size: 14px; color: #1a2e50; line-height: 1.75; margin: 0; }
+
     @keyframes appear {
       from { opacity:0; transform:translateY(24px) scale(.96); }
       to   { opacity:1; transform:translateY(0) scale(1); }
@@ -1936,6 +1972,18 @@
       }
       .crono-header, .consulta-card { background: rgba(7,23,46,.88) !important; }
       label { color: #b8ccdf !important; }
+
+      /* ── Dark mode: seção "Como nasceu" ── */
+      .origem-hero-card {
+        background: rgba(0,60,120,.30) !important;
+        border-color: rgba(0,149,255,.45) !important;
+      }
+      .origem-h3 { color: #e8f0fa !important; }
+      .origem-p { color: #c0d4ea !important; }
+      .origem-quote { background: rgba(255,255,255,.07) !important; }
+      .origem-quote-text { color: #e0eeff !important; }
+      .origem-quote-author { color: #60aaff !important; }
+      .origem-body { color: #c0d4ea !important; }
     }
 
   </style>
@@ -3426,19 +3474,19 @@
             <div style="max-width:680px;margin:0 auto;">
 
               <!-- Card principal -->
-              <div style="background:linear-gradient(135deg,rgba(0,149,255,.10),rgba(0,149,255,.04));border:1.5px solid rgba(0,149,255,.25);border-radius:20px;padding:28px 28px 24px;margin-bottom:22px;text-align:center;">
+              <div class="origem-hero-card">
                 <div style="font-size:52px;margin-bottom:12px;">👧</div>
-                <h3 style="font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--text);margin:0 0 10px;">Diana Ayla, 9 anos</h3>
-                <p style="font-size:14px;color:#3d5068;line-height:1.75;margin:0 0 20px;">
+                <h3 class="origem-h3">Diana Ayla, 9 anos</h3>
+                <p class="origem-p">
                   A Corrida Kids Ilhas 2026 nasceu de um sonho simples e verdadeiro.<br>
                   O projeto foi idealizado por <strong>Diana Ayla</strong>, uma criança de 9 anos que, ao saber da realização de uma corrida na empresa em que seus pais trabalham, desejou viver aquela experiência também.
                 </p>
                 <!-- Frase emocional -->
-                <div style="background:linear-gradient(135deg,rgba(0,100,200,.12),rgba(0,149,255,.06));border-left:4px solid #0095ff;border-radius:0 14px 14px 0;padding:16px 20px;text-align:left;margin-top:4px;">
-                  <p style="font-size:17px;font-weight:800;color:#07172e;line-height:1.6;margin:0 0 8px;font-style:italic;">
+                <div class="origem-quote">
+                  <p class="origem-quote-text">
                     "Eu só queria correr com meus amigos em uma corrida de verdade, com vencedor, troféu, pódium e medalhas."
                   </p>
-                  <span style="font-size:12px;font-weight:700;color:#0066cc;letter-spacing:.5px;">— Diana Ayla, 9 anos</span>
+                  <span class="origem-quote-author">— Diana Ayla, 9 anos</span>
                 </div>
               </div>
 
@@ -3451,8 +3499,8 @@
                     <div style="width:2px;flex:1;background:linear-gradient(to bottom,rgba(255,87,34,.3),rgba(0,149,255,.3));min-height:40px;margin-top:6px;"></div>
                   </div>
                   <div style="padding-bottom:28px;padding-top:10px;">
-                    <p style="font-size:13px;font-weight:800;color:#ff5722;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;">O pedido</p>
-                    <p style="font-size:14px;color:#1a2e50;line-height:1.75;margin:0;">Ao descobrir que a participação era permitida apenas para adultos, Diana fez um pedido especial à sua mãe, <strong>Ana Paula Lima</strong>: criar uma corrida voltada para crianças, onde ela e seus amigos pudessem participar, correr, competir, brincar e se divertir juntos.</p>
+                    <p class="origem-label" style="color:#ff5722;">O pedido</p>
+                    <p class="origem-body">Ao descobrir que a participação era permitida apenas para adultos, Diana fez um pedido especial à sua mãe, <strong>Ana Paula Lima</strong>: criar uma corrida voltada para crianças, onde ela e seus amigos pudessem participar, correr, competir, brincar e se divertir juntos.</p>
                   </div>
                 </div>
 
@@ -3462,8 +3510,8 @@
                     <div style="width:2px;flex:1;background:linear-gradient(to bottom,rgba(124,58,237,.3),rgba(0,149,255,.3));min-height:40px;margin-top:6px;"></div>
                   </div>
                   <div style="padding-bottom:28px;padding-top:10px;">
-                    <p style="font-size:13px;font-weight:800;color:#7c3aed;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;">A mobilização</p>
-                    <p style="font-size:14px;color:#1a2e50;line-height:1.75;margin:0;">Sensibilizada com o desejo da filha, <strong>Ana Paula</strong> deu início à organização do projeto, mobilizando a comunidade e buscando apoio junto a instituições e lideranças locais.</p>
+                    <p class="origem-label" style="color:#7c3aed;">A mobilização</p>
+                    <p class="origem-body">Sensibilizada com o desejo da filha, <strong>Ana Paula</strong> deu início à organização do projeto, mobilizando a comunidade e buscando apoio junto a instituições e lideranças locais.</p>
                   </div>
                 </div>
 
@@ -3473,8 +3521,8 @@
                     <div style="width:2px;flex:1;background:linear-gradient(to bottom,rgba(58,138,0,.3),rgba(0,149,255,.3));min-height:40px;margin-top:6px;"></div>
                   </div>
                   <div style="padding-bottom:28px;padding-top:10px;">
-                    <p style="font-size:13px;font-weight:800;color:#0d7a3e;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;">O apoio</p>
-                    <p style="font-size:14px;color:#1a2e50;line-height:1.75;margin:0;">Com o apoio do <strong>Centro Comunitário</strong> e o patrocínio da <strong>Loja Maçônica da Ilha de Santa Maria</strong>, o projeto ganhou força e se transformou em um grande evento comunitário.</p>
+                    <p class="origem-label" style="color:#0d7a3e;">O apoio</p>
+                    <p class="origem-body">Com o apoio do <strong>Centro Comunitário</strong> e o patrocínio da <strong>Loja Maçônica da Ilha de Santa Maria</strong>, o projeto ganhou força e se transformou em um grande evento comunitário.</p>
                   </div>
                 </div>
 
@@ -3483,8 +3531,8 @@
                     <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#0066cc,#00a8ff);display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 16px rgba(0,149,255,.35);">💙</div>
                   </div>
                   <div style="padding-top:10px;">
-                    <p style="font-size:13px;font-weight:800;color:#0066cc;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;">O legado</p>
-                    <p style="font-size:14px;color:#1a2e50;line-height:1.75;margin:0;">A Loja Maçônica da Ilha de Santa Maria prontamente apoiou a iniciativa, e a Corrida Kids, junto ao Show de Talentos, passa a integrar a programação da <strong>Ação Global 2026</strong>, promovendo esporte, cultura, inclusão e alegria para as crianças de Ilha de Santa Maria, Monte Belo e demais comunidades. 💙</p>
+                    <p class="origem-label" style="color:#0066cc;">O legado</p>
+                    <p class="origem-body">A Loja Maçônica da Ilha de Santa Maria prontamente apoiou a iniciativa, e a Corrida Kids, junto ao Show de Talentos, passa a integrar a programação da <strong>Ação Global 2026</strong>, promovendo esporte, cultura, inclusão e alegria para as crianças de Ilha de Santa Maria, Monte Belo e demais comunidades. 💙</p>
                   </div>
                 </div>
 
