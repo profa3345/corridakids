@@ -985,8 +985,12 @@
     }
     .footer-emoji { font-size: 28px; margin-bottom: 8px; display: block; animation: footerBounce 2s ease-in-out infinite alternate; }
     @keyframes footerBounce { from { transform: translateY(0); } to { transform: translateY(-5px); } }
-    .footer-text { color:rgba(255,255,255,.52); font-size:13px; font-weight:500; letter-spacing:.3px; line-height: 1.7; }
-    .footer-text b { color:rgba(255,255,255,.78); font-weight:700; }
+    .footer-text { color:rgba(255,255,255,.62); font-size:13px; font-weight:500; letter-spacing:.3px; line-height: 1.7; }
+    .footer-text b { color:rgba(255,255,255,.88); font-weight:700; }
+    @media (max-width: 768px) {
+      .footer-text { color:rgba(255,255,255,.78); }
+      .footer-text b { color:#fff; }
+    }
     .footer-hearts { margin-top: 10px; font-size: 18px; display: flex; justify-content: center; gap: 6px; }
     .footer-hearts span { display:inline-block; animation: heartBeat 1.4s ease-in-out infinite; }
     .footer-hearts span:nth-child(2) { animation-delay: .2s; }
@@ -1035,17 +1039,19 @@
 
     /* ── Mobile: desativa efeitos pesados (performance inteligente) ── */
     @media (max-width: 768px) {
+      /* Fundo: azul naval (menos agressivo que preto puro — reduz cansaço visual) */
+      body { background: #0b1a33 !important; }
       /* Blobs: apenas 2 leves, blur reduzido, animação mais lenta */
       .blob.b3, .blob.b4, .blob.b5 { display: none !important; }
-      .blob { filter: blur(50px) !important; opacity: .10 !important; animation-duration: 40s !important; will-change: auto !important; }
-      /* Aurora: desativa completamente no mobile */
-      body::after { animation: none !important; opacity: .4 !important; }
+      .blob { filter: blur(50px) !important; opacity: .14 !important; animation-duration: 40s !important; will-change: auto !important; }
+      /* Aurora: mantém presença leve (não some completamente — ajuda a suavizar o fundo) */
+      body::after { animation: none !important; opacity: .65 !important; }
       /* Grain: opacidade reduzida */
       body::before { opacity: .5 !important; }
       /* Emojis flutuantes: desativados no mobile */
       #floatEmojis { display: none !important; }
-      /* Topbar: backdrop-filter mais leve */
-      .topbar { backdrop-filter: blur(10px) !important; }
+      /* Topbar: backdrop-filter mais leve, fundo ligeiramente mais presente */
+      .topbar { backdrop-filter: blur(10px) !important; background: rgba(11,26,51,.80) !important; }
       /* Modais: sem blur pesado */
       .admin-portal-overlay { backdrop-filter: blur(8px) !important; }
       #videoDeepModal { backdrop-filter: blur(8px) !important; }
@@ -1062,8 +1068,8 @@
     @media (max-width: 480px) {
       /* Blobs: removidos completamente em telas muito pequenas */
       .blob { display: none !important; }
-      /* Aurora: gradiente fixo, sem animação */
-      body::after { opacity: .6 !important; animation: none !important; }
+      /* Aurora: mais presente em telas pequenas (compensa ausência dos blobs) */
+      body::after { opacity: .75 !important; animation: none !important; }
       /* Grain: desativado */
       body::before { display: none !important; }
       /* Confetti no load: desativado */
@@ -1281,6 +1287,29 @@
 
     /* ── Step nav buttons ── */
     .step-nav { display:flex; gap:10px; margin-top:8px; flex-wrap:wrap; }
+
+    /* ── Indicador de swipe — aparece só em touch, some após primeiro swipe ── */
+    .swipe-hint {
+      display: none;
+      align-items: center; justify-content: center; gap: 6px;
+      font-size: 11px; font-weight: 600; color: var(--muted);
+      letter-spacing: .3px; margin-top: 10px; opacity: .75;
+      transition: opacity .4s ease;
+      user-select: none; pointer-events: none;
+    }
+    .swipe-hint.hidden { opacity: 0; }
+    @media (pointer: coarse) {
+      .swipe-hint { display: flex; }
+    }
+    .swipe-hint-arrow {
+      font-size: 14px; animation: swipeNudge 2s ease-in-out infinite;
+    }
+    @keyframes swipeNudge {
+      0%,100% { transform: translateX(0); }
+      40%      { transform: translateX(-6px); }
+      60%      { transform: translateX(6px); }
+    }
+
     .btn-next {
       background: linear-gradient(135deg, var(--accent1), #0099cc);
       color: #fff; box-shadow: 0 8px 24px rgba(0,194,255,.35);
@@ -2472,6 +2501,11 @@
                   <button type="button" class="btn btn-ghost" onclick="showSection('home')">🏠 Cancelar</button>
                   <button type="button" class="btn btn-concordo btn" onclick="cNextStep(1)">✅ Concordo e continuo →</button>
                 </div>
+                <div class="swipe-hint" id="cSwipeHint1" aria-hidden="true">
+                  <span class="swipe-hint-arrow">←</span>
+                  <span>Deslize para navegar</span>
+                  <span class="swipe-hint-arrow">→</span>
+                </div>
               </div>
 
               <!-- ETAPA 2: CRIANÇA -->
@@ -2554,6 +2588,11 @@
                 <div class="step-nav">
                   <button type="button" class="btn btn-ghost" onclick="cGoStep(1, true)">← Voltar</button>
                   <button type="button" class="btn btn-next btn" onclick="cNextStep(2)">Próximo →</button>
+                </div>
+                <div class="swipe-hint" id="cSwipeHint2" aria-hidden="true">
+                  <span class="swipe-hint-arrow">←</span>
+                  <span>Deslize para navegar</span>
+                  <span class="swipe-hint-arrow">→</span>
                 </div>
               </div>
 
@@ -2766,6 +2805,11 @@
                   <button type="button" class="btn btn-ghost" onclick="showSection('home')">🏠 Cancelar</button>
                   <button type="button" class="btn btn-next btn" onclick="sNextStep(1)">Próximo →</button>
                 </div>
+                <div class="swipe-hint" id="sSwipeHint1" aria-hidden="true">
+                  <span class="swipe-hint-arrow">←</span>
+                  <span>Deslize para navegar</span>
+                  <span class="swipe-hint-arrow">→</span>
+                </div>
               </div>
 
               <!-- ETAPA 2: AUTORIZAÇÃO (só para menores) -->
@@ -2800,6 +2844,11 @@
                 <div class="step-nav">
                   <button type="button" class="btn btn-ghost" onclick="sGoStep(1, true)">← Voltar</button>
                   <button type="button" class="btn btn-concordo btn" onclick="sNextStep(2)">✅ Concordo e continuo →</button>
+                </div>
+                <div class="swipe-hint" id="sSwipeHint2" aria-hidden="true">
+                  <span class="swipe-hint-arrow">←</span>
+                  <span>Deslize para navegar</span>
+                  <span class="swipe-hint-arrow">→</span>
                 </div>
               </div>
 
@@ -4795,10 +4844,15 @@
   }
 
   function downloadRegulamento() {
+    // FIX #15: inclui data/hora de geração e versão para o usuário saber se está desatualizado
+    const dataGeracao = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
     const txt = [
       'REGULAMENTO OFICIAL',
       '1ª CORRIDA KIDS ILHAS 2026',
       'Ilha de Santa Maria e Ilha de Monte Belo — Vitória/ES',
+      '',
+      'Documento gerado em: ' + dataGeracao,
+      'Versão atualizada disponível em: corridakidsilhas.vercel.app',
       '',
       'DATA: Junho 2026 — Dia a Definir',
       'HORÁRIO: 8h00 às 12h30',
@@ -4841,6 +4895,11 @@
       '== RESPONSÁVEL GERAL ==',
       'Ana Paula Lima — (27) 99924-3874',
       'Fernando Soares — Vice-líder comunitário',
+      '',
+      '---',
+      'AVISO: Este documento foi gerado automaticamente. Caso a data do evento seja',
+      'confirmada após ' + dataGeracao + ', baixe novamente em corridakidsilhas.vercel.app',
+      'para garantir as informações mais atualizadas.',
     ].join('\n');
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob(['\uFEFF' + txt], {type:'text/plain;charset=utf-8'}));
@@ -5071,17 +5130,37 @@
 
     // Verificar inscrição duplicada:
     // — Menor: mesmo CPF do responsável + nome do participante
-    // — Adulto: mesmo nome + nascimento (não tem CPF)
+    // — Adulto: mesmo nome + nascimento. FIX #4: também verifica telefone como segundo fator
+    //   para evitar duplicatas com variações de digitação do nome
     const nomeValShow   = (document.getElementById('showNome')?.value || '').trim().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
     const nascValShow   = document.getElementById('showNascimento')?.value || '';
     const cpfDigitsShow = onlyDigits(cpfVal);
     let dupSnapShow;
     if (_isAdultoSave) {
+      // Para adultos: verifica nome+nascimento (deduplicação primária)
       dupSnapShow = await db.collection(COL_SHOW)
         .where('nomeLower',          '==', nomeValShow)
         .where('nascimento',         '==', nascValShow)
         .where('responsavel.tipo',   '==', 'adulto')
         .limit(1).get();
+      // FIX #4: verificação secundária por telefone — captura re-inscrições com nome diferente
+      if (dupSnapShow.empty) {
+        const telAdulto = onlyDigits(document.getElementById('showRespTelefone')?.value || '');
+        if (telAdulto.length >= 10) {
+          const dupTelSnap = await db.collection(COL_SHOW)
+            .where('responsavel.telefone', '==', telAdulto)
+            .where('responsavel.tipo',     '==', 'adulto')
+            .where('cancelada',            '==', false)
+            .limit(1).get();
+          // Só considera duplicata se nome e nascimento forem próximos (mesmo participante)
+          // — evita bloquear dois adultos diferentes com o mesmo telefone (família)
+          if (!dupTelSnap.empty) {
+            const existente = dupTelSnap.docs[0].data();
+            const mesmoNasc = existente.nascimento === nascValShow;
+            if (mesmoNasc) dupSnapShow = dupTelSnap;
+          }
+        }
+      }
     } else {
       dupSnapShow = await db.collection(COL_SHOW)
         .where('responsavel.cpf', '==', cpfDigitsShow)
@@ -5122,7 +5201,16 @@
         nome:    (document.getElementById('nomeApresentacao')?.value || '').trim(),
         duracao: (document.getElementById('duracao')?.value || '').trim()
       },
-      responsavel: _isAdultoSave ? { tipo: 'adulto' } : {
+      responsavel: _isAdultoSave ? {
+        tipo:     'adulto',
+        // FIX #4: salva telefone do adulto para deduplicação e contato pela organização
+        telefone: onlyDigits(document.getElementById('showRespTelefone')?.value || ''),
+        email:    (function() {
+          var em = (document.getElementById('showRespEmail')?.value || '').trim().toLowerCase();
+          if (em && (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em))) throw new Error('E-mail inválido. Verifique o endereço digitado.');
+          return em;
+        })()
+      } : {
         nome:     (document.getElementById('showRespNome')?.value || '').trim(),
         cpf:      onlyDigits(cpfVal),
         vinculo:  document.getElementById('showRespVinculo')?.value || '',
@@ -5976,26 +6064,46 @@
   async function _verificarRecaptcha(action) {
     // Se a chave não foi configurada, apenas avisa no console e prossegue
     if (!_RECAPTCHA_SITE_KEY || _RECAPTCHA_SITE_KEY === 'SUA_CHAVE_RECAPTCHA_V3_AQUI') {
-      console.warn('[reCAPTCHA] Chave do site não configurada. Configure _RECAPTCHA_SITE_KEY para ativar a proteção anti-bot.');
+      console.warn('[reCAPTCHA] Chave nao configurada.');
       return null;
     }
-    // Aguarda a lib do Google carregar (pode ter delay por async/defer)
     if (typeof grecaptcha === 'undefined' || !grecaptcha.execute) {
-      console.warn('[reCAPTCHA] Biblioteca ainda não carregada. Prosseguindo sem verificação.');
+      console.warn('[reCAPTCHA] Biblioteca nao carregada. Prosseguindo sem verificacao.');
       return null;
     }
     try {
       const token = await grecaptcha.execute(_RECAPTCHA_SITE_KEY, { action: action });
-      if (!token || token.length < 10) throw new Error('Token inválido');
-      // ⚠️ Em produção real: envie o token para uma Cloud Function que chama
-      // https://recaptchaenterprise.googleapis.com/v1/projects/PROJECT/assessments
-      // e verifique se o score >= 0.5. Aqui fazemos apenas a geração do token,
-      // que por si só já bloqueia bots que não executam JavaScript.
+      if (!token || token.length < 10) throw new Error('Token invalido');
+
+      // FIX #2 — envia o token para o proxy server-side que verifica o score.
+      // /api/verificar-recaptcha chama a Google Assessment API com a chave SECRETA
+      // e retorna { ok: bool, score: float }. Fail-open se proxy indisponivel.
+      try {
+        const ctrl = new AbortController();
+        const tid  = setTimeout(function() { ctrl.abort(); }, 5000);
+        const resp = await fetch('/api/verificar-recaptcha', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ token: token, action: action }),
+          signal:  ctrl.signal
+        });
+        clearTimeout(tid);
+        if (resp.ok) {
+          const result = await resp.json();
+          // Score < 0.3 = muito provavelmente bot
+          if (result && result.ok === false && typeof result.score === 'number' && result.score < 0.3) {
+            throw new Error('Verificacao anti-bot falhou. Tente novamente.');
+          }
+        }
+        // 404/502 = proxy ainda nao deployado, fail-open
+      } catch(proxyErr) {
+        if (proxyErr.message && proxyErr.message.includes('anti-bot')) throw proxyErr;
+        console.warn('[reCAPTCHA] Proxy indisponivel, prosseguindo:', proxyErr.message);
+      }
       return token;
     } catch(e) {
-      // Em caso de falha na verificação, não bloqueia o usuário (fail-open)
-      // para não prejudicar acessibilidade. Registre o erro no servidor.
-      console.warn('[reCAPTCHA] Falha na verificação:', e.message);
+      if (e.message && e.message.includes('anti-bot')) throw e;
+      console.warn('[reCAPTCHA] Falha:', e.message);
       return null;
     }
   }
@@ -6653,7 +6761,10 @@
     var stepIdx = 0;
     var finished = false;
 
-    // Cria barra de progresso logo abaixo do botão
+    // FIX #13: remove barra anterior se existir (evita duplicação por duplo-toque)
+    var barExisting = document.getElementById('_submitProgressBar');
+    if (barExisting) barExisting.remove();
+
     var bar = document.createElement('div');
     bar.id = '_submitProgressBar';
     bar.style.cssText = [
@@ -6710,12 +6821,13 @@
     const border = tipo === 'sucesso' ? 'rgba(105,255,71,.35)' : tipo === 'erro' ? 'rgba(255,87,34,.35)' : 'rgba(0,194,255,.35)';
     toast.style.cssText = `
       position:fixed; bottom:32px; left:50%; transform:translateX(-50%) translateY(24px);
-      background:${bg}; color:#fff; padding:14px 28px; border-radius:999px;
+      background:${bg}; color:#fff; padding:14px 28px; border-radius:20px;
       font-family:Sora,sans-serif; font-size:14px; font-weight:700;
       border:1px solid ${border}; box-shadow:0 16px 48px rgba(0,0,0,.45);
-      z-index:9999; opacity:0; pointer-events:none; white-space:nowrap;
+      z-index:9999; opacity:0; pointer-events:none;
+      white-space:normal; word-break:break-word;
       transition:opacity .3s, transform .3s;
-      max-width: 90vw; text-align:center;
+      max-width:min(92vw,480px); width:max-content; text-align:center;
     `;
     toast.setAttribute('role', 'alert');
     toast.setAttribute('aria-live', tipo === 'erro' ? 'assertive' : 'polite');
@@ -7043,8 +7155,9 @@
   // EXPORTAÇÕES
   // ================================================================
   function exportarCSV() {
-    const lista = ultimoFiltrado.length ? ultimoFiltrado : aplicaFiltros(cacheRelatorios);
-    if (!lista.length) { showToast('⚠️ Nenhum inscrito para exportar.', 'info'); return; }
+    // FIX #9: sempre recalcula filtros ativos — evita exportar dados desatualizados
+    const lista = aplicaFiltros(cacheRelatorios);
+    if (!lista.length) { showToast('⚠️ Nenhum inscrito para exportar com os filtros atuais.', 'info'); return; }
     const header = ['numero','tipo','categoria','categoriaShow','camisa','nome','nascimento','bairro','responsavel','vinculo','cpf','telefone','email','status','criadoEm'];
     // Separador , (padrão RFC 4180) — compatível com Mac Excel, LibreOffice e Google Sheets
     const rows = [header.map(v => '"' + v + '"').join(',')];
@@ -7063,8 +7176,9 @@
   }
 
   function exportarXLSX() {
-    const lista = ultimoFiltrado.length ? ultimoFiltrado : aplicaFiltros(cacheRelatorios);
-    if (!lista.length) { showToast('⚠️ Nenhum inscrito para exportar.', 'info'); return; }
+    // FIX #9: sempre recalcula filtros ativos
+    const lista = aplicaFiltros(cacheRelatorios);
+    if (!lista.length) { showToast('⚠️ Nenhum inscrito para exportar com os filtros atuais.', 'info'); return; }
     const sheetData = [['Nº','Tipo','Categoria','Cat. Show','Camisa','Nome','Nascimento','Bairro','Responsável','Vínculo','CPF','Telefone','E-mail','Status','Criado em']];
     lista.forEach(function(it) {
       sheetData.push([it.numero||'',it.tipo||'',it.categoria||'',it.categoriaShow||'',it.camisa||'—',it.nome||'',it.nascimento||'',it.bairro||'',
@@ -7585,29 +7699,42 @@
   <script>
   /* ── Swipe para navegar entre etapas ── */
   (function() {
-    function addSwipe(formId, nextFn, prevFn) {
-      const form = document.getElementById(formId);
-      if (!form) return;
-      let startX = 0, startY = 0;
-      form.addEventListener('touchstart', function(e) {
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-      }, { passive: true });
-      form.addEventListener('touchend', function(e) {
-        const dx = e.changedTouches[0].clientX - startX;
-        const dy = e.changedTouches[0].clientY - startY;
-        if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 2.2) return;
-        const tag = e.target.tagName;
-        if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
-        if (dx < 0) nextFn(); else prevFn();
-      }, { passive: true });
-    }
     document.addEventListener('DOMContentLoaded', function() {
-      addSwipe('corridaForm',
+      // FIX #12: some o hint após o primeiro swipe real
+      var _swipeUsed = false;
+      function _dismissSwipeHints() {
+        if (_swipeUsed) return;
+        _swipeUsed = true;
+        document.querySelectorAll('.swipe-hint').forEach(function(el) {
+          el.classList.add('hidden');
+          setTimeout(function() { el.style.display = 'none'; }, 500);
+        });
+      }
+
+      function addSwipeWithHint(formId, nextFn, prevFn) {
+        var form = document.getElementById(formId);
+        if (!form) return;
+        var startX = 0, startY = 0;
+        form.addEventListener('touchstart', function(e) {
+          startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY;
+        }, { passive: true });
+        form.addEventListener('touchend', function(e) {
+          var dx = e.changedTouches[0].clientX - startX;
+          var dy = e.changedTouches[0].clientY - startY;
+          if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 2.2) return;
+          var tag = e.target.tagName;
+          if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
+          _dismissSwipeHints();
+          if (dx < 0) nextFn(); else prevFn();
+        }, { passive: true });
+      }
+
+      addSwipeWithHint('corridaForm',
         function() { var s = document.querySelector('#corridaForm .fstep.active'); if (!s) return; if (s.id==='cFStep1') cNextStep(1); else if (s.id==='cFStep2') cNextStep(2); },
         function() { var s = document.querySelector('#corridaForm .fstep.active'); if (!s) return; if (s.id==='cFStep2') cGoStep(1,true); else if (s.id==='cFStep3') cStep3GoBack(); }
       );
-      addSwipe('showForm',
+      addSwipeWithHint('showForm',
         function() { var s = document.querySelector('#showForm .fstep.active'); if (!s) return; if (s.id==='sFStep1') sNextStep(1); else if (s.id==='sFStep2') sNextStep(2); },
         function() { var s = document.querySelector('#showForm .fstep.active'); if (!s) return; if (s.id==='sFStep2') sGoStep(1,true); else if (s.id==='sFStep3') sStep3GoBack(); }
       );
