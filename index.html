@@ -1936,6 +1936,25 @@
       }
       .crono-header, .consulta-card { background: rgba(7,23,46,.88) !important; }
       label { color: #b8ccdf !important; }
+
+      /* ── Dark mode: seção #origem — corrige textos hardcoded ilegíveis ── */
+      #origem p, #origem span, #origem li {
+        color: #c8d8f0 !important;
+      }
+      /* Subtítulos coloridos da timeline (O PEDIDO, A MOBILIZAÇÃO...) mantêm cor mas mais clara */
+      #origem [style*="color:#ff5722"] { color: #ff7d4f !important; }
+      #origem [style*="color:#7c3aed"] { color: #b07ef5 !important; }
+      #origem [style*="color:#0d7a3e"] { color: #4dbf7f !important; }
+      #origem [style*="color:#0066cc"] { color: #4da6ff !important; }
+      /* Frase da Diana: fundo do quote-block */
+      #origem [style*="border-left:4px solid #0095ff"] {
+        background: linear-gradient(135deg, rgba(0,100,200,.25), rgba(0,149,255,.12)) !important;
+      }
+      #origem [style*="color:#07172e"] { color: #d8e8f8 !important; }
+      #origem [style*="color:#1a2e50"] { color: #c8d8f0 !important; }
+      #origem [style*="color:#3d5068"] { color: #a0bacf !important; }
+      /* Card principal da Diana */
+      #origem h3 { color: #e8f0ff !important; }
     }
 
   </style>
