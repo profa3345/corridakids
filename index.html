@@ -1955,6 +1955,55 @@
       #origem [style*="color:#3d5068"] { color: #a0bacf !important; }
       /* Card principal da Diana */
       #origem h3 { color: #e8f0ff !important; }
+
+      /* ── Dark mode global: classes CSS com cores hardcoded ilegíveis ── */
+      .hint { color: #7a9ab8 !important; }
+      .note, .video-info p, .crono-sub { color: #8da4c0 !important; }
+      .stat .k { color: #8da4c0 !important; }
+      .admin-portal-body label { color: #b8ccdf !important; }
+
+      /* Textos inline escuros ilegíveis sobre card escuro */
+      [style*="color:#07172e"] { color: #d0e0f0 !important; }
+      [style*="color:#1a2e50"] { color: #c0d4ea !important; }
+      [style*="color:#3d5068"] { color: #8da4c0 !important; }
+      [style*="color:#2d3e56"] { color: #8da4c0 !important; }
+
+      /* Badges de categoria (show/trajeto) */
+      [style*="color:#b8860b"] { color: #f0c040 !important; }
+      [style*="color:#0080aa"] { color: #40c0e0 !important; }
+      [style*="color:#2e7d32"] { color: #4dbf7f !important; }
+
+      /* ── Dark mode: modais dinâmicos com background:#fff hardcoded ── */
+      #cancelResultado > div[style*="background:#fff"],
+      #cancelResultado > div[style*="background: #fff"] {
+        background: rgba(7,23,46,.97) !important;
+        border-color: rgba(255,255,255,.15) !important;
+      }
+      #cancelResultado h3 { color: #d0e0f0 !important; }
+      #cancelResultado p  { color: #8da4c0 !important; }
+      /* Botão "Voltar" dentro do modal de cancelamento */
+      #cancelResultado button[style*="background:#f5f5f5"] {
+        background: rgba(255,255,255,.08) !important;
+        color: #c0d4ea !important;
+        border-color: rgba(255,255,255,.18) !important;
+      }
+
+      /* ── Dark mode: painel admin — tabs e lista de vídeos ── */
+      .admin-tab.active {
+        background: rgba(255,255,255,.10) !important;
+        color: #e8edf5 !important;
+        box-shadow: 0 4px 16px rgba(0,0,0,.30) !important;
+      }
+      .admin-tab { color: #8da4c0 !important; }
+      .admin-tabs { background: rgba(255,255,255,.04) !important; border-color: rgba(255,255,255,.08) !important; }
+      .vm-item {
+        background: rgba(255,255,255,.05) !important;
+        border-color: rgba(255,255,255,.10) !important;
+      }
+      .vm-btn-del {
+        background: rgba(198,40,40,.15) !important;
+        border-color: rgba(198,40,40,.30) !important;
+      }
     }
 
   </style>
@@ -2456,6 +2505,8 @@
 
         <section id="corrida" class="section" aria-label="Formulário de inscrição na Corrida Kids">
           <div class="card form-card">
+            <!-- Banner de urgência de vagas — exibido dinamicamente por JS -->
+            <div id="bannerVagasCorridaForm" style="display:none;background:linear-gradient(135deg,rgba(198,40,40,.12),rgba(255,87,34,.08));border:1.5px solid rgba(198,40,40,.30);border-radius:14px;padding:12px 16px;margin-bottom:16px;text-align:center;font-size:13px;font-weight:800;color:#c62828;" role="alert" aria-live="polite"></div>
             <div class="form-head">
               <div>
                 <h2>Inscrição • Corrida Kids 🏃‍♂️</h2>
@@ -2683,6 +2734,8 @@
         <!-- SHOW -->
         <section id="show" class="section" aria-label="Formulário de inscrição no Show de Talentos">
           <div class="card form-card">
+            <!-- Banner de urgência de vagas — exibido dinamicamente por JS -->
+            <div id="bannerVagasShowForm" style="display:none;background:linear-gradient(135deg,rgba(198,40,40,.12),rgba(255,87,34,.08));border:1.5px solid rgba(198,40,40,.30);border-radius:14px;padding:12px 16px;margin-bottom:16px;text-align:center;font-size:13px;font-weight:800;color:#c62828;" role="alert" aria-live="polite"></div>
             <div class="form-head">
               <div>
                 <h2>Inscrição • Show de Talentos 🎭</h2>
@@ -4660,12 +4713,13 @@
       var nomeParticipante = esc(dados.nome || '—');
       var tipoEvento = isCorrida ? '🏃 Corrida Kids' : '🎭 Show de Talentos';
 
+      const _mc3 = _modalColors();
       resultado.innerHTML = `
-        <div style="background:#fff;border:1.5px solid rgba(198,40,40,.25);border-radius:16px;padding:20px;text-align:center;">
+        <div style="background:${_mc3.bg};border:1.5px solid rgba(198,40,40,.25);border-radius:16px;padding:20px;text-align:center;">
           <div style="font-size:32px;margin-bottom:10px;">⚠️</div>
-          <h3 style="font-size:15px;font-weight:800;color:#07172e;margin:0 0 8px;">Confirmar cancelamento?</h3>
-          <p style="font-size:13px;color:#3d5068;margin:0 0 6px;">Participante: <strong>${nomeParticipante}</strong></p>
-          <p style="font-size:13px;color:#3d5068;margin:0 0 16px;">Evento: <strong>${tipoEvento}</strong></p>
+          <h3 style="font-size:15px;font-weight:800;color:${_mc3.title};margin:0 0 8px;">Confirmar cancelamento?</h3>
+          <p style="font-size:13px;color:${_mc3.body};margin:0 0 6px;">Participante: <strong>${nomeParticipante}</strong></p>
+          <p style="font-size:13px;color:${_mc3.body};margin:0 0 16px;">Evento: <strong>${tipoEvento}</strong></p>
           <p style="font-size:12px;color:#c62828;font-weight:700;margin:0 0 18px;">Esta ação é irreversível.</p>
           <div style="display:flex;gap:10px;justify-content:center;">
             <button type="button" id="btnConfirmarCancelamento"
@@ -4673,7 +4727,7 @@
               Sim, cancelar
             </button>
             <button type="button" onclick="document.getElementById('cancelResultado').style.display='none'"
-              style="flex:1;max-width:160px;padding:11px 0;border-radius:12px;border:1.5px solid rgba(7,23,46,.15);background:#f5f5f5;font-weight:700;font-size:13px;cursor:pointer;">
+              style="flex:1;max-width:160px;padding:11px 0;border-radius:12px;border:1.5px solid ${_mc3.btnCancelBdr};background:${_mc3.btnCancel};color:${_mc3.btnCancelTxt};font-weight:700;font-size:13px;cursor:pointer;">
               Voltar
             </button>
           </div>
@@ -5421,7 +5475,10 @@
       if (text) {
         els.msg.style.display = 'block';
         els.msg.textContent   = text;
-        els.msg.style.color   = (state === 'blocked') ? '#c62828' : (state === 'ok') ? '#1b5e20' : '#795548';
+        const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        els.msg.style.color   = (state === 'blocked') ? '#c62828'
+                              : (state === 'ok')      ? (isDark ? '#4dbf7f' : '#1b5e20')
+                              : (isDark ? '#aab8c8' : '#795548');
       } else {
         els.msg.style.display = 'none';
         els.msg.textContent   = '';
@@ -5452,6 +5509,12 @@
         // Para criar o proxy: api/moderar-talento.js com POST → Anthropic server-side.
         const controller = new AbortController();
         const timeoutId = setTimeout(function() { controller.abort(); }, 12000);
+        // UX: após 3s sem resposta, avisa o usuário que está demorando (mobile pode ser lento)
+        const slowTimer = setTimeout(function() {
+          if (_moderationResult === null) {
+            setStatus(els, 'loading', 'Verificando… isso pode levar alguns segundos.');
+          }
+        }, 3000);
         const resp = await fetch('/api/moderar-talento', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -5459,6 +5522,7 @@
           signal: controller.signal
         });
         clearTimeout(timeoutId);
+        clearTimeout(slowTimer);
 
         if (!resp.ok) throw new Error('proxy ' + resp.status);
         const parsed = await resp.json();
@@ -5479,6 +5543,7 @@
           if (els.input) els.input.style.borderColor = '#c62828';
         }
       } catch(e) {
+        clearTimeout(slowTimer);
         // Em caso de falha na API, não bloqueia o usuário — apenas avisa
         _moderationResult = true; // permissivo em caso de erro
         if (els.input) els.input.style.borderColor = '';
@@ -6496,6 +6561,20 @@
       }
       vagasEl.style.display = 'block';
     }
+
+    // Banner de urgência dentro do formulário (poucas ou esgotadas)
+    const bannerForm = document.getElementById(tipo === 'corrida' ? 'bannerVagasCorridaForm' : 'bannerVagasShowForm');
+    if (bannerForm) {
+      if (lotado) {
+        bannerForm.textContent = '🔒 Vagas esgotadas — inscrições encerradas para esta modalidade.';
+        bannerForm.style.display = 'block';
+      } else if (poucas) {
+        bannerForm.textContent = `⚡ Atenção: apenas ${vagas} vaga${vagas===1?'':'s'} restante${vagas===1?'':'s'}! Conclua sua inscrição rapidinho.`;
+        bannerForm.style.display = 'block';
+      } else {
+        bannerForm.style.display = 'none';
+      }
+    }
   }
 
   function aplicarStatusInscricoes(encerrado, atualizadoEm) {
@@ -6620,12 +6699,13 @@
     const modal = document.createElement('div');
     modal.id = 'modalConfirmEncerrar';
     modal.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(2,8,24,.85);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;';
-    modal.innerHTML = `<div style="background:#fff;border-radius:20px;padding:28px 24px;max-width:380px;width:100%;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.45);">
+    const _mc1 = _modalColors();
+    modal.innerHTML = `<div style="background:${_mc1.bg};border-radius:20px;padding:28px 24px;max-width:380px;width:100%;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.45);">
       <div style="font-size:36px;margin-bottom:12px;">${icone}</div>
-      <h3 style="font-size:16px;font-weight:800;color:#07172e;margin:0 0 10px;">${encerrado ? 'Reabrir inscrições?' : 'Encerrar inscrições?'}</h3>
-      <p style="font-size:13px;color:#3d5068;line-height:1.6;margin:0 0 22px;">${msg}</p>
+      <h3 style="font-size:16px;font-weight:800;color:${_mc1.title};margin:0 0 10px;">${encerrado ? 'Reabrir inscrições?' : 'Encerrar inscrições?'}</h3>
+      <p style="font-size:13px;color:${_mc1.body};line-height:1.6;margin:0 0 22px;">${msg}</p>
       <div style="display:flex;gap:10px;justify-content:center;">
-        <button type="button" onclick="document.getElementById('modalConfirmEncerrar').remove()" style="flex:1;padding:11px 0;border-radius:12px;border:1.5px solid rgba(7,23,46,.15);background:#f5f5f5;font-weight:700;font-size:13px;cursor:pointer;">Cancelar</button>
+        <button type="button" onclick="document.getElementById('modalConfirmEncerrar').remove()" style="flex:1;padding:11px 0;border-radius:12px;border:1.5px solid ${_mc1.btnCancelBdr};background:${_mc1.btnCancel};color:${_mc1.btnCancelTxt};font-weight:700;font-size:13px;cursor:pointer;">Cancelar</button>
         <button type="button" id="btnConfirmOk" style="flex:1;padding:11px 0;border-radius:12px;border:0;background:${encerrado ? '#2e7d32' : '#c62828'};color:#fff;font-weight:800;font-size:13px;cursor:pointer;">${labelOk}</button>
       </div>
     </div>`;
@@ -6824,6 +6904,19 @@
           btn.innerHTML = txtOriginal;
         }, 400);
       }
+    };
+  }
+
+  // Retorna cores adaptadas ao tema (light/dark) para modais gerados via JS
+  function _modalColors() {
+    const dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return {
+      bg:           dark ? '#0d1f3c'               : '#fff',
+      title:        dark ? '#d0e4f8'               : '#07172e',
+      body:         dark ? '#8da4c0'               : '#3d5068',
+      btnCancel:    dark ? 'rgba(255,255,255,.08)' : '#f5f5f5',
+      btnCancelTxt: dark ? '#c0d4ea'               : '#07172e',
+      btnCancelBdr: dark ? 'rgba(255,255,255,.15)' : 'rgba(7,23,46,.15)',
     };
   }
 
@@ -8100,12 +8193,13 @@
       const modal = document.createElement('div');
       modal.id = 'modalConfirmVideo';
       modal.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(2,8,24,.85);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;';
-      modal.innerHTML = `<div style="background:#fff;border-radius:20px;padding:28px 24px;max-width:360px;width:100%;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.45);">
+      const _mc2 = _modalColors();
+      modal.innerHTML = `<div style="background:${_mc2.bg};border-radius:20px;padding:28px 24px;max-width:360px;width:100%;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.45);">
         <div style="font-size:36px;margin-bottom:12px;">🗑️</div>
-        <h3 style="font-size:16px;font-weight:800;color:#07172e;margin:0 0 10px;">Remover vídeo?</h3>
-        <p style="font-size:13px;color:#3d5068;line-height:1.6;margin:0 0 22px;">O vídeo será removido do site imediatamente para todos os visitantes.</p>
+        <h3 style="font-size:16px;font-weight:800;color:${_mc2.title};margin:0 0 10px;">Remover vídeo?</h3>
+        <p style="font-size:13px;color:${_mc2.body};line-height:1.6;margin:0 0 22px;">O vídeo será removido do site imediatamente para todos os visitantes.</p>
         <div style="display:flex;gap:10px;justify-content:center;">
-          <button type="button" onclick="document.getElementById('modalConfirmVideo').remove()" style="flex:1;padding:11px 0;border-radius:12px;border:1.5px solid rgba(7,23,46,.15);background:#f5f5f5;font-weight:700;font-size:13px;cursor:pointer;">Cancelar</button>
+          <button type="button" onclick="document.getElementById('modalConfirmVideo').remove()" style="flex:1;padding:11px 0;border-radius:12px;border:1.5px solid ${_mc2.btnCancelBdr};background:${_mc2.btnCancel};color:${_mc2.btnCancelTxt};font-weight:700;font-size:13px;cursor:pointer;">Cancelar</button>
           <button type="button" id="btnConfirmRemoverVideo" style="flex:1;padding:11px 0;border-radius:12px;border:0;background:#c62828;color:#fff;font-weight:800;font-size:13px;cursor:pointer;">Sim, remover</button>
         </div>
       </div>`;
