@@ -8307,6 +8307,12 @@ function renderAssistenciaRemota() {
           ${escapeHtml(a.hostname||a.id)}
           ${a.bloqueado ? `<span title="Bloqueada: ${escapeHtml(a.bloqueadoMotivo||'')}" style="background:#DC2626;color:#fff;font-size:9px;padding:1px 6px;border-radius:4px;font-weight:700;letter-spacing:.3px">🔒 BLOQUEADA</span>` : ''}
         </div>
+        <div style="font-size:10.5px;color:var(--g400);display:flex;align-items:center;gap:4px;margin-top:2px">
+          <span title="Patrimônio">PAT ${escapeHtml(ativoRel?.pat || '—')}</span>
+          <span>·</span>
+          <span title="Unidade atual">${escapeHtml(ativoRel?.area || 'sem unidade')}</span>
+          <button class="btn btn-ghost btn-xs" onclick="abrirEditarUnidadeSYSACK('${a.id}','${escapeHtml(a.hostname||a.id)}','${escapeHtml(ativoRel?.id||'')}','${escapeHtml(ativoRel?.pat||'')}','${escapeHtml(ativoRel?.area||'')}')" title="Alterar unidade / patrimônio" style="padding:0 4px;font-size:10.5px;line-height:1.4;border:none;background:none;color:var(--accent);cursor:pointer">✏️</button>
+        </div>
         ${patchBadge}
         ${a.emSessao ? '<span style="font-size:10px;background:#EFF6FF;color:#2563EB;padding:1px 6px;border-radius:10px;margin-left:4px">Em sessão</span>' : ''}
       </td>
@@ -23724,6 +23730,81 @@ function evImprimirRelatorio() {
 window.evAbrirAnalise     = evAbrirAnalise;
 window.evColetarEAnalisar = evColetarEAnalisar;
 window.evImprimirRelatorio = evImprimirRelatorio;
+
+// ════════════════════════════════════════════════════════════
+// MUDANÇA DE UNIDADE / PATRIMÔNIO — direto da tela de Assistência Remota
+// Reaproveita fsUpdate, que já faz update parcial e audita automaticamente
+// os campos 'area' e 'pat' em ativos/{id}/historico (sysackAuditarMudancaAtivo).
+// ════════════════════════════════════════════════════════════
+function abrirEditarUnidadeSYSACK(agentId, hostname, ativoId, patAtual, unidadeAtual) {
+  document.getElementById('modal-editar-unidade')?.remove();
+
+  if (!ativoId) {
+    showToast?.('Este agente ainda não está vinculado a um ativo cadastrado — não é possível editar unidade/patrimônio por aqui.', 'warning');
+    return;
+  }
+
+  const unidades = [...new Set((STATE.orgUnidades || []).map(u => u.sigla).filter(Boolean))].sort();
+  const opcoesHtml = unidades.map(s => `<option value="${escapeHtml(s)}" ${s === unidadeAtual ? 'selected' : ''}>${escapeHtml(s)}</option>`).join('');
+
+  const overlay = document.createElement('div');
+  overlay.id = 'modal-editar-unidade';
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:10001;background:rgba(15,23,42,.65);display:flex;align-items:center;justify-content:center;padding:16px';
+  overlay.innerHTML = `
+    <div style="background:#fff;border-radius:14px;width:420px;max-width:96vw;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.3)">
+      <div style="padding:16px 20px;background:#0F172A;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:15px;font-weight:800;color:#fff">🏢 Unidade / Patrimônio — ${escapeHtml(hostname)}</div>
+        <button onclick="document.getElementById('modal-editar-unidade').remove()" style="background:rgba(255,255,255,.15);border:none;color:#fff;font-size:18px;cursor:pointer;border-radius:6px;padding:2px 8px">✕</button>
+      </div>
+      <div style="padding:18px 20px">
+        <label style="font-size:12px;font-weight:700;color:var(--g600);display:block;margin-bottom:4px">Patrimônio (PAT)</label>
+        <input id="eu-input-pat" class="form-control" type="text" value="${escapeHtml(patAtual)}" placeholder="Ex.: 12345" style="width:100%;margin-bottom:14px">
+
+        <label style="font-size:12px;font-weight:700;color:var(--g600);display:block;margin-bottom:4px">Unidade</label>
+        <select id="eu-select-unidade" class="form-control" style="width:100%;margin-bottom:6px">
+          <option value="">— Selecione —</option>
+          ${opcoesHtml}
+        </select>
+        <div style="font-size:11px;color:var(--g400)">Unidade atual: ${escapeHtml(unidadeAtual || 'sem unidade cadastrada')} · Lista carregada de organograma_unidades (${unidades.length} cadastradas)</div>
+      </div>
+      <div style="padding:12px 20px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px">
+        <button onclick="document.getElementById('modal-editar-unidade').remove()" class="btn btn-ghost btn-sm">Cancelar</button>
+        <button id="eu-btn-salvar" onclick="salvarUnidadePatrimonioSYSACK('${ativoId}','${escapeHtml(hostname)}','${escapeHtml(patAtual)}','${escapeHtml(unidadeAtual)}')" class="btn btn-primary btn-sm">Salvar</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+}
+
+async function salvarUnidadePatrimonioSYSACK(ativoId, hostname, patAntigo, unidadeAntiga) {
+  const btn = document.getElementById('eu-btn-salvar');
+  const novoPat = (document.getElementById('eu-input-pat')?.value || '').trim();
+  const novaUnidade = document.getElementById('eu-select-unidade')?.value || '';
+
+  // Só envia os campos que realmente mudaram — fsUpdate audita e grava no
+  // histórico do ativo automaticamente (só para os campos presentes no objeto).
+  const data = {};
+  if (novoPat !== (patAntigo || '')) data.pat = novoPat;
+  if (novaUnidade && novaUnidade !== (unidadeAntiga || '')) data.area = novaUnidade;
+
+  if (!Object.keys(data).length) {
+    showToast?.('Nenhuma alteração para salvar.', 'info');
+    return;
+  }
+
+  if (btn) { btn.disabled = true; btn.textContent = 'Salvando...'; }
+  try {
+    await fsUpdate('ativos', ativoId, data);
+    showToast?.(`✅ ${hostname} atualizado. Alteração registrada no histórico do ativo.`, 'success');
+    document.getElementById('modal-editar-unidade')?.remove();
+  } catch(e) {
+    showToast?.('❌ Erro ao salvar: ' + e.message, 'error');
+    if (btn) { btn.disabled = false; btn.textContent = 'Salvar'; }
+  }
+}
+
+window.abrirEditarUnidadeSYSACK = abrirEditarUnidadeSYSACK;
+window.salvarUnidadePatrimonioSYSACK = salvarUnidadePatrimonioSYSACK;
 
 // ════════════════════════════════════════════════════════════
 // IA MONITORING — Exibe alertas de anomalia no dashboard
