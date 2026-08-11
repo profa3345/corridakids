@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🏃 Corrida Kids Ilhas — Vem aí!</title>
-  <meta name="description" content="Venha viver a emoção da nossa corrida infantil! Corrida Kids: gratuita para crianças de 6 a 15 anos. Show de Talentos: de 4 a 100+ anos! Dezembro 2026 — Ilhas de Santa Maria e Monte Belo, Vitória-ES." />
+  <meta name="description" content="Venha viver a emoção da nossa corrida infantil! Corrida Kids: gratuita para crianças de 6 a 15 anos. Show de Talentos: de 4 a 100+ anos! 8 de novembro de 2026 (domingo) — Ilhas de Santa Maria e Monte Belo, Vitória-ES." />
   <meta property="og:title" content="🏃 Corrida Kids Ilhas — Vem aí!" />
   <meta property="og:description" content="Venha viver a emoção da nossa corrida infantil! Crianças cheias de energia e muita alegria nas Ilhas. Inscrição online gratuita!" />
   <meta property="og:image" content="https://corridakidsilhas.vercel.app/logo1.png" />
@@ -598,6 +598,7 @@
     .video-card:hover { transform: translateY(-10px) scale(1.018); box-shadow: 0 52px 96px rgba(0,0,0,.40); }
     .video-embed { position:relative; width:100%; padding-top:56.25%; background:#000; }
     .video-embed iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+    .video-embed video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; background:#000; }
     .video-info { padding: 20px 22px; }
     .video-info h3 { font-family:var(--font-display); font-size:17px; font-weight:700; color:var(--text); margin-bottom:8px; }
     .video-info p { font-size:13px; color:#3d5068; line-height:1.6; margin-bottom:14px; font-weight:500; }
@@ -2025,7 +2026,7 @@
     <div class="noscript-msg">
       <h1>🏃 Corrida Kids Ilhas 2026</h1>
       <p>Este site requer JavaScript para funcionar. Por favor, habilite o JavaScript no seu navegador e recarregue a página.</p>
-      <p style="margin-top:12px;font-size:13px;color:#888;">Evento gratuito • Dezembro 2026 • Ilhas de Santa Maria e Monte Belo, Vitória-ES</p>
+      <p style="margin-top:12px;font-size:13px;color:#888;">Evento gratuito • 8 de novembro de 2026 (domingo) • Ilhas de Santa Maria e Monte Belo, Vitória-ES</p>
     </div>
   </noscript>
   <a href="#main-content" class="skip-link">Ir para o conteúdo principal</a>
@@ -2072,7 +2073,7 @@
 
         <div class="pill" title="Data do evento">
           <span class="dot" aria-hidden="true"></span>
-          <span><strong>Dezembro 2026</strong> • Dia a Definir</span>
+          <span><strong>8 de novembro de 2026</strong> • Domingo</span>
         </div>
       </div>
     </header>
@@ -2223,7 +2224,7 @@
               <div class="crono-header">
                 <div class="crono-header-icon">🏁</div>
                 <div>
-                  <h3>Programação Oficial — Dezembro 2026</h3>
+                  <h3>Programação Oficial — 8 de novembro de 2026</h3>
                   <p>Ilha de Santa Maria &amp; Ilha de Monte Belo • Evento gratuito</p>
                 </div>
               </div>
@@ -4915,7 +4916,7 @@
       'Documento gerado em: ' + dataGeracao,
       'Versão atualizada disponível em: corridakidsilhas.vercel.app',
       '',
-      'DATA: Dezembro 2026 — Dia a Definir',
+      'DATA: 8 de novembro de 2026 (domingo)',
       'HORÁRIO: 8h00 às 12h30',
       'INSCRIÇÕES: corridakidsilhas.vercel.app',
       '',
@@ -6091,7 +6092,7 @@
   ${nomeParticipante ? `<div class="row"><span class="k">Participante</span><span class="v">${nomeParticipante}</span></div>` : ''}
   ${camisa ? `<div class="row"><span class="k">Camisa</span><span class="v">${camisa}</span></div>` : ''}
   <div class="row"><span class="k">Evento</span><span class="v">${evento}</span></div>
-  <div class="row"><span class="k">Data do evento</span><span class="v">Dezembro 2026 — a confirmar</span></div>
+  <div class="row"><span class="k">Data do evento</span><span class="v">8 de novembro de 2026 (domingo)</span></div>
   <div class="row"><span class="k">Local</span><span class="v">Ilha de Santa Maria, Vitória/ES</span></div>
   <div class="row"><span class="k">Concentração</span><span class="v">8h00</span></div>
   <div class="row"><span class="k">Comprovante gerado</span><span class="v">${dataGeracao}</span></div>
@@ -7999,10 +8000,10 @@
     var VIDEOS = {}; // preenchido dinamicamente
 
     var _VIDEOS_DEFAULTS = [
-      { id:'vid1', videoId:'Z0gcIo0Bfo0', titulo:'🏃 Corrida Kids Ilhas — Vem aí!',             descricao:'Venha viver a emoção da nossa corrida infantil! Crianças cheias de energia e muita alegria nas Ilhas.', ordem:1 },
-      { id:'vid2', videoId:'Umr56L32nkw', titulo:'🎭 Show de Talentos — Mostre seu Talento!',   descricao:'Música, dança, teatro e muito mais! Mostre seu talento no palco das Ilhas — inscreva-se no Show de Talentos!', ordem:2 },
-      { id:'vid3', videoId:'mAm26VkLcdA', titulo:'🏃 Corrida Kids e Show de Talentos — Vem aí!', descricao:'A Corrida Kids e o Show de Talentos estão chegando! Prepare-se para uma festa incrível nas Ilhas. Não perca!', ordem:3 },
-      { id:'vid4', videoId:'92Ov4e9Ffgw', titulo:'🐣 Feliz Páscoa',                               descricao:'Confira mais um vídeo especial da Corrida Kids Ilhas 2026! Venha fazer parte dessa festa incrível nas Ilhas de Santa Maria e Monte Belo.', ordem:4 }
+      { id:'vid1', tipo:'local', src:'corrida-kids-vem-ai.mp4',   poster:'corrida-kids-vem-ai.jpg',   titulo:'🏃 Corrida Kids Ilhas — Vem aí!',             descricao:'Venha viver a emoção da nossa corrida infantil! Crianças cheias de energia e muita alegria nas Ilhas.', ordem:1 },
+      { id:'vid2', tipo:'local', src:'show-de-talentos.mp4',      poster:'show-de-talentos.jpg',      titulo:'🎭 Show de Talentos — Mostre seu Talento!',   descricao:'Música, dança, teatro e muito mais! Mostre seu talento no palco das Ilhas — inscreva-se no Show de Talentos!', ordem:2 },
+      { id:'vid3', tipo:'local', src:'corrida-e-show-vem-ai.mp4', poster:'corrida-e-show-vem-ai.jpg', titulo:'🏃 Corrida Kids e Show de Talentos — Vem aí!', descricao:'A Corrida Kids e o Show de Talentos estão chegando! Prepare-se para uma festa incrível nas Ilhas. Não perca!', ordem:3 },
+      { id:'vid4', tipo:'local', src:'feliz-pascoa.mp4',          poster:'feliz-pascoa.jpg',          titulo:'🐣 Feliz Páscoa',                               descricao:'Confira mais um vídeo especial da Corrida Kids Ilhas 2026! Venha fazer parte dessa festa incrível nas Ilhas de Santa Maria e Monte Belo.', ordem:4 }
     ];
 
     function _ytIdFromUrl(url) {
@@ -8023,11 +8024,21 @@
 
     function _renderVideoCard(v) {
       var wid = esc(v.id);
-      var vid = esc(v.videoId);
       var titulo = esc(v.titulo);
       var descricao = esc(v.descricao);
-      return '<div class="video-card">' +
-        '<div class="video-embed" id="' + wid + '">' +
+
+      var embedHtml;
+      if (v.tipo === 'local') {
+        var src = esc(v.src);
+        var poster = esc(v.poster || '');
+        embedHtml =
+          '<video class="local-video" preload="none" controls playsinline poster="' + poster + '">' +
+            '<source src="' + src + '" type="video/mp4" />' +
+            'Seu navegador não suporta vídeo em HTML5. <a href="' + src + '">Baixar o vídeo</a>.' +
+          '</video>';
+      } else {
+        var vid = esc(v.videoId);
+        embedHtml =
           '<div class="yt-thumb" onclick="loadYtEmbed(\'' + wid + '\',\'' + vid + '\')" title="Clique para assistir">' +
             '<img src="https://img.youtube.com/vi/' + vid + '/hqdefault.jpg" alt="Thumbnail" loading="lazy" />' +
             '<div class="yt-play-btn">▶</div>' +
@@ -8038,7 +8049,12 @@
             '<a href="https://youtu.be/' + vid + '" target="_blank" rel="noopener" class="play-overlay">' +
               '<span class="play-btn">▶</span><span class="play-label">Assistir no YouTube</span>' +
             '</a>' +
-          '</div>' +
+          '</div>';
+      }
+
+      return '<div class="video-card">' +
+        '<div class="video-embed" id="' + wid + '">' +
+          embedHtml +
         '</div>' +
         '<div class="video-info">' +
           '<h3>' + titulo + '</h3>' +
@@ -8067,7 +8083,7 @@
       lista.sort(function(a,b){ return (a.ordem||0)-(b.ordem||0); });
       var html = '';
       lista.forEach(function(v) {
-        VIDEOS[v.id] = { wrapId: v.id, videoId: v.videoId, title: v.titulo };
+        VIDEOS[v.id] = { wrapId: v.id, tipo: v.tipo || 'youtube', videoId: v.videoId, src: v.src, poster: v.poster, title: v.titulo };
         html += _renderVideoCard(v);
       });
       grid.innerHTML = html;
@@ -8086,7 +8102,7 @@
           var lista = [];
           snap.forEach(function(doc) {
             var d = doc.data();
-            lista.push({ id: doc.id, videoId: d.videoId, titulo: d.titulo, descricao: d.descricao||'', ordem: d.ordem||0 });
+            lista.push({ id: doc.id, tipo: d.tipo || 'youtube', videoId: d.videoId, src: d.src, poster: d.poster, titulo: d.titulo, descricao: d.descricao||'', ordem: d.ordem||0 });
           });
           _renderVideosGrid(lista);
         }
@@ -8119,12 +8135,20 @@
         var html = '';
         snap.forEach(function(doc) {
           var d = doc.data();
-          var vid = esc(d.videoId||'');
           var titulo = esc(d.titulo||'Sem título');
           var docId = esc(doc.id);
+          var thumbSrc, subLabel;
+          if (d.tipo === 'local') {
+            thumbSrc = esc(d.poster || '');
+            subLabel = esc(d.src || '');
+          } else {
+            var vid = esc(d.videoId||'');
+            thumbSrc = 'https://img.youtube.com/vi/' + vid + '/mqdefault.jpg';
+            subLabel = 'youtu.be/' + vid;
+          }
           html += '<div class="vm-item">' +
-            '<img class="vm-thumb" src="https://img.youtube.com/vi/' + vid + '/mqdefault.jpg" alt="thumb" />' +
-            '<div class="vm-info"><strong>' + titulo + '</strong><span>youtu.be/' + vid + '</span></div>' +
+            '<img class="vm-thumb" src="' + thumbSrc + '" alt="thumb" />' +
+            '<div class="vm-info"><strong>' + titulo + '</strong><span>' + subLabel + '</span></div>' +
             '<div class="vm-actions">' +
               '<button class="vm-btn-del" onclick="vmRemover(\'' + docId + '\')">🗑️ Remover</button>' +
             '</div>' +
@@ -8215,7 +8239,7 @@
       _vdmVideoId = info.videoId;
 
       document.getElementById('vdmThumbImg').src =
-        'https://img.youtube.com/vi/' + info.videoId + '/hqdefault.jpg';
+        info.tipo === 'local' ? (info.poster || '') : ('https://img.youtube.com/vi/' + info.videoId + '/hqdefault.jpg');
       document.getElementById('vdmTitle').textContent = info.title;
 
       var modal = document.getElementById('videoDeepModal');
@@ -8231,7 +8255,8 @@
     }
 
     window.vdmPlay = function() {
-      if (!_vdmWrapId || !_vdmVideoId) return;
+      if (!_vdmWrapId) return;
+      var infoLocal = VIDEOS[_vdmWrapId] || {};
       // Fechar modal
       var modal = document.getElementById('videoDeepModal');
       modal.classList.remove('open');
@@ -8243,14 +8268,19 @@
       var home = document.getElementById('home');
       if (home) home.classList.add('active');
 
-      // Scroll até o card e depois carrega o embed
+      // Scroll até o card e depois carrega/reproduz o vídeo
       var wrap = document.getElementById(_vdmWrapId);
       if (wrap) {
         var card = wrap.closest('.video-card');
         if (card) card.scrollIntoView({ behavior:'smooth', block:'center' });
       }
       setTimeout(function() {
-        if (typeof loadYtEmbed === 'function') loadYtEmbed(_vdmWrapId, _vdmVideoId);
+        if (infoLocal.tipo === 'local') {
+          var videoEl = wrap && wrap.querySelector('video');
+          if (videoEl) { videoEl.play().catch(function(){}); }
+        } else if (typeof loadYtEmbed === 'function') {
+          loadYtEmbed(_vdmWrapId, _vdmVideoId);
+        }
       }, 300);
     };
 
